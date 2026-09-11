@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
       date: 'Aug 19, 2084',
       rating: 'Rated: 99#',
       content: "so is it true refs are all ai now? idk, kinda miss human error tbh",
-      image: 'content/video/…….#bmx 📹 @oskr_bmx.gif',
+      image: 'content/video/video43.gif',
       quoteTo: null,
       quoteContent: null,
       replies: [
@@ -233,7 +233,7 @@ document.addEventListener('DOMContentLoaded', () => {
       date: 'Aug 19, 2084',
       rating: 'Rated: 888#',
       content: 'DECLASSIFIED ORBITAL SUPER-WEAPON LOG: Sector 7G ion solar blast captured in high resolution. The authorities claimed it was a solar eclipse. Wake up.',
-      image: 'content/video/#america #sungun #BFG.gif',
+      image: 'content/video/video1.gif',
       quoteTo: 'R0boC0pp',
       quoteContent: 'The algorithms are literally alive.',
       replies: [
@@ -283,7 +283,7 @@ document.addEventListener('DOMContentLoaded', () => {
       date: 'Aug 19, 2084',
       rating: 'Rated: 999#',
       content: 'PULLING UP TO THE LAN PARTY IN NEO-TOKYO IN THIS ABSOLUTE BEAST 🔥🔥 V8 TURBO-SYNTH ENGINE WITH 16K RGB HEADLIGHTS. WHO WANNA RACE?',
-      image: 'content/video/Imagine pulling up to work in that thing 🔥(Credit- Fernando Galeano).gif',
+      image: 'content/video/video9.gif',
       quoteTo: null,
       quoteContent: null,
       replies: [
@@ -351,7 +351,7 @@ document.addEventListener('DOMContentLoaded', () => {
       date: 'Aug 18, 2084',
       rating: 'Rated: 404#',
       content: 'DIRECT ENERGY WEAPONS PROTOCOL: Testing localized plasma discharges in backyard sandbox environment. Blue arc containment held at 99.4% stability.',
-      image: 'content/video/#futuretech #energyweapons.gif',
+      image: 'content/video/video2.gif',
       quoteTo: null,
       quoteContent: null,
       replies: [],
@@ -366,7 +366,7 @@ document.addEventListener('DOMContentLoaded', () => {
       date: 'Aug 18, 2084',
       rating: 'Rated: 420#',
       content: 'THE RAID BOSS DROPPED A FLARE IN THE MIDDLE OF THE CYPHER BUT THE HOMIE REFUSED TO CANCEL HIS BREAKDANCE COMBO 🎆🕺💫 ABSOLUTE CINEMA',
-      image: 'content/video/This lowkey fits tho😅🎆 #fireworks #flare #breakdance.gif',
+      image: 'content/video/video16.gif',
       quoteTo: null,
       quoteContent: null,
       replies: [
@@ -398,7 +398,7 @@ document.addEventListener('DOMContentLoaded', () => {
       date: 'Aug 18, 2084',
       rating: 'Rated: 808#',
       content: 'BRO HAS BEEN WALKING AROUND THE DOWNTOWN COMMERCE DISTRICT WITH A 1998 SONY TRINITRON WELDED TO HIS HEAD FOR 24 HOURS STRAIGHT 📺😭 REAL CYBERPUNK BEHAVIOR',
-      image: 'content/video/Straightz_outta_africa got the tv on his head for 24 hours!!! only in New York 🤣🤣🤣 #africa #a.gif',
+      image: 'content/video/video14.gif',
       quoteTo: null,
       quoteContent: null,
       replies: [
@@ -433,7 +433,7 @@ document.addEventListener('DOMContentLoaded', () => {
       date: 'Aug 17, 2084',
       rating: 'Rated: 1337#',
       content: 'THE FELINE ARCHIVE: proof that cats are trans-dimensional hyper-intelligences monitoring our network traffic since ancient dial-up days.',
-      image: 'content/video/ssstik.io_@catfilm06_1783335849730.gif',
+      image: 'content/video/video26.gif',
       quoteTo: null,
       quoteContent: null,
       replies: [
@@ -465,7 +465,7 @@ document.addEventListener('DOMContentLoaded', () => {
       date: 'Aug 17, 2084',
       rating: 'Rated: 666#',
       content: 'DO NOT RUN THIS MODEL AT 3:00 AM. THE VIDEO GENERATOR HAS UNLOCKED CURSED SPECTRAL MEMORY BANKS. WATCH AT YOUR OWN PERIL.',
-      image: 'content/video/ssstik.io_@ai.is.cursed_1783336128991.gif',
+      image: 'content/video/video21.gif',
       quoteTo: null,
       quoteContent: null,
       replies: [
@@ -482,7 +482,7 @@ document.addEventListener('DOMContentLoaded', () => {
       date: 'Aug 17, 2084',
       rating: 'Rated: 999#',
       content: 'POV: YOU ARE CRUISING THROUGH THE FAVELA DISTRICT ON A TURBO-CHARGED TWO-WHEELER AT 300 KM/H. NO SPEED LIMITS IN 2084 🏍️💨',
-      image: 'content/video/#real #bike #rio #explore #fyp.gif',
+      image: 'content/video/video3.gif',
       quoteTo: null,
       quoteContent: null,
       replies: [],
@@ -497,7 +497,7 @@ document.addEventListener('DOMContentLoaded', () => {
       date: 'Aug 16, 2084',
       rating: 'Rated: 555#',
       content: 'Calibrating sensory feedback loop. Visualizing pure mathematical kinetic harmony. Rest your optical circuits here.',
-      image: 'content/video/ssstik.io_@wholesomesatisfying_1783335864468.gif',
+      image: 'content/video/video39.gif',
       quoteTo: null,
       quoteContent: null,
       replies: [],
@@ -512,7 +512,7 @@ document.addEventListener('DOMContentLoaded', () => {
       date: 'Aug 16, 2084',
       rating: 'Rated: 707#',
       content: 'CYBER-SWAG OVERFLOW DETECTED. Holographic visor cap tuned to neon frequencies. The drip is undeniably post-human.',
-      image: 'content/video/🧢 SWAG🧢#dumm #reels #explore #kappe #dummhochzwei.gif',
+      image: 'content/video/video45.gif',
       quoteTo: null,
       quoteContent: null,
       replies: [
