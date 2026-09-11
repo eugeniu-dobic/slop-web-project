@@ -1,0 +1,44 @@
+# Temporary scratch and test files
+scratch/
+*.tmp
+*.temp
+
+# OS generated files
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+[Dd]esktop.ini
+$RECYCLE.BIN/
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Editor & IDE directories
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Node / Dependencies (if added later)
+node_modules/
+.npm
+
+# Local Environment Variables & Secrets
+.env
+.env.local
+.env.*.local
+
+# Agent / Tooling local caches
+.gemini/

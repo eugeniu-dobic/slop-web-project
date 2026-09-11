@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="styles/style.css">
+  <link rel="stylesheet" href="styles/style-90s.css">
+  <title>Slop - 2084 Community Wire</title>
+  <script>
+    // Clean up any stale keys from previous bug
+    try { sessionStorage.removeItem('slop_gateway_passed'); } catch (e) {}
+
+    // Only skip the loading screen if returning to homepage from an article
+    var _isReturning = false;
+    try {
+      if (sessionStorage.getItem('slop_returning_from_article') === 'true') {
+        _isReturning = true;
+        sessionStorage.removeItem('slop_returning_from_article');
+      } else if (document.referrer && document.referrer.indexOf('news-') !== -1) {
+        _isReturning = true;
+      }
+    } catch (e) {}
+
+    if (_isReturning) {
+      document.write('<style id="skip-loader-style">#loading-screen { display: none !important; } body.loading-active { overflow: auto !important; }</style>');
+    }
+  </script>
+</head>
+
+<body class="loading-active slop-90s-body" id="top">
+  <script>
+    if (typeof _isReturning !== 'undefined' && _isReturning) {
+      document.body.classList.remove('loading-active');
+    }
+  </script>
+  <div id="loading-screen">
+    <script>
+      if (typeof _isReturning !== 'undefined' && _isReturning) {
+        var _ls = document.getElementById('loading-screen');
+        if (_ls) _ls.remove();
+      }
+    </script>
+    <img id="loading-bg" src="content/loading_home_content/home1.gif" alt="System Loading">
+    <div id="loading-content" class="raw-terminal" role="button" tabindex="0"
+      aria-label="Terminal - Press Enter or Click to connect">
+      <div id="terminal-logs" class="terminal-logs"></div>
+    </div>
+  </div>
+
+  <!-- Master Page Container Frame (Identical to 90s Article Page) -->
+  <div class="retro-page-wrapper">
+
+    <!-- Big Logo Header (Untouched) -->
+    <div class="logo"></div>
+
+    <!-- Breaking News Marquee Ticker (Directly Under Logo Header) -->
+    <div class="retro-marquee-bar">
+      <div class="retro-marquee-badge">BREAKING NEWS</div>
+      <div class="retro-marquee-content">
+        <marquee behavior="scroll" direction="left" scrollamount="4">
+          *** PRESIDENTIAL ELECTION 2084 VOTING NOW ACTIVE *** THUNDER PLEDGES MAXIMUM BORDER STRENGTH *** LUNA SERENITY
+          LAUNCHES PERSONAL PROGRESS SCORE PILOT *** BOBBY FREEDOM WARNS AGAINST DIGITAL DISTRACTIONS *** KODAK BLACKER
+          IN GTA 7 CONFIRMED *** STATE CONSENSUS MAINFRAME ENCRYPTING CITIZEN CIPHERS ***
+        </marquee>
+      </div>
+    </div>
+
+    <!-- Web 1.0 Breadcrumbs Bar -->
+    <nav class="retro-breadcrumbs">
+      <a href="index.html">Home</a>
+      <span class="sep">&gt;&gt;</span>
+      <a href="news-elections-2084-90s.html">Wire Dispatches</a>
+      <span class="sep">&gt;&gt;</span>
+      <span>Community Discussion Feed</span>
+    </nav>
+
+    <!-- 3-Column Retro Layout (Identical to 90s Article Page) -->
+    <div class="retro-main-layout">
+
+      <!-- ================================================================
+           LEFT COLUMN: Getting Around (with triangles), Search Wire, Login, Side Ad
+           ================================================================ -->
+      <aside class="retro-left-column">
+
+        <!-- Getting Around (MTV / 90s style with triangles ►) -->
+        <div class="retro-widget-box">
+          <div class="retro-box-header">GETTING AROUND</div>
+          <div class="retro-box-body" style="padding: 0;">
+            <ul class="retro-nav-list">
+              <li class="retro-nav-item">
+                <a href="index.html" class="retro-nav-link active"><span class="arrow">&#9658;</span> HOME FEED</a>
+              </li>
+              <li class="retro-nav-item">
+                <a href="news-elections-2084-90s.html" class="retro-nav-link"><span class="arrow">&#9658;</span> 2084
+                  WIRE</a>
+              </li>
+              <li class="retro-nav-item">
+                <a href="news-elections-2084-90s.html" class="retro-nav-link"><span class="arrow">&#9658;</span> 90s
+                  ARCHIVE</a>
+              </li>
+              <li class="retro-nav-item">
+                <a href="#post-container" class="retro-nav-link"><span class="arrow">&#9658;</span> THREADS</a>
+              </li>
+              <li class="retro-nav-item">
+                <a href="#top" class="retro-nav-link"><span class="arrow">&#9658;</span> TOP OF PAGE</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Search Wire Widget (Identical to Article Page) -->
+        <div class="retro-widget-box">
+          <div class="retro-box-header brown">SEARCH WIRE</div>
+          <div class="retro-box-body">
+            <form class="retro-search-form"
+              onsubmit="event.preventDefault(); alert('SEARCH QUERY TRANSMITTED TO SLOP-NET ROUTE 12...');">
+              <input type="text" class="retro-search-input" placeholder="Search archive..." value="election 2084">
+              <button type="submit" class="retro-search-btn">[ SEARCH &gt;&gt; ]</button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Left Side Ad 1 -->
+        <div id="retro-left-ad-1" class="retro-ad-wrapper"></div>
+
+        <!-- User Login Widget (Identical to Article Page style) -->
+        <div class="retro-widget-box">
+          <div class="retro-box-header">USER LOGIN</div>
+          <div class="retro-box-body">
+            <form class="retro-search-form"
+              onsubmit="event.preventDefault(); alert('AUTHENTICATING WITH CENTRAL CONSENSUS MAINFRAME...');">
+              <label for="username" style="font-size: 10px; font-weight: bold; color: #333;">Username:</label>
+              <input type="text" id="username" class="retro-search-input" placeholder="e.g. @Echo_84" required>
+              <label for="password" style="font-size: 10px; font-weight: bold; color: #333; margin-top: 4px;">Cipher
+                Key:</label>
+              <input type="password" id="password" class="retro-search-input" required>
+              <button type="submit" class="retro-search-btn" style="margin-top: 6px;">[ Dial-In Login ]</button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Left Side Ad 2 -->
+        <div id="retro-left-ad-2" class="retro-ad-wrapper"></div>
+
+      </aside>
+
+      <!-- ================================================================
+           CENTER COLUMN: Post Container (Posts style 100% UNTOUCHED)
+           ================================================================ -->
+      <main class="retro-center-column">
+        <div class="retro-article-header-banner">
+          <span>COMMUNITY WIRE</span>
+        </div>
+
+        <!-- Post Container: Untouched! -->
+        <div id="post-container"></div>
+      </main>
+
+      <!-- ================================================================
+           RIGHT COLUMN: Election Tracker, Other Dispatches, Weather, Side Ad
+           ================================================================ -->
+      <aside class="retro-right-column">
+
+        <!-- Election Leaderboard Table (GolfChannel Style - Identical to Article Page) -->
+        <div class="retro-widget-box">
+          <div class="retro-box-header">ELECTION TRACKER</div>
+          <div class="retro-box-body" style="padding: 0;">
+            <table class="retro-leaderboard-table">
+              <thead>
+                <tr>
+                  <th>CANDIDATE</th>
+                  <th style="text-align: right;">TALLY</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1. D. Thunder</td>
+                  <td id="lb-pct-thunder" class="retro-leaderboard-pct">38.1%</td>
+                </tr>
+                <tr>
+                  <td>2. L. Serenity</td>
+                  <td id="lb-pct-luna" class="retro-leaderboard-pct">34.9%</td>
+                </tr>
+                <tr>
+                  <td>3. B. Freedom</td>
+                  <td id="lb-pct-bobby" class="retro-leaderboard-pct">27.0%</td>
+                </tr>
+              </tbody>
+            </table>
+            <div
+              style="padding: 6px; font-size: 10px; color: #555; background: #fafafa; border-top: 1px solid #ddd; text-align: center;">
+              Total Ballots: <strong id="lb-total-votes">1,007,696</strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- Wire Dispatches (Identical to Article Page) -->
+        <div class="retro-widget-box">
+          <div class="retro-box-header brown">WIRE DISPATCHES</div>
+          <div class="retro-box-body">
+            <div class="retro-dispatches-list">
+              <a href="news-elections-2084-90s.html" class="retro-dispatch-item">
+                <img src="content/news/thunder.jpg" alt="Elections 2084" class="retro-dispatch-thumb">
+                <div class="retro-dispatch-title">ELECTIONS 2084: THREE VISIONS</div>
+              </a>
+              <a href="news-kodak-blacker-gta7.html" class="retro-dispatch-item">
+                <img src="content/news/news2_link.jpg" alt="Kodak Blacker in GTA 7" class="retro-dispatch-thumb">
+                <div class="retro-dispatch-title">KODAK BLACKER™ IN GTA 7</div>
+              </a>
+              <a href="news-right-to-forget.html" class="retro-dispatch-item">
+                <img src="content/news/news3_link.jpg" alt="Right to Forget" class="retro-dispatch-thumb">
+                <div class="retro-dispatch-title">RIGHT TO FORGET™ PASSES SENATE</div>
+              </a>
+              <a href="news-city-12-relocation.html" class="retro-dispatch-item">
+                <img src="content/news/news4_link.jpg" alt="City 12 Relocation" class="retro-dispatch-thumb">
+                <div class="retro-dispatch-title">CITY 12 MOVED AFTER VIEW COMPLAINTS</div>
+              </a>
+              <a href="news-online-court-vote.html" class="retro-dispatch-item">
+                <img src="content/news/news5_link.jpg" alt="Online Court Voting" class="retro-dispatch-thumb">
+                <div class="retro-dispatch-title">COURTS DECIDE GUILT BY ONLINE VOTE™</div>
+              </a>
+              <a href="news-premium-citizenship.html" class="retro-dispatch-item">
+                <img src="content/news/news6_link.jpg" alt="Premium Citizenship" class="retro-dispatch-thumb">
+                <div class="retro-dispatch-title">PREMIUM CITIZENSHIP™ FOR $29.99/MO</div>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Side Ad 1 -->
+        <div id="retro-right-ad-1" class="retro-ad-wrapper"></div>
+
+        <!-- Weather: City 12 Widget (Identical to Article Page) -->
+        <div class="retro-widget-box">
+          <div class="retro-box-header">WEATHER: CITY 12</div>
+          <div class="retro-box-body">
+            <div class="retro-weather-box">
+              <div class="retro-weather-icon">&#9729;</div>
+              <div class="retro-weather-info">
+                <div class="retro-weather-temp">74&deg;F // Heavy Slop Fog</div>
+                <div>Humidity: 88% &bull; Wind: 14mph</div>
+                <div>Air Quality: <span style="color: var(--retro-red); font-weight: bold;">Level 4 Filter Req.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Side Ad 2 -->
+        <div id="retro-right-ad-2" class="retro-ad-wrapper"></div>
+
+      </aside>
+
+    </div><!-- /.retro-main-layout -->
+
+    <!-- Retro Footer (Identical to Article Page) -->
+    <footer class="retro-portal-footer">
+      <div class="retro-counter-wrap">
+        <span class="retro-counter-label">CITIZEN VISITOR COUNT:</span>
+        <div id="retro-counter-digits" class="retro-counter-digits">
+          <span class="retro-counter-digit">0</span>
+          <span class="retro-counter-digit">0</span>
+          <span class="retro-counter-digit">4</span>
+          <span class="retro-counter-digit">8</span>
+          <span class="retro-counter-digit">2</span>
+          <span class="retro-counter-digit">9</span>
+          <span class="retro-counter-digit">2</span>
+        </div>
+      </div>
+
+      <div class="retro-badges-row">
+        <a href="#top" class="retro-badge-btn netscape">NETSCAPE<br>NOW! 4.7</a>
+        <a href="#top" class="retro-badge-btn ie">MS INTERNET<br>EXPLORER 5</a>
+        <a href="#top" class="retro-badge-btn html4">W3C HTML<br>4.0 VALID</a>
+        <a href="#top" class="retro-badge-btn geocities">GEOCITIES<br>SECTOR 12</a>
+        <a href="#top" class="retro-badge-btn">800 x 600<br>BEST VIEW</a>
+        <a href="#top" class="retro-badge-btn" style="background-color: #000; color: #00FF66;">MADE WITH<br>NOTEPAD</a>
+      </div>
+
+      <div class="retro-footer-copy">
+        &copy; 2084 SLOP Interactive News Bureau &bull; All Transmissions Logged &bull; Central Consensus Department<br>
+        Optimized for 28.8k / 56k dial-up modems &bull; Best viewed in Netscape Navigator 4.0+ or Internet Explorer 5.0+
+        at 800x600 resolution
+      </div>
+    </footer>
+
+  </div><!-- /.retro-page-wrapper -->
+
+  <div id="popup-container-left"></div>
+  <div id="popup-container"></div>
+
+  <!-- Win95 Lightbox Modal for Side Ads -->
+  <div id="retro-ad-lightbox" style="display: none;">
+    <div id="retro-ad-lightbox-content">
+      <img id="retro-ad-lightbox-img" src="" alt="Advertisement Zoom">
+      <button id="retro-ad-lightbox-close" title="Close Window">&times;</button>
+    </div>
+  </div>
+
+
+  <script src="scripts/dither.js"></script>
+  <script src="scripts/main.js"></script>
+  <script src="scripts/article-ads.js"></script>
+</body>
+
+</html>
