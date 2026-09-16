@@ -9,7 +9,7 @@ window.__articleAdsActive = true;
 if (window.location.pathname.includes('news-') || window.location.href.includes('news-')) {
   try {
     sessionStorage.setItem('slop_returning_from_article', 'true');
-  } catch (e) {}
+  } catch (e) { }
 }
 
 document.addEventListener('click', (e) => {
@@ -17,7 +17,7 @@ document.addEventListener('click', (e) => {
   if (link && link.getAttribute('href') && link.getAttribute('href').includes('index.html')) {
     try {
       sessionStorage.setItem('slop_returning_from_article', 'true');
-    } catch (err) {}
+    } catch (err) { }
   }
 });
 
@@ -56,56 +56,152 @@ document.addEventListener('DOMContentLoaded', () => {
     lightbox.innerHTML = `
       <div id="ad-lightbox-content">
         <img id="ad-lightbox-img" src="" alt="Ad Fullscreen">
-        <button id="ad-lightbox-close">X</button>
+        <button id="ad-lightbox-close" title="Close (Esc)" aria-label="Close">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
       </div>
     `;
     document.body.appendChild(lightbox);
     lightboxImg = document.getElementById('ad-lightbox-img');
   }
 
+  function closeArticleAdsLightbox() {
+    const retroLightbox = document.getElementById('retro-ad-lightbox');
+    if (retroLightbox) {
+      retroLightbox.classList.remove('active');
+      setTimeout(() => {
+        if (!retroLightbox.classList.contains('active')) {
+          retroLightbox.style.display = 'none';
+          const retroLightboxImg = document.getElementById('retro-ad-lightbox-img');
+          if (retroLightboxImg) {
+            retroLightboxImg.src = '';
+            retroLightboxImg.alt = '';
+          }
+        }
+      }, 250);
+    }
+
+    if (lightbox) {
+      lightbox.classList.remove('active');
+      setTimeout(() => {
+        if (!lightbox.classList.contains('active')) {
+          lightbox.style.display = 'none';
+          if (lightboxImg) {
+            lightboxImg.src = '';
+            lightboxImg.alt = '';
+          }
+        }
+      }, 250);
+    }
+  }
+
+  function openArticleAdsLightbox(src, alt = '') {
+    if (!src) return;
+    const retroLightbox = document.getElementById('retro-ad-lightbox');
+    const retroLightboxImg = document.getElementById('retro-ad-lightbox-img');
+    if (retroLightbox && retroLightboxImg) {
+      retroLightboxImg.alt = alt;
+      retroLightboxImg.src = src;
+      retroLightbox.style.display = 'flex';
+      requestAnimationFrame(() => {
+        retroLightbox.classList.add('active');
+      });
+      return;
+    }
+    if (lightbox && lightboxImg) {
+      lightboxImg.alt = alt;
+      lightboxImg.src = src;
+      lightbox.style.display = 'flex';
+      requestAnimationFrame(() => {
+        lightbox.classList.add('active');
+      });
+    }
+  }
+
+  window.openRetroLightbox = openArticleAdsLightbox;
+  window.closeRetroLightbox = closeArticleAdsLightbox;
+
+  const retroLightboxImgEl = document.getElementById('retro-ad-lightbox-img');
+  if (retroLightboxImgEl) {
+    retroLightboxImgEl.addEventListener('error', () => {
+      console.warn('[Lightbox] Image failed to load, closing zoom:', retroLightboxImgEl.src);
+      closeArticleAdsLightbox();
+    });
+  }
+
   // Lightbox click-to-zoom listeners (ensuring strictly single modal opening)
   document.addEventListener('click', (e) => {
-    if (e.target.classList.contains('ad-image')) {
-      const retroLightbox = document.getElementById('retro-ad-lightbox');
-      const retroLightboxImg = document.getElementById('retro-ad-lightbox-img');
-      if (retroLightbox && retroLightboxImg) {
-        retroLightboxImg.src = e.target.src;
-        retroLightbox.style.display = 'flex';
-        return;
+    // If the lightbox is currently active, don't trigger zoom-in
+    const retroLightbox = document.getElementById('retro-ad-lightbox');
+    if (retroLightbox && retroLightbox.classList.contains('active')) return;
+    if (lightbox && lightbox.classList.contains('active')) return;
+
+    if (e.target.closest('#retro-ad-lightbox') || e.target.closest('#ad-lightbox')) return;
+
+    // Loading screen GIFs and terminal elements must never trigger zoom
+    if (e.target.closest('#loading-screen') || e.target.closest('#loading-bg') || e.target.id === 'loading-bg') return;
+
+    const isZoomableImage = e.target.tagName === 'IMG' &&
+      !e.target.closest('#loading-screen') &&
+      !e.target.closest('#loading-bg') &&
+      e.target.id !== 'loading-bg' &&
+      !e.target.closest('#retro-ad-lightbox') &&
+      !e.target.closest('#ad-lightbox') &&
+      !e.target.closest('#retro-counter-digits') &&
+      !e.target.closest('.retro-dispatch-item') &&
+      !e.target.classList.contains('retro-dispatch-thumb') &&
+      !e.target.classList.contains('post-icon-svg') &&
+      !e.target.closest('.post-icon') &&
+      !e.target.classList.contains('post-avatar') &&
+      !e.target.classList.contains('comment-avatar') &&
+      !e.target.closest('.author-avatar') &&
+      !e.target.closest('button');
+
+    let zoomSrc = null;
+    let zoomAlt = '';
+
+    if (isZoomableImage && e.target.src) {
+      zoomSrc = e.target.src;
+      zoomAlt = e.target.alt || '';
+    } else {
+      const postImageContainer = e.target.closest('.post-attached-image-container');
+      if (postImageContainer) {
+        const childImg = postImageContainer.querySelector('img');
+        if (childImg && childImg.src) {
+          zoomSrc = childImg.src;
+          zoomAlt = childImg.alt || '';
+        } else if (postImageContainer.style.backgroundImage) {
+          const match = postImageContainer.style.backgroundImage.match(/url\(['"]?(.*?)['"]?\)/);
+          if (match && match[1]) zoomSrc = match[1];
+        }
       }
-      if (lightbox && lightboxImg) {
-        lightboxImg.src = e.target.src;
-        lightbox.style.display = 'flex';
-      }
+    }
+
+    if (zoomSrc) {
+      openArticleAdsLightbox(zoomSrc, zoomAlt);
     }
   });
 
+  // Lightbox click-to-close: clicking anywhere on the open lightbox (image, content, backdrop, close button) closes it
   document.addEventListener('click', (e) => {
     const retroLightbox = document.getElementById('retro-ad-lightbox');
-    if (retroLightbox && (e.target === retroLightbox || e.target.id === 'retro-ad-lightbox-close')) {
-      retroLightbox.style.display = 'none';
-      const retroLightboxImg = document.getElementById('retro-ad-lightbox-img');
-      if (retroLightboxImg) retroLightboxImg.src = '';
+    if (retroLightbox && retroLightbox.classList.contains('active') && e.target.closest('#retro-ad-lightbox')) {
+      closeArticleAdsLightbox();
+      return;
     }
 
-    if (lightbox && (e.target === lightbox || e.target.id === 'ad-lightbox-close')) {
-      lightbox.style.display = 'none';
-      if (lightboxImg) lightboxImg.src = '';
+    if (lightbox && lightbox.classList.contains('active') && e.target.closest('#ad-lightbox')) {
+      closeArticleAdsLightbox();
+      return;
     }
   });
 
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
-      const retroLightbox = document.getElementById('retro-ad-lightbox');
-      if (retroLightbox) {
-        retroLightbox.style.display = 'none';
-        const retroLightboxImg = document.getElementById('retro-ad-lightbox-img');
-        if (retroLightboxImg) retroLightboxImg.src = '';
-      }
-      if (lightbox) {
-        lightbox.style.display = 'none';
-        if (lightboxImg) lightboxImg.src = '';
-      }
+      closeArticleAdsLightbox();
     }
   });
 

@@ -301,51 +301,97 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const defaultEntries = [
     {
-      author: "CyberHawk_84",
-      location: "Sector 9 Border District",
-      date: "Nov 4, 2084 @ 20:14 EST",
-      text: "Thunder's national defense system is the only thing keeping the rogue automated supply drones from raiding our ward. Make tomorrow louder indeed."
+      author: "@sector_04",
+      location: "Sector 04 Ward",
+      date: "Nov 4, 2084 @ 18:02 EST",
+      text: "mine says vote already submitted. didnt vote yet"
     },
     {
-      author: "NeonPriestess",
-      location: "City 12 Tech Quarter",
-      date: "Nov 4, 2084 @ 19:58 EST",
-      text: "My Personal Progress Score jumped 14 points after I switched my heating allocation to automated mode under Luna's pilot test. A softer future is inevitable."
+      author: "@lena_772",
+      location: "Terminal 772",
+      date: "Nov 4, 2084 @ 18:04 EST",
+      text: "same"
     },
     {
-      author: "OldOrderVet",
-      location: "Sub-Basement Bunker 04",
-      date: "Nov 4, 2084 @ 19:42 EST",
-      text: "Bobby Freedom is right. You kids don't remember paper money or when the police chief was an actual human being with eyes. Discipline preserves freedom."
+      author: "@CivicDad88",
+      location: "Residential Quad C",
+      date: "Nov 4, 2084 @ 18:07 EST",
+      text: "probably system delay. happens every election"
     },
     {
-      author: "GlitchWalker",
-      location: "Underground Optical Relay",
-      date: "Nov 4, 2084 @ 19:15 EST",
-      text: "Notice how the telemetry packet size is exactly 512 bytes regardless of candidate? Just saying. The mainframe already knows what you clicked."
+      author: "@user_5518",
+      location: "Automated Ward 5",
+      date: "Nov 4, 2084 @ 18:14 EST",
+      text: "you guys still vote manually?"
     },
     {
-      author: "Citizen_9918",
-      location: "Consensus Ward B",
-      date: "Nov 4, 2084 @ 18:30 EST",
-      text: "Great article as usual from SLOP newsdesk. Works perfectly on my Netscape Communicator 4.7 running under Win95 OSR2!"
+      author: "@oldinternetguy",
+      location: "Archive Node",
+      date: "Nov 4, 2084 @ 18:19 EST",
+      text: "back in my day you had to physically stand somewhere"
+    },
+    {
+      author: "@Sector_12Resident",
+      location: "Sector 12 Gate",
+      date: "Nov 4, 2084 @ 18:25 EST",
+      text: "polling station is closed but the app says open"
+    },
+    {
+      author: "@admin",
+      location: "Civic System Admin",
+      date: "Nov 4, 2084 @ 18:26 EST",
+      text: "Please refresh your Civic Interface."
+    },
+    {
+      author: "@Sector_12Resident",
+      location: "Sector 12 Gate",
+      date: "Nov 4, 2084 @ 18:27 EST",
+      text: "did that"
+    },
+    {
+      author: "@admin",
+      location: "Civic System Admin",
+      date: "Nov 4, 2084 @ 18:28 EST",
+      text: "Please refresh again."
+    },
+    {
+      author: "@user_1883",
+      location: "Terminal 1883",
+      date: "Nov 4, 2084 @ 18:35 EST",
+      text: "can we vote for none"
+    },
+    {
+      author: "@admin",
+      location: "Civic System Admin",
+      date: "Nov 4, 2084 @ 18:36 EST",
+      text: "No."
+    },
+    {
+      author: "@user_1883",
+      location: "Terminal 1883",
+      date: "Nov 4, 2084 @ 18:38 EST",
+      text: "ok"
     }
   ];
 
   function renderGuestbook() {
     if (!entriesContainer) return;
-    let stored = localStorage.getItem('slop_90s_guestbook');
+    let stored = localStorage.getItem('slop_guestbook_v2_elections');
     let entries = stored ? JSON.parse(stored) : defaultEntries;
 
-    entriesContainer.innerHTML = entries.map(item => `
-      <div class="retro-entry-card">
+    entriesContainer.innerHTML = entries.map(item => {
+      const isAdmin = item.author && (item.author.toLowerCase() === '@admin' || item.author.toLowerCase() === 'admin');
+      const isDeleted = (item.text && (item.text.includes('[comment unavailable]') || item.text.includes('[deleted]'))) || (item.author && item.author.includes('deleted_user'));
+      return `
+      <div class="retro-entry-card${isAdmin ? ' admin-entry' : ''}">
         <div class="retro-entry-header">
-          <span class="retro-entry-author">👤 ${escapeHtml(item.author)} <small style="color: #666;">(${escapeHtml(item.location || 'Local Net')})</small></span>
+          <span class="retro-entry-author">👤 ${escapeHtml(item.author)}${isAdmin ? ' <span class="retro-admin-badge">[SYS-ADMIN]</span>' : ''} <small style="color: #666;">(${escapeHtml(item.location || 'Local Net')})</small></span>
           <span class="retro-entry-date">${escapeHtml(item.date)}</span>
         </div>
-        <div class="retro-entry-text">${escapeHtml(item.text)}</div>
+        <div class="retro-entry-text${isDeleted ? ' deleted-text' : ''}">${escapeHtml(item.text)}</div>
       </div>
-    `).join('');
+    `;
+    }).join('');
 
     if (guestbookCount) {
       guestbookCount.textContent = `(${entries.length} Entries)`;
@@ -355,7 +401,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (guestbookForm) {
     guestbookForm.addEventListener('submit', (e) => {
       e.preventDefault();
-      const author = authorInput.value.trim() || 'Anonymous_Citizen';
+      const author = authorInput.value.trim() || '@Anonymous_Citizen';
       const loc = locationInput.value.trim() || 'Network Terminal';
       const text = messageInput.value.trim();
 
@@ -364,7 +410,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      let stored = localStorage.getItem('slop_90s_guestbook');
+      let stored = localStorage.getItem('slop_guestbook_v2_elections');
       let entries = stored ? JSON.parse(stored) : [...defaultEntries];
 
       const now = new Date();
@@ -377,7 +423,7 @@ document.addEventListener('DOMContentLoaded', () => {
         text: text
       });
 
-      localStorage.setItem('slop_90s_guestbook', JSON.stringify(entries));
+      localStorage.setItem('slop_guestbook_v2_elections', JSON.stringify(entries));
       messageInput.value = '';
       renderGuestbook();
     });

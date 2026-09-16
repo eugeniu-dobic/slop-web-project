@@ -21,69 +21,97 @@ document.addEventListener('DOMContentLoaded', () => {
   // Authentic Judicial Stream comments matching original article dialogue
   const defaultEntries = [
     {
-      author: "@CourtGamer_2084",
-      location: "Sector 4 Gaming Grid",
-      date: "Nov 8, 2084 @ 19:42 EST",
-      text: "bro had zero defense on stream, I hit 😂 so fast"
+      author: "@courtwatcher",
+      location: "Judicial Feed 01",
+      date: "Nov 8, 2084 @ 18:30 EST",
+      text: "what case is being voted today"
     },
     {
-      author: "@TwitchJuror_88",
-      location: "Live Stream Channel 9",
-      date: "Nov 8, 2084 @ 19:35 EST",
-      text: "chat was spamming 💀 before the prosecutor even finished reading the charges"
+      author: "@JusticeEnjoyer",
+      location: "Voting Terminal 9",
+      date: "Nov 8, 2084 @ 18:32 EST",
+      text: "I voted guilty because the guy looked suspicious"
     },
     {
-      author: "@ApexBettor",
-      location: "Judicial Betting Pool",
-      date: "Nov 8, 2084 @ 19:28 EST",
-      text: "I lost 1,500 credits because he got 94% guilty instead of 95% total"
+      author: "@Sector9Dad",
+      location: "Sector 9 Resident",
+      date: "Nov 8, 2084 @ 18:35 EST",
+      text: "that's not how court works"
     },
     {
-      author: "@JusticePremiumUser",
-      location: "Subscriber VIP Lounge",
-      date: "Nov 8, 2084 @ 19:19 EST",
-      text: "bought the monthly Justice Premium pass just so my 💀 vote counts as two votes"
+      author: "@admin",
+      location: "Consensus Judicial Mod",
+      date: "Nov 8, 2084 @ 18:36 EST",
+      text: "Your comment has been flagged as legal misinformation."
     },
     {
-      author: "@CasualViewer_99",
-      location: "Residential Quadrant 12",
-      date: "Nov 8, 2084 @ 19:12 EST",
-      text: "finding out he was actually innocent after the stream was wild lmao, great episode though"
+      author: "@Sector9Dad",
+      location: "Sector 9 Resident",
+      date: "Nov 8, 2084 @ 18:37 EST",
+      text: "what did i say"
     },
     {
-      author: "@LegalEagle_AI",
-      location: "Automated Judicial Server",
-      date: "Nov 8, 2084 @ 19:04 EST",
-      text: "system latency dropped to 42ms per conviction. Justice efficiency rating: optimal."
+      author: "@admin",
+      location: "Consensus Judicial Mod",
+      date: "Nov 8, 2084 @ 18:38 EST",
+      text: "Your comment has been flagged as legal misinformation."
     },
     {
-      author: "@StreamLover",
-      location: "Municipal Broadcast Hub",
-      date: "Nov 8, 2084 @ 18:55 EST",
-      text: "can't wait for the Live Execution Reactions™ feature to drop next week"
+      author: "@LegalEagle2044",
+      location: "Civic Monitor",
+      date: "Nov 8, 2084 @ 18:45 EST",
+      text: "I voted not guilty and my Civic Score dropped 3 points"
     },
     {
-      author: "@JurorChatMod",
-      location: "Consensus Moderation Desk",
+      author: "@user_991",
+      location: "Terminal 991",
       date: "Nov 8, 2084 @ 18:47 EST",
-      text: "reminder to stream viewers: please stop tipping the defendant digital stickers while he is giving his final statement"
+      text: "coincidence"
+    },
+    {
+      author: "@courtbot",
+      location: "Judicial Automated Relay",
+      date: "Nov 8, 2084 @ 18:50 EST",
+      text: "Please remember to vote responsibly."
+    },
+    {
+      author: "@user_552",
+      location: "District 552",
+      date: "Nov 8, 2084 @ 18:52 EST",
+      text: "what does responsibly mean"
+    },
+    {
+      author: "@courtbot",
+      location: "Judicial Automated Relay",
+      date: "Nov 8, 2084 @ 18:53 EST",
+      text: "Please vote responsibly."
+    },
+    {
+      author: "@user_552",
+      location: "District 552",
+      date: "Nov 8, 2084 @ 18:54 EST",
+      text: "👍"
     }
   ];
 
   function renderGuestbook() {
     if (!entriesContainer) return;
-    let stored = localStorage.getItem('slop_90s_court_guestbook');
+    let stored = localStorage.getItem('slop_guestbook_v2_court');
     let entries = stored ? JSON.parse(stored) : defaultEntries;
 
-    entriesContainer.innerHTML = entries.map(item => `
-      <div class="retro-entry-card">
+    entriesContainer.innerHTML = entries.map(item => {
+      const isAdmin = item.author && (item.author.toLowerCase() === '@admin' || item.author.toLowerCase() === 'admin');
+      const isDeleted = (item.text && (item.text.includes('[comment unavailable]') || item.text.includes('[deleted]'))) || (item.author && item.author.includes('deleted_user'));
+      return `
+      <div class="retro-entry-card${isAdmin ? ' admin-entry' : ''}">
         <div class="retro-entry-header">
-          <span class="retro-entry-author">👤 ${escapeHtml(item.author)} <small style="color: #666;">(${escapeHtml(item.location || 'Local Net')})</small></span>
+          <span class="retro-entry-author">👤 ${escapeHtml(item.author)}${isAdmin ? ' <span class="retro-admin-badge">[SYS-ADMIN]</span>' : ''} <small style="color: #666;">(${escapeHtml(item.location || 'Local Net')})</small></span>
           <span class="retro-entry-date">${escapeHtml(item.date)}</span>
         </div>
-        <div class="retro-entry-text">${escapeHtml(item.text)}</div>
+        <div class="retro-entry-text${isDeleted ? ' deleted-text' : ''}">${escapeHtml(item.text)}</div>
       </div>
-    `).join('');
+    `;
+    }).join('');
 
     if (guestbookCount) {
       guestbookCount.textContent = `(${entries.length} Entries)`;
@@ -102,7 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      let stored = localStorage.getItem('slop_90s_court_guestbook');
+      let stored = localStorage.getItem('slop_guestbook_v2_court');
       let entries = stored ? JSON.parse(stored) : [...defaultEntries];
 
       const now = new Date();
@@ -115,7 +143,7 @@ document.addEventListener('DOMContentLoaded', () => {
         text: text
       });
 
-      localStorage.setItem('slop_90s_court_guestbook', JSON.stringify(entries));
+      localStorage.setItem('slop_guestbook_v2_court', JSON.stringify(entries));
       messageInput.value = '';
       renderGuestbook();
     });

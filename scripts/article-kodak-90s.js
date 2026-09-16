@@ -21,75 +21,97 @@ document.addEventListener('DOMContentLoaded', () => {
   // Authentic Kodak in GTA 7 comments matching the original article dialogue
   const defaultEntries = [
     {
-      author: "@GTAFAN_2049",
-      location: "Sector 12 Neon District",
-      date: "Nov 5, 2084 @ 14:22 EST",
-      text: "Kodak Blacker in GTA 7 💀"
+      author: "@xXslimjimboXx",
+      location: "Vice City Grid",
+      date: "Nov 5, 2084 @ 13:02 EST",
+      text: "bro this is literally an npc"
     },
     {
-      author: "@NeuralPhilosopher",
-      location: "Vice City Academic Net",
-      date: "Nov 5, 2084 @ 14:15 EST",
-      text: "It had to happen."
-    },
-    {
-      author: "@xXSlayerXx",
-      location: "Dial-up Node 04",
-      date: "Nov 5, 2084 @ 14:02 EST",
-      text: "is that the real Kodak"
-    },
-    {
-      author: "@NeuralPhilosopher",
-      location: "Vice City Academic Net",
-      date: "Nov 5, 2084 @ 13:58 EST",
-      text: "no"
-    },
-    {
-      author: "@xXSlayerXx",
-      location: "Dial-up Node 04",
-      date: "Nov 5, 2084 @ 13:55 EST",
-      text: "oh"
-    },
-    {
-      author: "@RockstarLeaks_REAL",
-      location: "Rockstar Leaks BBS",
-      date: "Nov 5, 2084 @ 13:48 EST",
-      text: "He got 47 guns and 3 brains."
-    },
-    {
-      author: "@MusicScholar",
-      location: "Consensus Sound Archive",
-      date: "Nov 5, 2084 @ 13:30 EST",
-      text: "This man changed Western culture."
-    },
-    {
-      author: "@NormalPerson",
-      location: "Terminal 8080",
-      date: "Nov 5, 2084 @ 13:12 EST",
-      text: "bro it's just a rapper in GTA"
-    },
-    {
-      author: "@MusicScholar",
-      location: "Consensus Sound Archive",
+      author: "@M4RCO",
+      location: "Audio Relay 02",
       date: "Nov 5, 2084 @ 13:05 EST",
-      text: "you don't get it bro"
+      text: "song kinda hard ngl"
+    },
+    {
+      author: "@LilSector",
+      location: "Sector 9 Net",
+      date: "Nov 5, 2084 @ 13:11 EST",
+      text: "does he actually talk or just generate responses"
+    },
+    {
+      author: "@rockstar_fan",
+      location: "Rockstar BBS",
+      date: "Nov 5, 2084 @ 13:14 EST",
+      text: "both apparently"
+    },
+    {
+      author: "@deleted_user",
+      location: "",
+      date: "Nov 5, 2084 @ 13:18 EST",
+      text: "[comment unavailable]"
+    },
+    {
+      author: "@user_004",
+      location: "Feed Node 004",
+      date: "Nov 5, 2084 @ 13:24 EST",
+      text: "why does he look different every trailer"
+    },
+    {
+      author: "@user_004",
+      location: "Feed Node 004",
+      date: "Nov 5, 2084 @ 13:27 EST",
+      text: "that's not what i asked"
+    },
+    {
+      author: "@bot_771",
+      location: "Automated Node 771",
+      date: "Nov 5, 2084 @ 13:30 EST",
+      text: "Kodak Blacker changed my life ❤️"
+    },
+    {
+      author: "@deleted_user",
+      location: "",
+      date: "Nov 5, 2084 @ 13:30 EST",
+      text: "[comment unavailable]"
+    },
+    {
+      author: "@someone",
+      location: "Public Terminal",
+      date: "Nov 5, 2084 @ 13:31 EST",
+      text: "this comment was posted 4 seconds after the article"
+    },
+    {
+      author: "@bot_771",
+      location: "Automated Node 771",
+      date: "Nov 5, 2084 @ 13:31 EST",
+      text: "thank you for your support"
+    },
+    {
+      author: "@someone",
+      location: "Public Terminal",
+      date: "Nov 5, 2084 @ 13:32 EST",
+      text: "bro"
     }
   ];
 
   function renderGuestbook() {
     if (!entriesContainer) return;
-    let stored = localStorage.getItem('slop_90s_kodak_guestbook');
+    let stored = localStorage.getItem('slop_guestbook_v2_kodak');
     let entries = stored ? JSON.parse(stored) : defaultEntries;
 
-    entriesContainer.innerHTML = entries.map(item => `
-      <div class="retro-entry-card">
+    entriesContainer.innerHTML = entries.map(item => {
+      const isAdmin = item.author && (item.author.toLowerCase() === '@admin' || item.author.toLowerCase() === 'admin');
+      const isDeleted = (item.text && (item.text.includes('[comment unavailable]') || item.text.includes('[deleted]'))) || (item.author && item.author.includes('deleted_user'));
+      return `
+      <div class="retro-entry-card${isAdmin ? ' admin-entry' : ''}">
         <div class="retro-entry-header">
-          <span class="retro-entry-author">👤 ${escapeHtml(item.author)} <small style="color: #666;">(${escapeHtml(item.location || 'Vice Sector 12')})</small></span>
+          <span class="retro-entry-author">👤 ${escapeHtml(item.author)}${isAdmin ? ' <span class="retro-admin-badge">[SYS-ADMIN]</span>' : ''} <small style="color: #666;">(${escapeHtml(item.location || 'Vice Sector 12')})</small></span>
           <span class="retro-entry-date">${escapeHtml(item.date)}</span>
         </div>
-        <div class="retro-entry-text">${escapeHtml(item.text)}</div>
+        <div class="retro-entry-text${isDeleted ? ' deleted-text' : ''}">${escapeHtml(item.text)}</div>
       </div>
-    `).join('');
+    `;
+    }).join('');
 
     if (guestbookCount) {
       guestbookCount.textContent = `(${entries.length} Entries)`;
@@ -108,7 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      let stored = localStorage.getItem('slop_90s_kodak_guestbook');
+      let stored = localStorage.getItem('slop_guestbook_v2_kodak');
       let entries = stored ? JSON.parse(stored) : [...defaultEntries];
 
       const now = new Date();
@@ -121,7 +143,7 @@ document.addEventListener('DOMContentLoaded', () => {
         text: text
       });
 
-      localStorage.setItem('slop_90s_kodak_guestbook', JSON.stringify(entries));
+      localStorage.setItem('slop_guestbook_v2_kodak', JSON.stringify(entries));
       messageInput.value = '';
       renderGuestbook();
     });

@@ -21,69 +21,97 @@ document.addEventListener('DOMContentLoaded', () => {
   // Authentic City 12 comments matching original article dialogue
   const defaultEntries = [
     {
-      author: "@MiamiCommuter",
-      location: "City 12 North Terminal",
-      date: "Nov 7, 2084 @ 16:42 EST",
-      text: "The bus route 44 tracker still says arriving in 5 minutes, but the bus stop is currently 70 miles north in open water."
+      author: "@city12mom",
+      location: "Tower Block 9",
+      date: "Nov 7, 2084 @ 15:42 EST",
+      text: "woke up and my window faces the wrong way now"
     },
     {
-      author: "@CourierDave",
-      location: "Continental Postal Hub",
-      date: "Nov 7, 2084 @ 16:34 EST",
-      text: "Delivering mail was impossible today. The entire residential zip code was physically driving down the coast on crawler legs."
+      author: "@sector_blue",
+      location: "High Rise East",
+      date: "Nov 7, 2084 @ 15:45 EST",
+      text: "Honestly the new view is better"
     },
     {
-      author: "@GPS_User_84",
-      location: "Highway 101 Overpass",
-      date: "Nov 7, 2084 @ 16:26 EST",
-      text: "My vehicle GPS told me to turn left into the Atlantic Ocean. I thought it was glitched until I saw my office building floating past."
+      author: "@city12dad",
+      location: "Mobile Zone 12",
+      date: "Nov 7, 2084 @ 15:51 EST",
+      text: "did they move the whole city or just the buildings"
     },
     {
-      author: "@LostCitizen",
-      location: "Sector 12 Municipal Hall",
-      date: "Nov 7, 2084 @ 16:17 EST",
-      text: "Wait, so are we moving back north now? I literally just finished updating my physical address at the municipal registry."
+      author: "@admin",
+      location: "Municipal Logistics Desk",
+      date: "Nov 7, 2084 @ 15:52 EST",
+      text: "The city."
     },
     {
-      author: "@Echo_Driver",
-      location: "Coastal Transit Lane",
+      author: "@city12dad",
+      location: "Mobile Zone 12",
+      date: "Nov 7, 2084 @ 15:53 EST",
+      text: "right"
+    },
+    {
+      author: "@user_551",
+      location: "Transit Sector 5",
+      date: "Nov 7, 2084 @ 16:04 EST",
+      text: "my GPS still says old location"
+    },
+    {
+      author: "@user_552",
+      location: "Sub-Ward 2",
+      date: "Nov 7, 2084 @ 16:06 EST",
+      text: "mine too"
+    },
+    {
+      author: "@user_553",
+      location: "Coastal Shelf",
       date: "Nov 7, 2084 @ 16:09 EST",
-      text: "Can someone tell me if street parking rules still apply while the asphalt is actively moving 15 knots per hour?"
+      text: "mine says i live underwater"
     },
     {
-      author: "@PostalService_AI",
-      location: "Automated Dispatch 04",
-      date: "Nov 7, 2084 @ 16:03 EST",
-      text: "Automated Dispatch: Parcel delivery delayed due to unscheduled continental repositioning of recipient municipality."
+      author: "@sector_12",
+      location: "Sector 12 Outer Ring",
+      date: "Nov 7, 2084 @ 16:15 EST",
+      text: "new skyline is fire ngl"
     },
     {
-      author: "@Displaced_Dan",
-      location: "Submerged Ward B",
-      date: "Nov 7, 2084 @ 15:56 EST",
-      text: "My apartment was moved digitally three weeks ago, so I've been paying rent in two different counties simultaneously."
+      author: "@complaint_bot",
+      location: "Automated Municipal Bot",
+      date: "Nov 7, 2084 @ 16:15 EST",
+      text: "Thank you for your positive feedback."
     },
     {
-      author: "@CentralConsensus",
-      location: "Consensus Infrastructure",
-      date: "Nov 7, 2084 @ 15:48 EST",
-      text: "Notice to all citizens: Unauthorized anchoring of private foundations to the continental shelf is strictly prohibited."
+      author: "@sector_12",
+      location: "Sector 12 Outer Ring",
+      date: "Nov 7, 2084 @ 16:16 EST",
+      text: "i didn't give feedback"
+    },
+    {
+      author: "@complaint_bot",
+      location: "Automated Municipal Bot",
+      date: "Nov 7, 2084 @ 16:16 EST",
+      text: "Thank you."
     }
   ];
 
   function renderGuestbook() {
     if (!entriesContainer) return;
-    let stored = localStorage.getItem('slop_90s_city12_guestbook');
+    let stored = localStorage.getItem('slop_guestbook_v2_city12');
     let entries = stored ? JSON.parse(stored) : defaultEntries;
 
-    entriesContainer.innerHTML = entries.map(item => `
-      <div class="retro-entry-card">
+    entriesContainer.innerHTML = entries.map(item => {
+      const isAdmin = item.author && (item.author.toLowerCase() === '@admin' || item.author.toLowerCase() === 'admin');
+      const isDeleted = (item.text && (item.text.includes('[comment unavailable]') || item.text.includes('[deleted]'))) || (item.author && item.author.includes('deleted_user'));
+      return `
+      <div class="retro-entry-card${isAdmin ? ' admin-entry' : ''}">
         <div class="retro-entry-header">
-          <span class="retro-entry-author">👤 ${escapeHtml(item.author)} <small style="color: #666;">(${escapeHtml(item.location || 'Local Net')})</small></span>
+          <span class="retro-entry-author">👤 ${escapeHtml(item.author)}${isAdmin ? ' <span class="retro-admin-badge">[SYS-ADMIN]</span>' : ''} <small style="color: #666;">(${escapeHtml(item.location || 'Local Net')})</small></span>
           <span class="retro-entry-date">${escapeHtml(item.date)}</span>
         </div>
-        <div class="retro-entry-text">${escapeHtml(item.text)}</div>
+        <div class="retro-entry-text${isDeleted ? ' deleted-text' : ''}">${escapeHtml(item.text)}</div>
       </div>
-    `).join('');
+    `;
+    }).join('');
 
     if (guestbookCount) {
       guestbookCount.textContent = `(${entries.length} Entries)`;
@@ -102,7 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      let stored = localStorage.getItem('slop_90s_city12_guestbook');
+      let stored = localStorage.getItem('slop_guestbook_v2_city12');
       let entries = stored ? JSON.parse(stored) : [...defaultEntries];
 
       const now = new Date();
@@ -115,7 +143,7 @@ document.addEventListener('DOMContentLoaded', () => {
         text: text
       });
 
-      localStorage.setItem('slop_90s_city12_guestbook', JSON.stringify(entries));
+      localStorage.setItem('slop_guestbook_v2_city12', JSON.stringify(entries));
       messageInput.value = '';
       renderGuestbook();
     });

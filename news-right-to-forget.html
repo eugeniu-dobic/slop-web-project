@@ -43,7 +43,7 @@
     <div class="retro-main-layout">
 
       <!-- ================================================================
-           LEFT COLUMN: Getting Around, Search, Downloads, Side Ads
+           LEFT COLUMN: Getting Around, Side Ads
            ================================================================ -->
       <aside class="retro-left-column">
 
@@ -77,32 +77,8 @@
           </div>
         </div>
 
-        <!-- Search Box -->
-        <div class="retro-widget-box">
-          <div class="retro-box-header brown">SEARCH WIRE</div>
-          <div class="retro-box-body">
-            <form class="retro-search-form"
-              onsubmit="event.preventDefault(); alert('SEARCH QUERY TRANSMITTED TO SLOP-NET ROUTE 12...');">
-              <input type="text" class="retro-search-input" placeholder="Search archive..." value="memory freedom act">
-              <button type="submit" class="retro-search-btn">[ SEARCH &gt;&gt; ]</button>
-            </form>
-          </div>
-        </div>
-
         <!-- Left Side Ad 1 (Borderless, Win95 Close, 15s Respawn) -->
         <div id="retro-left-ad-1" class="retro-ad-wrapper"></div>
-
-        <!-- Campaign Downloads (MTV style mini-box) -->
-        <div class="retro-widget-box">
-          <div class="retro-box-header">DOWNLOADS</div>
-          <div class="retro-box-body">
-            <ul class="retro-download-list">
-              <li><a href="#article-lead">Memory Freedom Act Full Text (.TXT - 64KB)</a></li>
-              <li><a href="#article-lead">Previous Self Archive Form (.DOC)</a></li>
-              <li><a href="#article-lead">Neural Wipe Screensaver (.SCR - 1.44MB)</a></li>
-            </ul>
-          </div>
-        </div>
 
         <!-- Left Side Ad 2 (Borderless, Win95 Close, 15s Respawn) -->
         <div id="retro-left-ad-2" class="retro-ad-wrapper"></div>
@@ -362,11 +338,16 @@
 
   </div><!-- /.retro-page-wrapper -->
 
-  <!-- Win95 Lightbox Modal for Side Ads -->
+  <!-- Modern Lightbox Modal for Posts & Ads -->
   <div id="retro-ad-lightbox" style="display: none;">
     <div id="retro-ad-lightbox-content">
-      <img id="retro-ad-lightbox-img" src="" alt="Advertisement Zoom">
-      <button id="retro-ad-lightbox-close" title="Close Window">&times;</button>
+      <img id="retro-ad-lightbox-img" src="" alt="">
+      <button id="retro-ad-lightbox-close" title="Close (Esc)" aria-label="Close">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
     </div>
   </div>
 

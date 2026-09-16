@@ -147,62 +147,103 @@ document.addEventListener('DOMContentLoaded', () => {
   // --------------------------------------------------------------------------
   const initialComments = [
     {
-      author: 'Thunder_Chad_84',
-      badge: 'thunder',
-      badgeText: 'Donald Thunder',
-      avatar: 'content/user.svg',
-      timestamp: '12 mins ago',
-      text: 'MAKE THE BORDER 1000 METERS TALLER! If you don\'t like Thunder you can disagree louder into the ocean! Bigger military, bigger lasers, bigger everything!'
-    },
-    {
-      author: 'Luna_Progress_AI',
-      badge: 'luna',
-      badgeText: 'Luna Serenity',
-      avatar: 'content/user.svg',
-      timestamp: '28 mins ago',
-      text: 'My Personal Progress Score™ jumped by +15 points immediately after selecting Luna! The machine provides. The machine heals. Automated happiness for everyone.'
-    },
-    {
-      author: 'Old_Way_Bobby',
-      badge: 'bobby',
-      badgeText: 'Bobby Freedom',
-      avatar: 'content/user.svg',
-      timestamp: '45 mins ago',
-      text: 'Discipline preserves freedom! None of these synthetic neural scores in my day. Just raw tradition, hard work, and zero distractions! Bobby speaks the unfiltered truth!'
-    },
-    {
-      author: 'Central_Elections_AI',
+      author: '@sector_04',
       badge: 'system',
-      badgeText: 'Verified Official',
+      badgeText: 'Sector 04',
       avatar: 'content/user.svg',
-      timestamp: '1 hour ago',
-      text: '[CENTRAL MONITOR ADVISORY]: Any unauthorized dissent or recount requests will be treated as non-standard cognitive variance. Thank you for participating in managed democracy.'
+      timestamp: 'Nov 4, 2084 @ 18:02 EST',
+      text: 'mine says vote already submitted. didnt vote yet'
     },
     {
-      author: 'Cyb3r_Phantom',
+      author: '@lena_772',
       badge: 'system',
-      badgeText: 'Anonymous',
+      badgeText: 'Citizen',
       avatar: 'content/user.svg',
-      timestamp: '2 hours ago',
-      text: 'Notice how the poll percentages currently add up to 141.7%? Classic Central Neural Network math. Still voting Luna for the dopamine tokens though.'
+      timestamp: 'Nov 4, 2084 @ 18:04 EST',
+      text: 'same'
     },
     {
-      author: 'Suburban_Citizen_01',
-      badge: 'thunder',
-      badgeText: 'Donald Thunder',
+      author: '@CivicDad88',
+      badge: 'system',
+      badgeText: 'Citizen',
       avatar: 'content/user.svg',
-      timestamp: '3 hours ago',
-      text: 'I voted for Donald Thunder but my smart fridge just locked me out and started playing Luna Serenity\'s techno anthem? Can someone reboot my kitchen?'
+      timestamp: 'Nov 4, 2084 @ 18:07 EST',
+      text: 'probably system delay. happens every election'
     },
     {
-      author: 'Synth_Druid',
-      badge: 'luna',
-      badgeText: 'Luna Serenity',
+      author: '@user_5518',
+      badge: 'system',
+      badgeText: 'Citizen',
       avatar: 'content/user.svg',
-      timestamp: '4 hours ago',
-      text: 'Universal digital identity is actually super chill, my microwave and I now share a credit rating. Progress forever.'
+      timestamp: 'Nov 4, 2084 @ 18:14 EST',
+      text: 'you guys still vote manually?'
+    },
+    {
+      author: '@oldinternetguy',
+      badge: 'system',
+      badgeText: 'Veteran',
+      avatar: 'content/user.svg',
+      timestamp: 'Nov 4, 2084 @ 18:19 EST',
+      text: 'back in my day you had to physically stand somewhere'
+    },
+    {
+      author: '@Sector_12Resident',
+      badge: 'system',
+      badgeText: 'Sector 12',
+      avatar: 'content/user.svg',
+      timestamp: 'Nov 4, 2084 @ 18:25 EST',
+      text: 'polling station is closed but the app says open'
+    },
+    {
+      author: '@admin',
+      badge: 'system',
+      badgeText: 'Admin',
+      avatar: 'content/user.svg',
+      timestamp: 'Nov 4, 2084 @ 18:26 EST',
+      text: 'Please refresh your Civic Interface.'
+    },
+    {
+      author: '@Sector_12Resident',
+      badge: 'system',
+      badgeText: 'Sector 12',
+      avatar: 'content/user.svg',
+      timestamp: 'Nov 4, 2084 @ 18:27 EST',
+      text: 'did that'
+    },
+    {
+      author: '@admin',
+      badge: 'system',
+      badgeText: 'Admin',
+      avatar: 'content/user.svg',
+      timestamp: 'Nov 4, 2084 @ 18:28 EST',
+      text: 'Please refresh again.'
+    },
+    {
+      author: '@user_1883',
+      badge: 'system',
+      badgeText: 'Citizen',
+      avatar: 'content/user.svg',
+      timestamp: 'Nov 4, 2084 @ 18:35 EST',
+      text: 'can we vote for none'
+    },
+    {
+      author: '@admin',
+      badge: 'system',
+      badgeText: 'Admin',
+      avatar: 'content/user.svg',
+      timestamp: 'Nov 4, 2084 @ 18:36 EST',
+      text: 'No.'
+    },
+    {
+      author: '@user_1883',
+      badge: 'system',
+      badgeText: 'Citizen',
+      avatar: 'content/user.svg',
+      timestamp: 'Nov 4, 2084 @ 18:38 EST',
+      text: 'ok'
     }
   ];
+
 
   const commentsList = document.getElementById('article-comments-list');
   const commentCountSpan = document.getElementById('comment-count');

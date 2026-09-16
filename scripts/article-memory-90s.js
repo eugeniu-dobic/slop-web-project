@@ -21,75 +21,97 @@ document.addEventListener('DOMContentLoaded', () => {
   // Authentic Right to Forget comments matching original article dialogue
   const defaultEntries = [
     {
-      author: "@LILMIND",
-      location: "Sector 4 Cyber Ward",
-      date: "Nov 6, 2084 @ 11:42 EST",
-      text: "bro I'm deleting 2026 rn"
+      author: "@mia_44",
+      location: "Memory Terminal 44",
+      date: "Nov 6, 2084 @ 10:14 EST",
+      text: "Can I delete my ex"
     },
     {
-      author: "@LegalCitizen",
-      location: "Consensus Justice Branch",
-      date: "Nov 6, 2084 @ 11:39 EST",
-      text: "You can't delete government memories."
+      author: "@user_0081",
+      location: "Archive Node 0081",
+      date: "Nov 6, 2084 @ 10:16 EST",
+      text: "you can delete the memory. not the archive apparently"
     },
     {
-      author: "@LILMIND",
-      location: "Sector 4 Cyber Ward",
-      date: "Nov 6, 2084 @ 11:36 EST",
-      text: "what"
+      author: "@echo_echo",
+      location: "Sub-Sector 08",
+      date: "Nov 6, 2084 @ 10:22 EST",
+      text: 'why does mine say "memory retained by authority"'
     },
     {
-      author: "@LegalCitizen",
-      location: "Consensus Justice Branch",
-      date: "Nov 6, 2084 @ 11:33 EST",
-      text: "your memory is yours."
+      author: "@oldschooldad",
+      location: "Sector 3 Old Quarter",
+      date: "Nov 6, 2084 @ 10:28 EST",
+      text: "we used to just forget things naturally"
     },
     {
-      author: "@LILMIND",
-      location: "Sector 4 Cyber Ward",
-      date: "Nov 6, 2084 @ 11:30 EST",
-      text: "then why do y'all have it"
+      author: "@mia_44",
+      location: "Memory Terminal 44",
+      date: "Nov 6, 2084 @ 10:30 EST",
+      text: "how"
     },
     {
-      author: "@LegalCitizen",
-      location: "Consensus Justice Branch",
-      date: "Nov 6, 2084 @ 11:28 EST",
-      text: "different question."
+      author: "@oldschooldad",
+      location: "Sector 3 Old Quarter",
+      date: "Nov 6, 2084 @ 10:32 EST",
+      text: "idk"
     },
     {
-      author: "@MemoryFree_84",
-      location: "City 12 District 9",
-      date: "Nov 6, 2084 @ 11:15 EST",
-      text: "Deleted my ex and my student loans. The bank just contacted me anyway. Guess they keep the archive."
+      author: "@user_481",
+      location: "Ward 481",
+      date: "Nov 6, 2084 @ 10:41 EST",
+      text: "can i delete a memory without knowing which memory it is"
     },
     {
-      author: "@CourtObserver",
-      location: "Central Legal Monitor",
-      date: "Nov 6, 2084 @ 10:55 EST",
-      text: "“Justice works better when only one side remembers” has got to be the quote of the century."
+      author: "@admin",
+      location: "Memory Registry Admin",
+      date: "Nov 6, 2084 @ 10:43 EST",
+      text: "Yes. Randomized deletion is available with Premium access."
     },
     {
-      author: "@BrainWiped_01",
-      location: "Terminal Null",
-      date: "Nov 6, 2084 @ 10:20 EST",
-      text: "Wait, what article is this? Where am I?"
+      author: "@user_221",
+      location: "Net Cafe 221",
+      date: "Nov 6, 2084 @ 10:50 EST",
+      text: "can i delete this comment"
+    },
+    {
+      author: "@admin",
+      location: "Memory Registry Admin",
+      date: "Nov 6, 2084 @ 10:51 EST",
+      text: "No."
+    },
+    {
+      author: "@user_221",
+      location: "Net Cafe 221",
+      date: "Nov 6, 2084 @ 10:52 EST",
+      text: "why"
+    },
+    {
+      author: "@admin",
+      location: "Memory Registry Admin",
+      date: "Nov 6, 2084 @ 10:53 EST",
+      text: "This comment is part of a public record."
     }
   ];
 
   function renderGuestbook() {
     if (!entriesContainer) return;
-    let stored = localStorage.getItem('slop_90s_memory_guestbook');
+    let stored = localStorage.getItem('slop_guestbook_v2_memory');
     let entries = stored ? JSON.parse(stored) : defaultEntries;
 
-    entriesContainer.innerHTML = entries.map(item => `
-      <div class="retro-entry-card">
+    entriesContainer.innerHTML = entries.map(item => {
+      const isAdmin = item.author && (item.author.toLowerCase() === '@admin' || item.author.toLowerCase() === 'admin');
+      const isDeleted = (item.text && (item.text.includes('[comment unavailable]') || item.text.includes('[deleted]'))) || (item.author && item.author.includes('deleted_user'));
+      return `
+      <div class="retro-entry-card${isAdmin ? ' admin-entry' : ''}">
         <div class="retro-entry-header">
-          <span class="retro-entry-author">👤 ${escapeHtml(item.author)} <small style="color: #666;">(${escapeHtml(item.location || 'Local Net')})</small></span>
+          <span class="retro-entry-author">👤 ${escapeHtml(item.author)}${isAdmin ? ' <span class="retro-admin-badge">[SYS-ADMIN]</span>' : ''} <small style="color: #666;">(${escapeHtml(item.location || 'Local Net')})</small></span>
           <span class="retro-entry-date">${escapeHtml(item.date)}</span>
         </div>
-        <div class="retro-entry-text">${escapeHtml(item.text)}</div>
+        <div class="retro-entry-text${isDeleted ? ' deleted-text' : ''}">${escapeHtml(item.text)}</div>
       </div>
-    `).join('');
+    `;
+    }).join('');
 
     if (guestbookCount) {
       guestbookCount.textContent = `(${entries.length} Entries)`;
@@ -108,7 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      let stored = localStorage.getItem('slop_90s_memory_guestbook');
+      let stored = localStorage.getItem('slop_guestbook_v2_memory');
       let entries = stored ? JSON.parse(stored) : [...defaultEntries];
 
       const now = new Date();
@@ -121,7 +143,7 @@ document.addEventListener('DOMContentLoaded', () => {
         text: text
       });
 
-      localStorage.setItem('slop_90s_memory_guestbook', JSON.stringify(entries));
+      localStorage.setItem('slop_guestbook_v2_memory', JSON.stringify(entries));
       messageInput.value = '';
       renderGuestbook();
     });

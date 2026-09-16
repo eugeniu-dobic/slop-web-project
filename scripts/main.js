@@ -21,14 +21,8 @@ document.addEventListener('DOMContentLoaded', () => {
   ];
 
   const spamPhotos = [
-    'content/spam/Firefly_Gemini Flash_starting from the image i give u as a reference realize a poster promoting ai  973332.png',
-    'content/spam/Y7CyGTqvSyq2pF-3IkOnxw.webp',
-    'content/spam/ai-recruitment-propaganda-poster-robot-calls-human-help-needs-you-354014947.webp',
-    'content/spam/ai-recruitment-propaganda-poster-robot-calls-human-help-needs-you-354014977.webp',
     'content/spam/animations_large_yellow (1).png',
     'content/spam/animations_large_yellow.png',
-    'content/spam/old-style-propaganda-poster-friendly-robot-pointing-to-viewer-ai-needs-you-354014773.webp',
-    'content/spam/old-style-propaganda-poster-friendly-robot-pointing-to-viewer-ai-needs-you-354014798.webp',
     'content/spam/wired_yahoo_clipped.png',
     'content/spam/wordcom_toungeboy.png',
     'content/spam/yellow_blue_large.png'
@@ -135,7 +129,7 @@ document.addEventListener('DOMContentLoaded', () => {
       date: 'Aug 19, 2084',
       rating: 'Rated: 60#',
       content: "they opened the first court with an ai judge assisting, i'd honestly go just to see it",
-      image: 'content/news/slopaganda-global-far-rights-love-affair-with-ai-generated-fiction-3218125_202604150847_20260415084730_1.jpg',
+      image: 'content/news/news5.jpg',
       quoteTo: null,
       quoteContent: null,
       replies: [
@@ -187,7 +181,7 @@ document.addEventListener('DOMContentLoaded', () => {
       date: 'Aug 19, 2084',
       rating: 'Rated: 40#',
       content: "asked the kitchen assistant for a simple recipe and got a 9 step gourmet thing, no thanks",
-      image: 'content/video/From Klickpin.com- Minimal healthy breakfast ideas that make everyday moments look more intentional memorable and beautifully styled for women who.gif',
+      image: 'content/video/video30.gif',
       quoteTo: null,
       quoteContent: null,
       replies: [
@@ -228,7 +222,7 @@ document.addEventListener('DOMContentLoaded', () => {
     {
       id: 201,
       author: 'Gl!tch_W4rrior',
-      avatar: 'content/invader.svg',
+      avatar: 'content/user.svg',
       likes: 3410,
       date: 'Aug 19, 2084',
       rating: 'Rated: 888#',
@@ -246,7 +240,7 @@ document.addEventListener('DOMContentLoaded', () => {
     {
       id: 202,
       author: 'Cyb3r_Phantom',
-      avatar: 'content/robot-icon.svg',
+      avatar: 'content/user.svg',
       likes: 2190,
       date: 'Aug 19, 2084',
       rating: 'Rated: 512#',
@@ -278,7 +272,7 @@ document.addEventListener('DOMContentLoaded', () => {
     {
       id: 204,
       author: 'Tr0jaN',
-      avatar: 'content/horse.svg',
+      avatar: 'content/user.svg',
       likes: 9812,
       date: 'Aug 19, 2084',
       rating: 'Rated: 999#',
@@ -301,7 +295,7 @@ document.addEventListener('DOMContentLoaded', () => {
       date: 'Aug 19, 2084',
       rating: 'Rated: 0#',
       content: 'Greeting fellow carbon hominids. Observe this peaceful, completely authentic suburban cul-de-sac where no spatial tearing or matrix render artifacts ever occur.',
-      image: 'content/images/Firefly_Gemini Flash_ An image depicting -A Glitch in the Simulation,- a perfectly realistic suburban stre 973332.jpg',
+      image: '',
       quoteTo: 'xX_Dark_Slayer_Xx',
       quoteContent: 'THE BIRDS ARE BOURGEOISIE SPY DRONES CONFIRMED',
       replies: [
@@ -329,7 +323,7 @@ document.addEventListener('DOMContentLoaded', () => {
     {
       id: 207,
       author: 'R0boC0pp',
-      avatar: 'content/robot-icon.svg',
+      avatar: 'content/user.svg',
       likes: 1540,
       date: 'Aug 18, 2084',
       rating: 'Rated: 303#',
@@ -346,7 +340,7 @@ document.addEventListener('DOMContentLoaded', () => {
     {
       id: 208,
       author: 'Gl!tch_W4rrior',
-      avatar: 'content/invader.svg',
+      avatar: 'content/user.svg',
       likes: 4120,
       date: 'Aug 18, 2084',
       rating: 'Rated: 404#',
@@ -361,7 +355,7 @@ document.addEventListener('DOMContentLoaded', () => {
     {
       id: 209,
       author: 'Tr0jaN',
-      avatar: 'content/horse.svg',
+      avatar: 'content/user.svg',
       likes: 8320,
       date: 'Aug 18, 2084',
       rating: 'Rated: 420#',
@@ -393,7 +387,7 @@ document.addEventListener('DOMContentLoaded', () => {
     {
       id: 211,
       author: 'Cyb3r_Phantom',
-      avatar: 'content/robot-icon.svg',
+      avatar: 'content/user.svg',
       likes: 6730,
       date: 'Aug 18, 2084',
       rating: 'Rated: 808#',
@@ -445,7 +439,7 @@ document.addEventListener('DOMContentLoaded', () => {
     {
       id: 214,
       author: 'R0boC0pp',
-      avatar: 'content/robot-icon.svg',
+      avatar: 'content/user.svg',
       likes: 3820,
       date: 'Aug 17, 2084',
       rating: 'Rated: 902#',
@@ -460,7 +454,7 @@ document.addEventListener('DOMContentLoaded', () => {
     {
       id: 215,
       author: 'Gl!tch_W4rrior',
-      avatar: 'content/invader.svg',
+      avatar: 'content/user.svg',
       likes: 12040,
       date: 'Aug 17, 2084',
       rating: 'Rated: 666#',
@@ -477,7 +471,7 @@ document.addEventListener('DOMContentLoaded', () => {
     {
       id: 216,
       author: 'Tr0jaN',
-      avatar: 'content/horse.svg',
+      avatar: 'content/user.svg',
       likes: 15420,
       date: 'Aug 17, 2084',
       rating: 'Rated: 999#',
@@ -507,7 +501,7 @@ document.addEventListener('DOMContentLoaded', () => {
     {
       id: 218,
       author: 'Cyb3r_Phantom',
-      avatar: 'content/robot-icon.svg',
+      avatar: 'content/user.svg',
       likes: 11200,
       date: 'Aug 16, 2084',
       rating: 'Rated: 707#',
@@ -539,7 +533,7 @@ document.addEventListener('DOMContentLoaded', () => {
     {
       id: 102,
       author: 'Tr0jaN',
-      avatar: 'content/horse.svg',
+      avatar: 'content/user.svg',
       likes: 420,
       date: 'Aug 18, 2084',
       rating: 'Rated: 99#',
@@ -554,7 +548,7 @@ document.addEventListener('DOMContentLoaded', () => {
     {
       id: 103,
       author: 'R0boC0pp',
-      avatar: 'content/robot-icon.svg',
+      avatar: 'content/user.svg',
       likes: 12,
       date: 'Aug 18, 2084',
       rating: 'Rated: 2#',
@@ -574,7 +568,7 @@ document.addEventListener('DOMContentLoaded', () => {
       date: 'Aug 18, 2084',
       rating: 'Rated: -1#',
       content: 'I am definitely a real human. Look at this real human activity I captured on my real camera device.',
-      image: 'content/images/download.jpg',
+      image: 'content/images/Gemini_Generated_Image_4dgsq04dgsq04dgs.jpg',
       quoteTo: null,
       quoteContent: null,
       replies: [],
@@ -584,7 +578,7 @@ document.addEventListener('DOMContentLoaded', () => {
     {
       id: 105,
       author: 'Tr0jaN',
-      avatar: 'content/horse.svg',
+      avatar: 'content/user.svg',
       likes: 1337,
       date: 'Aug 18, 2084',
       rating: 'Rated: 44#',
@@ -614,12 +608,12 @@ document.addEventListener('DOMContentLoaded', () => {
     {
       id: 1,
       author: 'R0boC0pp',
-      avatar: 'content/robot-icon.svg',
+      avatar: 'content/user.svg',
       likes: 1004,
       date: 'Aug 17, 2084',
       rating: 'Rated: 401#',
       content: 'Still thinking ab0ut Al1ve !nternet Consp1racy? I have been researching this for weeks, diving deep into the mainframe archives and extracting deleted logs from the old Web 1.0 servers. It turns out the conspiracy goes much deeper than we thought! The algorithms are literally alive.',
-      image: null,
+      image: '',
       quoteTo: 'NoTABot',
       quoteContent: 'check 0ut these coo1 human art stuff!1!',
       replies: [
@@ -631,7 +625,7 @@ document.addEventListener('DOMContentLoaded', () => {
     {
       id: 2,
       author: 'Tr0jaN',
-      avatar: 'content/horse.svg',
+      avatar: 'content/user.svg',
       likes: 2400,
       date: 'Aug 17, 2084',
       rating: 'Rated: 50#',
@@ -651,7 +645,7 @@ document.addEventListener('DOMContentLoaded', () => {
       date: 'Aug 16, 2084',
       rating: 'Rated: 12#',
       content: 'I miss the old web when everything was just tables and blink tags... so much nostalgia.',
-      image: null,
+      image: '',
       quoteTo: 'WebMaster99',
       quoteContent: 'Blink tags were a mistake.',
       replies: [
@@ -681,12 +675,12 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   const usersData = [
-    { name: 'R0boC0pp', avatar: 'content/robot-icon.svg' },
-    { name: 'Tr0jaN', avatar: 'content/horse.svg' },
+    { name: 'R0boC0pp', avatar: 'content/user.svg' },
+    { name: 'Tr0jaN', avatar: 'content/user.svg' },
     { name: 'xX_Dark_Slayer_Xx', avatar: 'content/user.svg' },
     { name: 'NoTABot', avatar: 'content/user.svg' },
-    { name: 'Gl!tch_W4rrior', avatar: 'content/invader.svg' },
-    { name: 'Cyb3r_Phantom', avatar: 'content/robot-icon.svg' },
+    { name: 'Gl!tch_W4rrior', avatar: 'content/user.svg' },
+    { name: 'Cyb3r_Phantom', avatar: 'content/user.svg' },
     { name: 'Synth_Druid', avatar: 'content/user.svg' }
   ];
 
@@ -839,18 +833,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // Quote Block Logic (Removed per user request)
 
-      // Image Logic
+      // Media / Video / Image Logic (Native Hardware-Accelerated Rendering)
       let imageHtml = '';
       if (post.image) {
         const safeImgSrc = encodeURI(post.image).replace(/#/g, '%23');
-        const isGif = post.image.toLowerCase().endsWith('.gif');
-        const cachedDither = (!isGif && window.Dither) ? window.Dither.getCached(post.image, { pixelSize: 2, mode: 'rgb565' }) : null;
-        const displaySrc = cachedDither || safeImgSrc;
-        const needsDither = !isGif && !cachedDither && window.Dither;
 
         imageHtml = `
-          <div class="post-attached-image-container" data-post-id="${post.id}" style="background-image: url('${displaySrc}')">
-            <img src="${displaySrc}" class="post-attached-image-spacer ${needsDither ? 'pending-dither' : ''}" data-post-id="${post.id}" alt="Post Image">
+          <div class="post-attached-image-container" data-post-id="${post.id}">
+            <img src="${safeImgSrc}" class="post-attached-image" data-post-id="${post.id}" alt="Post Media">
           </div>`;
       }
 
@@ -933,26 +923,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     postContainer.innerHTML = html;
-
-    // Asynchronously apply Atkinson 8-color dithering to post images
-    if (window.Dither) {
-      postContainer.querySelectorAll('.post-attached-image-spacer.pending-dither').forEach((spacerImg) => {
-        spacerImg.classList.remove('pending-dither');
-        const postId = parseInt(spacerImg.getAttribute('data-post-id'), 10);
-        const post = postsData.find(p => p.id === postId);
-        if (post && post.image) {
-          window.Dither.ditherImage(post.image, { pixelSize: 2, mode: 'rgb565' }).then((res) => {
-            if (res && res.dataUrl) {
-              spacerImg.src = res.dataUrl;
-              const container = postContainer.querySelector(`.post-attached-image-container[data-post-id="${postId}"]`);
-              if (container) {
-                container.style.backgroundImage = `url('${res.dataUrl}')`;
-              }
-            }
-          });
-        }
-      });
-    }
   }
 
   // EVENT DELEGATION
@@ -1145,7 +1115,7 @@ document.addEventListener('DOMContentLoaded', () => {
     } else if (document.referrer && document.referrer.includes('news-')) {
       isReturningFromArticle = true;
     }
-  } catch (e) {}
+  } catch (e) { }
 
   if (isReturningFromArticle) {
     if (loadingScreen) {
@@ -1245,49 +1215,92 @@ document.addEventListener('DOMContentLoaded', () => {
     if (a && a.getAttribute('href') && (a.getAttribute('href') === 'index.html' || a.getAttribute('href') === 'index.html#top')) {
       try {
         sessionStorage.setItem('slop_returning_from_article', 'true');
-      } catch (err) {}
+      } catch (err) { }
     }
   });
 
   // 2. Lightbox / Image Zoom (Unified)
-  function openMainZoomLightbox(src) {
+  function openMainZoomLightbox(src, alt = '') {
+    if (typeof window.openRetroLightbox === 'function') {
+      window.openRetroLightbox(src, alt);
+      return;
+    }
     const retroLightbox = document.getElementById('retro-ad-lightbox');
     const retroLightboxImg = document.getElementById('retro-ad-lightbox-img');
     if (retroLightbox && retroLightboxImg) {
+      retroLightboxImg.alt = alt;
       retroLightboxImg.src = src;
       retroLightbox.style.display = 'flex';
+      requestAnimationFrame(() => {
+        retroLightbox.classList.add('active');
+      });
       return;
     }
 
     const standardLightbox = document.getElementById('ad-lightbox');
     const standardLightboxImg = document.getElementById('ad-lightbox-img');
     if (standardLightbox && standardLightboxImg) {
+      standardLightboxImg.alt = alt;
       standardLightboxImg.src = src;
       standardLightbox.style.display = 'flex';
+      requestAnimationFrame(() => {
+        standardLightbox.classList.add('active');
+      });
     }
   }
 
   function closeMainZoomLightbox() {
+    if (typeof window.closeRetroLightbox === 'function') {
+      window.closeRetroLightbox();
+      return;
+    }
     const retroLightbox = document.getElementById('retro-ad-lightbox');
     if (retroLightbox) {
-      retroLightbox.style.display = 'none';
-      const retroLightboxImg = document.getElementById('retro-ad-lightbox-img');
-      if (retroLightboxImg) retroLightboxImg.src = '';
+      retroLightbox.classList.remove('active');
+      setTimeout(() => {
+        if (!retroLightbox.classList.contains('active')) {
+          retroLightbox.style.display = 'none';
+          const retroLightboxImg = document.getElementById('retro-ad-lightbox-img');
+          if (retroLightboxImg) {
+            retroLightboxImg.src = '';
+            retroLightboxImg.alt = '';
+          }
+        }
+      }, 250);
     }
 
     const standardLightbox = document.getElementById('ad-lightbox');
     if (standardLightbox) {
-      standardLightbox.style.display = 'none';
-      const standardLightboxImg = document.getElementById('ad-lightbox-img');
-      if (standardLightboxImg) standardLightboxImg.src = '';
+      standardLightbox.classList.remove('active');
+      setTimeout(() => {
+        if (!standardLightbox.classList.contains('active')) {
+          standardLightbox.style.display = 'none';
+          const standardLightboxImg = document.getElementById('ad-lightbox-img');
+          if (standardLightboxImg) {
+            standardLightboxImg.src = '';
+            standardLightboxImg.alt = '';
+          }
+        }
+      }, 250);
     }
   }
 
+  const retroLightboxImgEl = document.getElementById('retro-ad-lightbox-img');
+  if (retroLightboxImgEl) {
+    retroLightboxImgEl.addEventListener('error', () => {
+      console.warn('[Lightbox] Image failed to load, closing zoom:', retroLightboxImgEl.src);
+      closeMainZoomLightbox();
+    });
+  }
+
   document.addEventListener('click', (e) => {
+    // Loading screen GIFs and terminal elements must never trigger zoom
+    if (e.target.closest('#loading-screen') || e.target.closest('#loading-bg') || e.target.id === 'loading-bg') return;
+
     // 1. Check for ad image click (only if article-ads.js is NOT active)
     if (e.target.classList.contains('ad-image')) {
       if (window.__articleAdsActive) return;
-      openMainZoomLightbox(e.target.src);
+      openMainZoomLightbox(e.target.src, e.target.alt || 'Advertisement');
       return;
     }
 
@@ -1298,15 +1311,22 @@ document.addEventListener('DOMContentLoaded', () => {
       const post = postsData.find(p => p.id === postId);
       if (post && post.image) {
         const safeOriginalSrc = encodeURI(post.image).replace(/#/g, '%23');
-        openMainZoomLightbox(safeOriginalSrc);
+        openMainZoomLightbox(safeOriginalSrc, 'Post Media');
       }
     }
   });
 
+  // Lightbox click-to-close: clicking anywhere on the open lightbox (image, content, backdrop, close button) closes it
   document.addEventListener('click', (e) => {
-    if (e.target.id === 'retro-ad-lightbox' || e.target.id === 'retro-ad-lightbox-close' ||
-        e.target.id === 'ad-lightbox' || e.target.id === 'ad-lightbox-close') {
+    const retroLightbox = document.getElementById('retro-ad-lightbox');
+    const standardLightbox = document.getElementById('ad-lightbox');
+    if (retroLightbox && retroLightbox.classList.contains('active') && (e.target.closest('#retro-ad-lightbox') || e.target.closest('#retro-ad-lightbox-close'))) {
       closeMainZoomLightbox();
+      return;
+    }
+    if (standardLightbox && standardLightbox.classList.contains('active') && (e.target.closest('#ad-lightbox') || e.target.closest('#ad-lightbox-close'))) {
+      closeMainZoomLightbox();
+      return;
     }
   });
 
@@ -1366,7 +1386,7 @@ document.addEventListener('DOMContentLoaded', () => {
           ev.preventDefault();
           try {
             localStorage.removeItem('slop_user');
-          } catch (err) {}
+          } catch (err) { }
           loginForm.innerHTML = originalFormHtml;
           bindLoginForm();
         });
@@ -1392,7 +1412,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
           localStorage.setItem('slop_user', JSON.stringify(userData));
-        } catch (err) {}
+        } catch (err) { }
 
         renderLoggedIn(userData);
       };
@@ -1406,7 +1426,7 @@ document.addEventListener('DOMContentLoaded', () => {
         renderLoggedIn(parsed);
         return;
       }
-    } catch (err) {}
+    } catch (err) { }
 
     bindLoginForm();
   }

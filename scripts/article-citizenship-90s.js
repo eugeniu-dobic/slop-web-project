@@ -21,69 +21,97 @@ document.addEventListener('DOMContentLoaded', () => {
   // Authentic CitizenPlus comments matching original article dialogue
   const defaultEntries = [
     {
-      author: "@FreeTier_Frank",
-      location: "Waiting Queue Ward 8",
-      date: "Nov 9, 2084 @ 18:54 EST",
-      text: "Called emergency dispatch on the free plan and the automated voice said my police response ETA is October 2087."
+      author: "@richard_2049",
+      location: "Sector 7 Terminal",
+      date: "Nov 9, 2084 @ 17:45 EST",
+      text: "$30 for faster government is actually insane"
     },
     {
-      author: "@PlusSubscriber_84",
-      location: "Municipal Park Perimeter",
-      date: "Nov 9, 2084 @ 18:47 EST",
-      text: "Honestly $29.99 for Freedom Mode™ is worth every credit. Walked across the municipal park today without triggering the perimeter sirens."
+      author: "@LunaSupporter",
+      location: "Luna Civic Club",
+      date: "Nov 9, 2084 @ 17:48 EST",
+      text: "Worth it. My score went up 22 points."
     },
     {
-      author: "@TaxPenaltyVictim",
-      location: "Low-Value Citizen Sector",
-      date: "Nov 9, 2084 @ 18:39 EST",
-      text: "I forgot to renew my subscription for 12 hours and the revenue algorithm reclassified me as a low-value user and hiked my taxes by 600%."
+      author: "@user_338",
+      location: "Queue 338",
+      date: "Nov 9, 2084 @ 17:54 EST",
+      text: "Can I get my voting privileges back without premium"
     },
     {
-      author: "@WaitingCitizen",
-      location: "Public Clinic Lobby 4",
-      date: "Nov 9, 2084 @ 18:30 EST",
-      text: "Currently #4,198,203 in the free healthcare queue to get a routine checkup. Doctor appointment scheduled for my next reincarnation."
+      author: "@admin",
+      location: "Civic Services Desk",
+      date: "Nov 9, 2084 @ 17:55 EST",
+      text: "Standard citizens retain all fundamental voting rights."
     },
     {
-      author: "@CitizenPlus_Enthusiast",
-      location: "Express Lane District",
-      date: "Nov 9, 2084 @ 18:23 EST",
-      text: "If you cannot budget $29.99 a month to avoid being classified as a low-value user, that is frankly a personal skill issue."
+      author: "@user_338",
+      location: "Queue 338",
+      date: "Nov 9, 2084 @ 17:56 EST",
+      text: "so yes or no"
     },
     {
-      author: "@ConsensusMod",
-      location: "Department of Voluntary Compliance",
-      date: "Nov 9, 2084 @ 18:14 EST",
-      text: "Public Reminder: Standard free-tier breathing permits remain valid between 08:00 and 17:00 on alternating weekdays."
+      author: "@admin",
+      location: "Civic Services Desk",
+      date: "Nov 9, 2084 @ 17:57 EST",
+      text: "Please consult the Civic Services FAQ."
     },
     {
-      author: "@WeatherWatcher",
-      location: "Subscribed Atmosphere Zone 2",
+      author: "@user_991",
+      location: "Standard Tier Ward",
+      date: "Nov 9, 2084 @ 18:03 EST",
+      text: "my standard account says upgrade recommended every time i log in"
+    },
+    {
+      author: "@user_992",
+      location: "Standard Tier Ward",
       date: "Nov 9, 2084 @ 18:05 EST",
-      text: "My neighbor upgraded to WeatherPass Ultra and summoned a localized micro-tornado over my driveway because I parked too close to his lawn."
+      text: "same"
     },
     {
-      author: "@BudgetGuy",
-      location: "Budget Housing Block 11",
-      date: "Nov 9, 2084 @ 17:58 EST",
-      text: "Had to cancel my video streaming plan and my nutrient paste subscription just so I could afford crime protection this month."
+      author: "@user_994",
+      location: "Restricted Terminal",
+      date: "Nov 9, 2084 @ 18:09 EST",
+      text: "mine says final warning"
+    },
+    {
+      author: "@user_772",
+      location: "Aspirant Node 772",
+      date: "Nov 9, 2084 @ 18:15 EST",
+      text: "can premium increase my score above 900"
+    },
+    {
+      author: "@admin",
+      location: "Civic Services Desk",
+      date: "Nov 9, 2084 @ 18:16 EST",
+      text: "Some benefits are available only to Gold citizens."
+    },
+    {
+      author: "@user_772",
+      location: "Aspirant Node 772",
+      date: "Nov 9, 2084 @ 18:17 EST",
+      text: "oh no"
     }
   ];
 
   function renderGuestbook() {
     if (!entriesContainer) return;
-    let stored = localStorage.getItem('slop_90s_citizenship_guestbook');
+    let stored = localStorage.getItem('slop_guestbook_v2_citizenship');
     let entries = stored ? JSON.parse(stored) : defaultEntries;
 
-    entriesContainer.innerHTML = entries.map(item => `
-      <div class="retro-entry-card">
+    entriesContainer.innerHTML = entries.map(item => {
+      const isAdmin = item.author && (item.author.toLowerCase() === '@admin' || item.author.toLowerCase() === 'admin');
+      const isDeleted = (item.text && (item.text.includes('[comment unavailable]') || item.text.includes('[deleted]'))) || (item.author && item.author.includes('deleted_user'));
+      return `
+      <div class="retro-entry-card${isAdmin ? ' admin-entry' : ''}">
         <div class="retro-entry-header">
-          <span class="retro-entry-author">👤 ${escapeHtml(item.author)} <small style="color: #666;">(${escapeHtml(item.location || 'Metro Net')})</small></span>
+          <span class="retro-entry-author">👤 ${escapeHtml(item.author)}${isAdmin ? ' <span class="retro-admin-badge">[SYS-ADMIN]</span>' : ''} <small style="color: #666;">(${escapeHtml(item.location || 'Metro Net')})</small></span>
           <span class="retro-entry-date">${escapeHtml(item.date)}</span>
         </div>
-        <div class="retro-entry-text">${escapeHtml(item.text)}</div>
+        <div class="retro-entry-text${isDeleted ? ' deleted-text' : ''}">${escapeHtml(item.text)}</div>
       </div>
-    `).join('');
+    `;
+    }).join('');
 
     if (guestbookCount) {
       guestbookCount.textContent = `(${entries.length} Entries)`;
@@ -102,7 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      let stored = localStorage.getItem('slop_90s_citizenship_guestbook');
+      let stored = localStorage.getItem('slop_guestbook_v2_citizenship');
       let entries = stored ? JSON.parse(stored) : [...defaultEntries];
 
       const now = new Date();
@@ -115,7 +143,7 @@ document.addEventListener('DOMContentLoaded', () => {
         text: text
       });
 
-      localStorage.setItem('slop_90s_citizenship_guestbook', JSON.stringify(entries));
+      localStorage.setItem('slop_guestbook_v2_citizenship', JSON.stringify(entries));
       messageInput.value = '';
       renderGuestbook();
     });
