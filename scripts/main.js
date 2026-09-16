@@ -2,30 +2,22 @@ document.addEventListener('DOMContentLoaded', () => {
   const postContainer = document.getElementById('post-container');
   const newsContainer = document.getElementById('news-container');
   const postAds = [
-    'content/post_ad/1.png', 'content/post_ad/10.png', 'content/post_ad/11.png', 'content/post_ad/12.png',
-    'content/post_ad/13.png', 'content/post_ad/14.png', 'content/post_ad/18302bf1-5315-4275-b5c9-767e6f440dcd.png',
-    'content/post_ad/2.png', 'content/post_ad/3.png', 'content/post_ad/4.png', 'content/post_ad/5.png',
-    'content/post_ad/6.png', 'content/post_ad/6faa2843-c286-42cc-b8e2-055c1f525fde.png', 'content/post_ad/7.png',
-    'content/post_ad/8.png', 'content/post_ad/8bf9c46d-5e21-4609-8f0b-93194afde152.png', 'content/post_ad/9.png',
-    'content/post_ad/a61d6cf3-b785-4832-a010-c7b2b3bd0a99.png'
+    'content/post_ad/1.jpg', 'content/post_ad/10.jpg', 'content/post_ad/11.jpg', 'content/post_ad/12.jpg',
+    'content/post_ad/13.jpg', 'content/post_ad/14.jpg', 'content/post_ad/18302bf1-5315-4275-b5c9-767e6f440dcd.jpg',
+    'content/post_ad/2.jpg', 'content/post_ad/3.jpg', 'content/post_ad/4.jpg', 'content/post_ad/5.jpg',
+    'content/post_ad/6.jpg', 'content/post_ad/6faa2843-c286-42cc-b8e2-055c1f525fde.jpg', 'content/post_ad/7.jpg',
+    'content/post_ad/8.jpg', 'content/post_ad/8bf9c46d-5e21-4609-8f0b-93194afde152.jpg', 'content/post_ad/9.jpg',
+    'content/post_ad/a61d6cf3-b785-4832-a010-c7b2b3bd0a99.jpg'
   ];
 
   const dismissedPostSlots = new Set();
   const postSlotAdMap = new Map();
 
   const sideAds = [
-    'content/side_ad/15.png', 'content/side_ad/16.png', 'content/side_ad/17.png', 'content/side_ad/18.png',
-    'content/side_ad/19.png', 'content/side_ad/20.png', 'content/side_ad/21.png', 'content/side_ad/22.png',
-    'content/side_ad/23.png', 'content/side_ad/24.png', 'content/side_ad/25.png', 'content/side_ad/26.png',
-    'content/side_ad/27.png', 'content/side_ad/28.png', 'content/side_ad/29.png', 'content/side_ad/30.png'
-  ];
-
-  const spamPhotos = [
-    'content/spam/animations_large_yellow (1).png',
-    'content/spam/animations_large_yellow.png',
-    'content/spam/wired_yahoo_clipped.png',
-    'content/spam/wordcom_toungeboy.png',
-    'content/spam/yellow_blue_large.png'
+    'content/side_ad/15.jpg', 'content/side_ad/16.jpg', 'content/side_ad/17.jpg', 'content/side_ad/18.jpg',
+    'content/side_ad/19.jpg', 'content/side_ad/20.jpg', 'content/side_ad/21.jpg', 'content/side_ad/22.jpg',
+    'content/side_ad/23.jpg', 'content/side_ad/24.jpg', 'content/side_ad/25.jpg', 'content/side_ad/26.jpg',
+    'content/side_ad/27.jpg', 'content/side_ad/28.jpg', 'content/side_ad/29.jpg', 'content/side_ad/30.jpg'
   ];
 
   const postsData = [
@@ -1057,22 +1049,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // --- Retro 90s Visitor Counter on Homepage ---
-  const counterDigitsWrap = document.getElementById('retro-counter-digits');
-  if (counterDigitsWrap) {
-    let count = parseInt(localStorage.getItem('slop_90s_counter') || '48291', 10);
-    count += 1;
-    localStorage.setItem('slop_90s_counter', count.toString());
-
-    const formatted = String(count).padStart(7, '0');
-    counterDigitsWrap.innerHTML = formatted.split('').map(d => `
-      <span class="retro-counter-digit">${d}</span>
-    `).join('');
-  }
-
-  // --- Retro 90s Side Ads & Lightbox Modal (Delegated to scripts/article-ads.js) ---
-
-
   // --- Ad System Logic ---
 
   // 1. Popup Ads
@@ -1142,6 +1118,7 @@ document.addEventListener('DOMContentLoaded', () => {
       { html: "Checking 386/387 coupling... <span class=\"highlight\">[Ok]</span>" },
       { html: "eth0: 3c509 at 0x300, 10baseT port, address 00:20:af:12:34:56, IRQ 10." },
       { html: "SLOP inetd daemon[421]: <span class=\"status-alert\">listening on port 8080.</span>" },
+      { html: "Loading human inteface... <span class=\"highlight\">[Good Old Days by Rug]</span>" },
       { isCta: true }
     ];
 

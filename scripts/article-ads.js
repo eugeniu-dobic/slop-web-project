@@ -23,19 +23,19 @@ document.addEventListener('click', (e) => {
 
 document.addEventListener('DOMContentLoaded', () => {
   const postAds = [
-    'content/post_ad/1.png', 'content/post_ad/10.png', 'content/post_ad/11.png', 'content/post_ad/12.png',
-    'content/post_ad/13.png', 'content/post_ad/14.png', 'content/post_ad/18302bf1-5315-4275-b5c9-767e6f440dcd.png',
-    'content/post_ad/2.png', 'content/post_ad/3.png', 'content/post_ad/4.png', 'content/post_ad/5.png',
-    'content/post_ad/6.png', 'content/post_ad/6faa2843-c286-42cc-b8e2-055c1f525fde.png', 'content/post_ad/7.png',
-    'content/post_ad/8.png', 'content/post_ad/8bf9c46d-5e21-4609-8f0b-93194afde152.png', 'content/post_ad/9.png',
-    'content/post_ad/a61d6cf3-b785-4832-a010-c7b2b3bd0a99.png'
+    'content/post_ad/1.jpg', 'content/post_ad/10.jpg', 'content/post_ad/11.jpg', 'content/post_ad/12.jpg',
+    'content/post_ad/13.jpg', 'content/post_ad/14.jpg', 'content/post_ad/18302bf1-5315-4275-b5c9-767e6f440dcd.jpg',
+    'content/post_ad/2.jpg', 'content/post_ad/3.jpg', 'content/post_ad/4.jpg', 'content/post_ad/5.jpg',
+    'content/post_ad/6.jpg', 'content/post_ad/6faa2843-c286-42cc-b8e2-055c1f525fde.jpg', 'content/post_ad/7.jpg',
+    'content/post_ad/8.jpg', 'content/post_ad/8bf9c46d-5e21-4609-8f0b-93194afde152.jpg', 'content/post_ad/9.jpg',
+    'content/post_ad/a61d6cf3-b785-4832-a010-c7b2b3bd0a99.jpg'
   ];
 
   const sideAds = [
-    'content/side_ad/15.png', 'content/side_ad/16.png', 'content/side_ad/17.png', 'content/side_ad/18.png',
-    'content/side_ad/19.png', 'content/side_ad/20.png', 'content/side_ad/21.png', 'content/side_ad/22.png',
-    'content/side_ad/23.png', 'content/side_ad/24.png', 'content/side_ad/25.png', 'content/side_ad/26.png',
-    'content/side_ad/27.png', 'content/side_ad/28.png', 'content/side_ad/29.png', 'content/side_ad/30.png'
+    'content/side_ad/15.jpg', 'content/side_ad/16.jpg', 'content/side_ad/17.jpg', 'content/side_ad/18.jpg',
+    'content/side_ad/19.jpg', 'content/side_ad/20.jpg', 'content/side_ad/21.jpg', 'content/side_ad/22.jpg',
+    'content/side_ad/23.jpg', 'content/side_ad/24.jpg', 'content/side_ad/25.jpg', 'content/side_ad/26.jpg',
+    'content/side_ad/27.jpg', 'content/side_ad/28.jpg', 'content/side_ad/29.jpg', 'content/side_ad/30.jpg'
   ];
 
   function getRandom(arr) {
