@@ -1727,7 +1727,7 @@ a:hover {
   gap: 20px;
   margin-top: 15px;
   padding-top: 10px;
-  border-top: 1px dashed var(--color-border-light-gray);
+  border-top: none;
 }
 
 .post-icon {
