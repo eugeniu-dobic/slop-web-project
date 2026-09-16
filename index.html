@@ -10,12 +10,13 @@
     // Clean up any stale keys from previous bug
     try { sessionStorage.removeItem('slop_gateway_passed'); } catch (e) { }
 
-    // Only skip the loading screen if returning to homepage from an article
+    // Only skip the loading screen if returning to homepage from an article or narrative reset
     var _isReturning = false;
     try {
-      if (sessionStorage.getItem('slop_returning_from_article') === 'true') {
+      if (sessionStorage.getItem('slop_returning_from_article') === 'true' || sessionStorage.getItem('slop_skip_loader') === 'true') {
         _isReturning = true;
         sessionStorage.removeItem('slop_returning_from_article');
+        sessionStorage.removeItem('slop_skip_loader');
       } else if (document.referrer && document.referrer.indexOf('news-') !== -1) {
         _isReturning = true;
       }
@@ -106,17 +107,16 @@
         <div id="retro-left-ad-1" class="retro-ad-wrapper"></div>
 
         <!-- User Login Widget (Identical to Article Page style) -->
-        <div class="retro-widget-box">
-          <div class="retro-box-header">USER LOGIN</div>
-          <div class="retro-box-body">
-            <form class="retro-search-form"
-              onsubmit="event.preventDefault(); alert('AUTHENTICATING WITH CENTRAL CONSENSUS MAINFRAME...');">
+        <div class="retro-widget-box" id="retro-login-widget">
+          <div class="retro-box-header" id="retro-login-header">USER LOGIN</div>
+          <div class="retro-box-body" id="retro-login-box-body">
+            <form class="retro-search-form" id="retro-login-form">
               <label for="username" style="font-size: 10px; font-weight: bold; color: #333;">Username:</label>
               <input type="text" id="username" class="retro-search-input" placeholder="e.g. @Echo_84" required>
               <label for="password" style="font-size: 10px; font-weight: bold; color: #333; margin-top: 4px;">Cipher
                 Key:</label>
               <input type="password" id="password" class="retro-search-input" required>
-              <button type="submit" class="retro-search-btn" style="margin-top: 6px;">[ Dial-In Login ]</button>
+              <button type="submit" id="dial-in-login-btn" class="retro-search-btn" style="margin-top: 6px;">[ Dial-In Login ]</button>
             </form>
           </div>
         </div>

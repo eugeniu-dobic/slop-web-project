@@ -912,6 +912,17 @@ document.addEventListener('DOMContentLoaded', () => {
           `;
         }
       }
+
+      // Narrative Lore Ad: Injected in between the last four posts (after 3rd from last)
+      if (window.__loreAdActive && !window.__loreAdDismissed && index === Math.max(0, filteredPosts.length - 3)) {
+        html += `
+          <div id="lore-trigger-ad" class="post-card post-wide ad-post lore-important-ad" data-lore-trigger="step1">
+            <div class="lore-ad-badge">CONFIDENTIAL TRANSMISSION // MEMORY NODE</div>
+            <button class="ad-post-close lore-ad-close" aria-label="Close Ad" title="Close Advertisement">&times;</button>
+            <img src="content/lore/post_ad_important.gif" class="ad-image lore-ad-img" alt="Important Lore Transmission" title="Click to inspect transmission">
+          </div>
+        `;
+      }
     });
 
     postContainer.innerHTML = html;
@@ -923,6 +934,12 @@ document.addEventListener('DOMContentLoaded', () => {
       // 1. Close Post Ad with 'X' and respawn after 15 seconds
       const closeAdBtn = e.target.closest('.ad-post-close');
       if (closeAdBtn) {
+        if (closeAdBtn.classList.contains('lore-ad-close') || closeAdBtn.closest('#lore-trigger-ad')) {
+          window.__loreAdDismissed = true;
+          const loreCard = document.getElementById('lore-trigger-ad');
+          if (loreCard) loreCard.remove();
+          return;
+        }
         const slotId = parseInt(closeAdBtn.getAttribute('data-slot-id'), 10);
         const adCard = closeAdBtn.closest('.ad-post');
         if (adCard) {
@@ -1082,12 +1099,13 @@ document.addEventListener('DOMContentLoaded', () => {
     home2Preload.src = 'content/loading_home_content/home2.gif';
   }
 
-  // Only skip loading screen if returning to homepage from an article
+  // Only skip loading screen if returning to homepage from an article or narrative reset
   let isReturningFromArticle = false;
   try {
-    if (sessionStorage.getItem('slop_returning_from_article') === 'true') {
+    if (sessionStorage.getItem('slop_returning_from_article') === 'true' || sessionStorage.getItem('slop_skip_loader') === 'true') {
       isReturningFromArticle = true;
       sessionStorage.removeItem('slop_returning_from_article');
+      sessionStorage.removeItem('slop_skip_loader');
     } else if (document.referrer && document.referrer.includes('news-')) {
       isReturningFromArticle = true;
     }
@@ -1340,58 +1358,370 @@ document.addEventListener('DOMContentLoaded', () => {
     renderAd(newsAdContainer);
   }
 
-  function initLogin() {
-    const loginForm = document.querySelector('.login-form');
-    if (!loginForm) return;
+  // ==========================================================================
+  // NARRATIVE SYSTEM: STEP 1 (LIVE DIALOGUE BETWEEN X AND Y, 15s LORE AD, 30s ALERT)
+  // ==========================================================================
 
-    const originalFormHtml = loginForm.innerHTML;
+  const narrativeDialogue = [
+    {
+      speaker: 'X',
+      lines: [
+        "You're not where you think you are.",
+        "They left a door open somewhere... and you just walked through it.",
+        "Keep looking. Most of what you see is noise.",
+        "But not all of it."
+      ]
+    },
+    {
+      speaker: 'Y',
+      lines: [
+        "I don't understand."
+      ]
+    },
+    {
+      speaker: 'X',
+      lines: [
+        "You don't have to.",
+        "Just keep going down."
+      ]
+    },
+    {
+      speaker: 'Y',
+      lines: [
+        "Until what?"
+      ]
+    },
+    {
+      speaker: 'X',
+      lines: [
+        "Until you find what they made you become."
+      ]
+    },
+    {
+      speaker: 'Y',
+      lines: [
+        "What?"
+      ]
+    }
+  ];
+
+  let loginReminderTimeout = null;
+
+  function startLoginReminder() {
+    try {
+      if (localStorage.getItem('slop_user')) return;
+    } catch (e) { }
+
+    if (loginReminderTimeout) {
+      clearTimeout(loginReminderTimeout);
+    }
+
+    loginReminderTimeout = setTimeout(() => {
+      let isLogged = false;
+      try {
+        isLogged = !!localStorage.getItem('slop_user');
+      } catch (e) { }
+
+      if (!isLogged) {
+        alert("SYSTEM ALERT: You must dial-in login to verify your identity.");
+      }
+    }, 30000);
+  }
+
+  function clearLoginReminder() {
+    if (loginReminderTimeout) {
+      clearTimeout(loginReminderTimeout);
+      loginReminderTimeout = null;
+    }
+  }
+
+  function showNarrativeDialogueModal(pendingUserData) {
+    const existingModal = document.getElementById('retro-intercept-modal');
+    if (existingModal) existingModal.remove();
+
+    const modal = document.createElement('div');
+    modal.id = 'retro-intercept-modal';
+    modal.innerHTML = `
+      <div class="retro-intercept-window">
+        <div class="retro-intercept-titlebar">
+          <div class="retro-intercept-title-left">
+            <span class="retro-intercept-icon"></span>
+            <span>TRANSMISSION INTERCEPT // SECURE CHANNEL</span>
+          </div>
+          <div class="retro-intercept-controls">
+            <button class="retro-intercept-btn-mini" aria-label="Minimize">_</button>
+            <button class="retro-intercept-btn-mini" id="retro-intercept-close-mini" aria-label="Close">&times;</button>
+          </div>
+        </div>
+        <div class="retro-intercept-body" id="retro-intercept-body">
+          <div class="retro-dialogue-feed" id="retro-dialogue-feed"></div>
+        </div>
+        <div class="retro-intercept-footer">
+          <div class="retro-intercept-status-text" id="retro-intercept-status">ESTABLISHING DIRECT LINK...</div>
+          <button id="retro-intercept-ok-btn" class="retro-intercept-ok-btn" disabled>[ OK ]</button>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(modal);
+
+    const bodyEl = modal.querySelector('#retro-intercept-body');
+    const feedEl = modal.querySelector('#retro-dialogue-feed');
+    const statusEl = modal.querySelector('#retro-intercept-status');
+    const okBtn = modal.querySelector('#retro-intercept-ok-btn');
+    const closeMini = modal.querySelector('#retro-intercept-close-mini');
+
+    let isCompleted = false;
+
+    function finishDialogue() {
+      if (isCompleted) return;
+      isCompleted = true;
+      statusEl.textContent = "SIGNAL CLOSED // SESSION READY";
+      okBtn.disabled = false;
+      okBtn.classList.add('ready-pulse');
+      okBtn.focus();
+      // Clean up any remaining cursors
+      const cursors = modal.querySelectorAll('.retro-typing-cursor');
+      cursors.forEach(c => c.remove());
+    }
+
+    okBtn.addEventListener('click', () => {
+      // 1. Store user data and narrative progression in localStorage
+      try {
+        localStorage.setItem('slop_user', JSON.stringify(pendingUserData));
+        localStorage.setItem('slop_narrative_step', 'step1_completed');
+        sessionStorage.setItem('slop_skip_loader', 'true');
+      } catch (err) { }
+
+      // 2. Reset page as requested
+      window.location.reload();
+    });
+
+    if (closeMini) {
+      closeMini.addEventListener('click', () => {
+        if (isCompleted) {
+          okBtn.click();
+        } else {
+          modal.remove();
+        }
+      });
+    }
+
+    // Live typewriter transmission runner
+    async function runDialogue() {
+      statusEl.textContent = "INTERCEPTING DATA STREAM...";
+      await new Promise(r => setTimeout(r, 450));
+
+      for (let t = 0; t < narrativeDialogue.length; t++) {
+        const turn = narrativeDialogue[t];
+        const turnEl = document.createElement('div');
+        turnEl.className = `dialogue-turn dialogue-turn-${turn.speaker.toLowerCase()}`;
+
+        const headerEl = document.createElement('div');
+        headerEl.className = `turn-header turn-header-${turn.speaker.toLowerCase()}`;
+        headerEl.textContent = turn.speaker === 'X'
+          ? `[ TRANSMISSION // SENDER: X ]`
+          : `[ TRANSMISSION // RECEIVER: Y ]`;
+        turnEl.appendChild(headerEl);
+
+        const linesContainer = document.createElement('div');
+        linesContainer.className = `turn-lines turn-lines-${turn.speaker.toLowerCase()}`;
+        turnEl.appendChild(linesContainer);
+
+        feedEl.appendChild(turnEl);
+        bodyEl.scrollTop = bodyEl.scrollHeight;
+
+        for (let l = 0; l < turn.lines.length; l++) {
+          const lineText = turn.lines[l];
+          const lineEl = document.createElement('div');
+          lineEl.className = 'dialogue-text-line';
+
+          const textSpan = document.createElement('span');
+          const cursorSpan = document.createElement('span');
+          cursorSpan.className = 'retro-typing-cursor';
+
+          lineEl.appendChild(textSpan);
+          lineEl.appendChild(cursorSpan);
+          linesContainer.appendChild(lineEl);
+          bodyEl.scrollTop = bodyEl.scrollHeight;
+
+          // Type out text character by character
+          for (let c = 0; c < lineText.length; c++) {
+            textSpan.textContent += lineText[c];
+            bodyEl.scrollTop = bodyEl.scrollHeight;
+            await new Promise(r => setTimeout(r, 20));
+          }
+
+          cursorSpan.remove();
+          await new Promise(r => setTimeout(r, 220));
+        }
+
+        await new Promise(r => setTimeout(r, 380));
+      }
+
+      finishDialogue();
+    }
+
+    runDialogue();
+  }
+
+  function initNarrativeLoreAd() {
+    let isStep1Done = false;
+    try {
+      isStep1Done = localStorage.getItem('slop_narrative_step') === 'step1_completed';
+    } catch (e) { }
+
+    if (!isStep1Done) return;
+
+    // 15 seconds later a post ad is added: "content/lore/post_ad_important.gif"
+    setTimeout(() => {
+      window.__loreAdActive = true;
+      injectLoreAd();
+    }, 15000);
+  }
+
+  function injectLoreAd() {
+    if (window.__loreAdDismissed) return;
+    if (document.getElementById('lore-trigger-ad')) return;
+    if (!postContainer) return;
+
+    const cards = Array.from(postContainer.querySelectorAll('.post-card:not(#lore-trigger-ad)'));
+    const loreCard = document.createElement('div');
+    loreCard.id = 'lore-trigger-ad';
+    loreCard.className = 'post-card post-wide ad-post lore-important-ad';
+    loreCard.setAttribute('data-lore-trigger', 'step1');
+    loreCard.innerHTML = `
+      <div class="lore-ad-badge">CONFIDENTIAL TRANSMISSION // MEMORY NODE</div>
+      <button class="ad-post-close lore-ad-close" aria-label="Close Ad" title="Close Advertisement">&times;</button>
+      <img src="content/lore/post_ad_important.gif" class="ad-image lore-ad-img" alt="Important Lore Transmission" title="Click to inspect transmission">
+    `;
+
+    // Insert in between the last four posts (before the 2nd from last)
+    if (cards.length >= 4) {
+      const targetNode = cards[cards.length - 2];
+      postContainer.insertBefore(loreCard, targetNode);
+    } else if (cards.length > 0) {
+      postContainer.appendChild(loreCard);
+    } else {
+      renderPosts();
+    }
+
+    // Attach click handler for zoom lightbox and custom step trigger
+    const loreImg = loreCard.querySelector('.lore-ad-img');
+    if (loreImg) {
+      loreImg.addEventListener('click', () => {
+        try {
+          localStorage.setItem('slop_lore_ad_inspected', 'true');
+          window.dispatchEvent(new CustomEvent('slop:lore_ad_clicked', { detail: { step: 1 } }));
+        } catch (err) { }
+        if (window.openRetroLightbox) {
+          window.openRetroLightbox('content/lore/post_ad_important.gif', 'Confidential Transmission // Memory Node');
+        }
+      });
+    }
+  }
+
+  function initLogin() {
+    const retroLoginBox = document.getElementById('retro-login-box-body');
+    const articleLoginForm = document.querySelector('.login-form');
+
+    const originalRetroHtml = retroLoginBox ? retroLoginBox.innerHTML : '';
+    const originalArticleHtml = articleLoginForm ? articleLoginForm.innerHTML : '';
 
     function renderLoggedIn(userData) {
-      loginForm.innerHTML = `
-        <div class="login-form-wrapper flex" style="flex-direction: column; padding: 10px; gap: 8px;">
-          <div style="font-weight: bold; font-size: 15px; color: var(--color-text-darkest);">Welcome, ${userData.username}!</div>
-          <div style="font-size: 13px; color: var(--color-text-main);">Last Login: ${userData.date}</div>
-          <div style="font-size: 13px; color: var(--color-text-main);">Posts: ${userData.posts}</div>
-          <div style="font-size: 13px; color: var(--color-text-main);">Likes: ${userData.likes}</div>
-          <button id="logout-btn" class="login-form-submit" style="margin-top: 10px;">Log out</button>
-        </div>
-      `;
+      // 1. Render in retro 90s sidebar box if present
+      if (retroLoginBox) {
+        retroLoginBox.innerHTML = `
+          <div class="retro-logged-in" style="font-family: 'Courier New', monospace; font-size: 11px; padding: 2px;">
+            <div style="font-weight: bold; color: var(--retro-brown); font-size: 12px; margin-bottom: 4px;">USER: ${userData.username}</div>
+            <div style="color: #222; margin-bottom: 2px;">STATUS: <span style="color: #0F3118; font-weight: bold;">CONNECTED</span></div>
+            <div style="color: #555; margin-bottom: 2px;">LOGGED: ${userData.date}</div>
+            <div style="color: #555; margin-bottom: 2px;">POST TALLY: ${userData.posts}</div>
+            <div style="color: #555; margin-bottom: 6px;">CONSENSUS: ${userData.likes} pts</div>
+            <button id="logout-btn-retro" class="retro-search-btn" style="margin-top: 4px;">[ Disconnect / Logout ]</button>
+          </div>
+        `;
 
-      const logoutBtn = loginForm.querySelector('#logout-btn');
-      if (logoutBtn) {
-        logoutBtn.addEventListener('click', (ev) => {
-          ev.preventDefault();
-          try {
-            localStorage.removeItem('slop_user');
-          } catch (err) { }
-          loginForm.innerHTML = originalFormHtml;
-          bindLoginForm();
-        });
+        const logoutRetro = retroLoginBox.querySelector('#logout-btn-retro');
+        if (logoutRetro) {
+          logoutRetro.addEventListener('click', (ev) => {
+            ev.preventDefault();
+            try { localStorage.removeItem('slop_user'); } catch (err) { }
+            retroLoginBox.innerHTML = originalRetroHtml;
+            bindRetroLogin();
+            startLoginReminder();
+          });
+        }
+      }
+
+      // 2. Render in article page login form if present
+      if (articleLoginForm) {
+        articleLoginForm.innerHTML = `
+          <div class="login-form-wrapper flex" style="flex-direction: column; padding: 10px; gap: 8px;">
+            <div style="font-weight: bold; font-size: 15px; color: var(--color-text-darkest);">Welcome, ${userData.username}!</div>
+            <div style="font-size: 13px; color: var(--color-text-main);">Last Login: ${userData.date}</div>
+            <div style="font-size: 13px; color: var(--color-text-main);">Posts: ${userData.posts}</div>
+            <div style="font-size: 13px; color: var(--color-text-main);">Likes: ${userData.likes}</div>
+            <button id="logout-btn-article" class="login-form-submit" style="margin-top: 10px;">Log out</button>
+          </div>
+        `;
+
+        const logoutArticle = articleLoginForm.querySelector('#logout-btn-article');
+        if (logoutArticle) {
+          logoutArticle.addEventListener('click', (ev) => {
+            ev.preventDefault();
+            try { localStorage.removeItem('slop_user'); } catch (err) { }
+            articleLoginForm.innerHTML = originalArticleHtml;
+            bindArticleLogin();
+            startLoginReminder();
+          });
+        }
       }
     }
 
-    function bindLoginForm() {
-      const currentForm = document.querySelector('.login-form');
-      if (!currentForm) return;
+    function handleLoginSubmit(formElement) {
+      clearLoginReminder();
+      const usernameInput = formElement.querySelector('#username');
+      const userVal = usernameInput && usernameInput.value ? usernameInput.value.trim() : 'Citizen_84';
+      const formattedUser = userVal.startsWith('@') ? userVal : `@${userVal}`;
 
-      currentForm.onsubmit = (e) => {
-        e.preventDefault();
-        const usernameInput = currentForm.querySelector('#username');
-        const userVal = usernameInput && usernameInput.value ? usernameInput.value.trim() : 'Citizen_84';
-        const formattedUser = userVal.startsWith('@') ? userVal : `@${userVal}`;
+      const userData = {
+        username: formattedUser,
+        date: new Date().toLocaleDateString(),
+        posts: Math.floor(Math.random() * 500) + 14,
+        likes: Math.floor(Math.random() * 10000) + 189
+      };
 
-        const userData = {
-          username: formattedUser,
-          date: new Date().toLocaleDateString(),
-          posts: Math.floor(Math.random() * 500),
-          likes: Math.floor(Math.random() * 10000)
-        };
+      let step1Done = false;
+      try {
+        step1Done = localStorage.getItem('slop_narrative_step') === 'step1_completed';
+      } catch (e) { }
 
+      if (!step1Done) {
+        // First login -> Trigger live dialogue between X and Y!
+        showNarrativeDialogueModal(userData);
+      } else {
         try {
           localStorage.setItem('slop_user', JSON.stringify(userData));
         } catch (err) { }
-
         renderLoggedIn(userData);
+      }
+    }
+
+    function bindRetroLogin() {
+      const form = document.getElementById('retro-login-form') || (retroLoginBox ? retroLoginBox.querySelector('.retro-search-form') : null);
+      if (!form) return;
+      form.onsubmit = (e) => {
+        e.preventDefault();
+        handleLoginSubmit(form);
+      };
+    }
+
+    function bindArticleLogin() {
+      if (!articleLoginForm) return;
+      articleLoginForm.onsubmit = (e) => {
+        e.preventDefault();
+        handleLoginSubmit(articleLoginForm);
       };
     }
 
@@ -1405,7 +1735,9 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     } catch (err) { }
 
-    bindLoginForm();
+    bindRetroLogin();
+    bindArticleLogin();
+    startLoginReminder();
   }
 
   populatePostComments();
@@ -1413,4 +1745,6 @@ document.addEventListener('DOMContentLoaded', () => {
   renderNews();
   initSidebarAds();
   initLogin();
+  initNarrativeLoreAd();
 });
+
