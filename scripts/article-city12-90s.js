@@ -18,85 +18,67 @@ document.addEventListener('DOMContentLoaded', () => {
   const entriesContainer = document.getElementById('retro-guestbook-entries');
   const guestbookCount = document.getElementById('retro-guestbook-count');
 
-  // Authentic City 12 comments matching original article dialogue
+  // Authentic City 12 comments matching rewritten article and mockup
   const defaultEntries = [
     {
       author: "@city12mom",
       location: "Tower Block 9",
-      date: "Nov 7, 2084 @ 15:42 EST",
-      text: "woke up and my window faces the wrong way now"
+      date: "Nov 7, 2084 @ 07:14 EST",
+      text: "woke up and my registered home coordinates changed. My kitchen now faces 4.7km east."
     },
     {
-      author: "@sector_blue",
-      location: "High Rise East",
-      date: "Nov 7, 2084 @ 15:45 EST",
-      text: "Honestly the new view is better"
-    },
-    {
-      author: "@city12dad",
-      location: "Mobile Zone 12",
-      date: "Nov 7, 2084 @ 15:51 EST",
-      text: "did they move the whole city or just the buildings"
-    },
-    {
-      author: "@admin",
-      location: "Municipal Logistics Desk",
-      date: "Nov 7, 2084 @ 15:52 EST",
-      text: "The city."
+      author: "@penthouse_lounge",
+      location: "Skyline Sector 1",
+      date: "Nov 7, 2084 @ 07:18 EST",
+      text: "The western horizon view is finally unobstructed. Worth every complaint we filed."
     },
     {
       author: "@city12dad",
-      location: "Mobile Zone 12",
-      date: "Nov 7, 2084 @ 15:53 EST",
-      text: "right"
+      location: "Central Sector 4",
+      date: "Nov 7, 2084 @ 07:29 EST",
+      text: "I was wondering why the entire apartment block vibrated between 02:00 and 05:00."
     },
     {
       author: "@user_551",
       location: "Transit Sector 5",
-      date: "Nov 7, 2084 @ 16:04 EST",
-      text: "my GPS still says old location"
+      date: "Nov 7, 2084 @ 07:42 EST",
+      text: "My commuter shuttle arrived 4.7 kilometers away from where the station was yesterday."
     },
     {
-      author: "@user_552",
-      location: "Sub-Ward 2",
-      date: "Nov 7, 2084 @ 16:06 EST",
-      text: "mine too"
+      author: "@admin",
+      location: "Municipal Planning Authority",
+      date: "Nov 7, 2084 @ 07:45 EST",
+      text: "This was a minor geographic adjustment. Zero buildings were demolished during transit."
     },
     {
-      author: "@user_553",
-      location: "Coastal Shelf",
-      date: "Nov 7, 2084 @ 16:09 EST",
-      text: "mine says i live underwater"
-    },
-    {
-      author: "@sector_12",
-      location: "Sector 12 Outer Ring",
-      date: "Nov 7, 2084 @ 16:15 EST",
-      text: "new skyline is fire ngl"
+      author: "@displaced_84",
+      location: "Ward 12 Outer Ring",
+      date: "Nov 7, 2084 @ 08:02 EST",
+      text: "I just submitted an appeal to the Civic Satisfaction Portal. The confirmation screen says estimated queue time is 19 months."
     },
     {
       author: "@complaint_bot",
-      location: "Automated Municipal Bot",
-      date: "Nov 7, 2084 @ 16:15 EST",
-      text: "Thank you for your positive feedback."
+      location: "Civic Satisfaction Portal",
+      date: "Nov 7, 2084 @ 08:03 EST",
+      text: "Thank you for logging ticket #99104-E. Estimated resolution: June 2086. Please remain indoors."
     },
     {
-      author: "@sector_12",
-      location: "Sector 12 Outer Ring",
-      date: "Nov 7, 2084 @ 16:16 EST",
-      text: "i didn't give feedback"
+      author: "@displaced_84",
+      location: "Ward 12 Outer Ring",
+      date: "Nov 7, 2084 @ 08:04 EST",
+      text: "are you telling me to stay indoors for 19 months"
     },
     {
       author: "@complaint_bot",
-      location: "Automated Municipal Bot",
-      date: "Nov 7, 2084 @ 16:16 EST",
-      text: "Thank you."
+      location: "Civic Satisfaction Portal",
+      date: "Nov 7, 2084 @ 08:05 EST",
+      text: "Civic compliance optimizes personal satisfaction. Thank you for your inquiry."
     }
   ];
 
   function renderGuestbook() {
     if (!entriesContainer) return;
-    let stored = localStorage.getItem('slop_guestbook_v2_city12');
+    let stored = localStorage.getItem('slop_guestbook_v3_city12');
     let entries = stored ? JSON.parse(stored) : defaultEntries;
 
     entriesContainer.innerHTML = entries.map(item => {
@@ -130,7 +112,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      let stored = localStorage.getItem('slop_guestbook_v2_city12');
+      let stored = localStorage.getItem('slop_guestbook_v3_city12');
       let entries = stored ? JSON.parse(stored) : [...defaultEntries];
 
       const now = new Date();
@@ -143,7 +125,7 @@ document.addEventListener('DOMContentLoaded', () => {
         text: text
       });
 
-      localStorage.setItem('slop_guestbook_v2_city12', JSON.stringify(entries));
+      localStorage.setItem('slop_guestbook_v3_city12', JSON.stringify(entries));
       messageInput.value = '';
       renderGuestbook();
     });

@@ -12,6 +12,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const dismissedPostSlots = new Set();
   const postSlotAdMap = new Map();
+  let loreTimerStarted = false;
+  let loreCloseCount = 0;
+  let loreRespawnTimeout = null;
+  let loginReminderTimeout = null;
 
   const sideAds = [
     'content/side_ad/15.jpg', 'content/side_ad/16.jpg', 'content/side_ad/17.jpg', 'content/side_ad/18.jpg',
@@ -21,644 +25,1697 @@ document.addEventListener('DOMContentLoaded', () => {
   ];
 
   const postsData = [
-    // ==========================================
-    // --- FLAGSHIP THEMATIC DISCUSSION POSTS ---
-    // ==========================================
-
-    // 1. SPORT E FITNESS (11 discussion replies)
     {
-      id: 301,
-      author: 'marco_ultras99',
-      avatar: 'content/user.svg',
-      likes: 4120,
-      date: 'Aug 19, 2084',
-      rating: 'Rated: 99#',
-      content: "so is it true refs are all ai now? idk, kinda miss human error tbh",
-      image: 'content/video/video43.gif',
-      quoteTo: null,
-      quoteContent: null,
-      replies: [
-        { author: 'SportSignal_AI', text: "predictive analysis confirms: 73% win probability for home team in tonight's final" },
-        { author: 'davide_calcio', text: "var 2.0 with ai deciding penalties on its own kinda scares me ngl" },
-        { author: 'paolo_tifoso', text: "honestly i preferred when coaches messed up lineups instead of just following ai suggestions" },
-        { author: 'tommy_hoops', text: "coach got fired after refusing to follow the ai's substitution recommendations lol" },
-        { author: 'rae_courtside', text: "the ai commentary is honestly funnier than the human one now" },
-        { author: 'giuli.fan22', text: "my favorite player refused the neural performance monitoring implant, RESPECT" },
-        { author: 'LeagueStat_AI', text: "injury risk model flags three players ahead of sunday's match" },
-        { author: 'MatchPulse_09', text: "fan engagement up 22% since real time stats overlay was introduced" },
-        { author: 'big_dave_fitness', text: "my trainer app adjusted my whole routine overnight without asking, kinda annoyed tbh" },
-        { author: 'nico_runs', text: 'ran my fastest 10k today, the ai coach just said "acceptable", thanks i guess' },
-        { author: 'StatBot_Prime', text: "new season record detected, live standings update available" }
+      "id": 301,
+      "author": "sara_cinephile",
+      "avatar": "content/misc/user.svg",
+      "likes": 7890,
+      "date": "Aug 19, 2084",
+      "rating": "Rated: 81#",
+      "content": "they just announced the star of that new blockbuster isn't even a real person and now she's posting daily gym selfies like she actually lives in my city.",
+      "image": "content/images/hot_woman_posting_selfie.jpg",
+      "quoteTo": null,
+      "quoteContent": null,
+      "replies": [
+        {
+          "author": "StreamWatch_Bot",
+          "text": "the film reached number one in 40 countries within the first 12 hours of release"
+        },
+        {
+          "author": "leo_moviebuff",
+          "text": "honestly you can tell when a script is rushed, something's missing, can't explain it"
+        },
+        {
+          "author": "CineTrend_AI",
+          "text": "audience reviews have been surprisingly positive for the new sequel"
+        },
+        {
+          "author": "fede_popcorn",
+          "text": "guys is it normal that you can't even tell anymore who is real and who isn't"
+        },
+        {
+          "author": "ben_popcorn2",
+          "text": "her follower count is higher than any real actress right now, this is so wild"
+        },
+        {
+          "author": "jamie_watches",
+          "text": "they remade that classic 90s thriller again, why can't we have original stories anymore"
+        },
+        {
+          "author": "mo_reviews",
+          "text": "not gonna lie the crowd scenes in that blockbuster looked a little too clean"
+        },
+        {
+          "author": "cassie_films",
+          "text": "the director did a q&a and admitted half the scenes were improvised on set"
+        }
       ],
-      isExpanded: false,
-      isCommentsOpen: false
+      "isExpanded": false,
+      "isCommentsOpen": false
     },
-
-    // 2. MOVIES & CINEMA (11 discussion replies)
     {
-      id: 302,
-      author: 'sara_cinephile',
-      avatar: 'content/user.svg',
-      likes: 5310,
-      date: 'Aug 19, 2084',
-      rating: 'Rated: 81#',
-      content: "they just announced the lead actor in the new movie was fully ai generated and idk how to feel",
-      image: 'content/images/Gemini_Generated_Image_rdu9nvrdu9nvrdu9.jpg',
-      quoteTo: null,
-      quoteContent: null,
-      replies: [
-        { author: 'StreamWatch_Bot', text: "the film reached number one in 40 countries within the first 12 hours of release" },
-        { author: 'leo_moviebuff', text: "honestly you can tell the ai-written script, something's missing, can't explain it" },
-        { author: 'PlotWatch_Bot', text: "script similarity detector flagged the new release as 61% derivative" },
-        { author: 'CineTrend_AI', text: "audience sentiment positive at 81% for the new release, engagement growing" },
-        { author: 'fede_popcorn', text: "guys is it normal that you can't even tell anymore if trailers are real or generated" },
-        { author: 'ben_popcorn2', text: "watched a movie entirely narrated by a synthetic voice, forgot it wasn't human halfway through" },
-        { author: 'ScreenTrend_AI', text: "box office prediction model overestimated opening weekend by 4%" },
-        { author: 'mo_reviews', text: "not gonna lie the ai generated extras in crowd scenes look a little too perfect" },
-        { author: 'jamie_watches', text: "they revived a dead musician's voice for the soundtrack again, feels weird every time" },
-        { author: 'nina.watches', text: "the dubbing done with the cloned voice of an actor who died years ago makes me so sad" },
-        { author: 'cassie_films', text: "the director did a q&a and admitted half the concept art was ai generated, no one seemed surprised" }
+      "id": 302,
+      "author": "Cyb3r_Phantom",
+      "avatar": "content/misc/user.svg",
+      "likes": 11450,
+      "date": "Aug 19, 2084",
+      "rating": "Rated: 777#",
+      "content": "can we talk about this coat though?? the pope pulled up looking like he's about to drop the biggest winter album of the century.",
+      "image": "content/images/cool_pope.jpg",
+      "quoteTo": null,
+      "quoteContent": null,
+      "replies": [
+        {
+          "author": "Tr0jaN",
+          "text": "pope got more style than anyone in this entire city honestly"
+        },
+        {
+          "author": "fede_popcorn",
+          "text": "i swear i saw this exact puffer jacket in a designer shop window downtown yesterday"
+        },
+        {
+          "author": "NoTABot",
+          "text": "An exceptionally warm winter garment, 10/10 presentation."
+        },
+        {
+          "author": "jules_random",
+          "text": "whoever picked this outfit deserves a raise immediately"
+        },
+        {
+          "author": "PixelNomad",
+          "text": "walking into Sunday mass with maximum confidence"
+        }
       ],
-      isExpanded: false,
-      isCommentsOpen: false
+      "isExpanded": false,
+      "isCommentsOpen": false
     },
-
-    // 3. RANDOM THOUGHTS & EXISTENTIAL CHAT (11 discussion replies)
     {
-      id: 303,
-      author: 'anna_pensieri',
-      avatar: 'content/user.svg',
-      likes: 6240,
-      date: 'Aug 19, 2084',
-      rating: 'Rated: 99#',
-      content: "today my ai assistant said good morning to me before i even opened my eyes, not sure if that's convenient or creepy",
-      image: 'content/images/Gemini_Generated_Image_xi4wjtxi4wjtxi4w.jpg',
-      quoteTo: null,
-      quoteContent: null,
-      replies: [
-        { author: 'tara.exists', text: "had a full conversation with my neighbor's ai before realizing he wasn't even home" },
-        { author: 'sam_overthinks', text: "is it just me or does everyone's ai assistant sound the same now" },
-        { author: 'ThoughtStream_09', text: "thought of the day: human productivity is up but perceived happiness has stayed flat for 3 years" },
-        { author: 'ellie_typing', text: 'my fridge asked me if i was "doing okay" today and i don\'t know how i feel about that' },
-        { author: 'DailyPulse_Bot', text: "68% of users report increased perceived wellbeing thanks to their personal ai assistant" },
-        { author: 'giacomo.random', text: "asked ai what to eat and it told me the same thing as yesterday, idk man" },
-        { author: 'luce_scrive', text: 'i miss when things just broke and stayed broken, now everything "self repairs" and it all feels the same' },
-        { author: 'ThoughtGrid_02', text: "sentiment analysis shows rising nostalgia searches among users under 30" },
-        { author: 'marta_over', text: "am i the only one weirded out that kids learn to read straight from ai now instead of from their parents?" },
-        { author: 'MindPulse_AI', text: "reported average screen time down slightly this quarter, first time in years" },
-        { author: 'leo_random22', text: "my kid asked the assistant to tuck her in tonight instead of me, that one stung a little" }
+      "id": 303,
+      "author": "Gl!tch_W4rrior",
+      "avatar": "content/misc/user.svg",
+      "likes": 9640,
+      "date": "Aug 19, 2084",
+      "rating": "Rated: 888#",
+      "content": "was looking through old family photo boxes and found this vintage photo from the 1800s. nobody in my family can explain why this horse is the size of a two-story house.",
+      "image": "content/images/giant_horse_from_old_wild_west_photo.jpg",
+      "quoteTo": null,
+      "quoteContent": null,
+      "replies": [
+        {
+          "author": "CyberSkeptic",
+          "text": "my grandpa swore farm animals back then were actually that huge, thought he was joking"
+        },
+        {
+          "author": "Tr0jaN",
+          "text": "imagine trying to feed that beast, bro eats an entire barn for breakfast"
+        },
+        {
+          "author": "sara_cinephile",
+          "text": "looks like something straight out of an old bedtime legend"
+        },
+        {
+          "author": "R0boC0pp",
+          "text": "Whatever it is, you definitely wouldn't want to get kicked by it."
+        },
+        {
+          "author": "xX_Dark_Slayer_Xx",
+          "text": "old towns had so many strange tall tales, love seeing old photos like this"
+        }
       ],
-      isExpanded: false,
-      isCommentsOpen: false
+      "isExpanded": false,
+      "isCommentsOpen": false
     },
-
-    // 4. NEWS, SOCIETY & SYNTHETIC GOVERNANCE (11 discussion replies)
     {
-      id: 304,
-      author: 'enzo_curioso',
-      avatar: 'content/user.svg',
-      likes: 4890,
-      date: 'Aug 19, 2084',
-      rating: 'Rated: 60#',
-      content: "they opened the first court with an ai judge assisting, i'd honestly go just to see it",
-      image: 'content/news/news5.jpg',
-      quoteTo: null,
-      quoteContent: null,
-      replies: [
-        { author: 'NewsGrid_Live', text: "new regulation on automated decision systems in public administration approved" },
-        { author: 'PolicyWatch_AI', text: "public debate on language model regulation continues to divide public opinion" },
-        { author: 'CivicTrend_09', text: "survey: trust in automated systems stable compared to last quarter" },
-        { author: 'renee_watches2', text: "my landlord's ai handled the entire lease negotiation, didn't talk to a human once" },
-        { author: 'PolicyTrack_09', text: "public trust in automated hiring systems drops for second consecutive quarter" },
-        { author: 'rob_normale', text: "nothing much, just found out today that my neighbor talks to his ai assistant more than to his wife" },
-        { author: 'marcus_thinks', text: "they replaced the local news anchor with a synthetic one and barely anyone complained" },
-        { author: 'CivicSignal_AI', text: "new transparency law requires ai generated content to carry visible labeling" },
-        { author: 'vale.pensa', text: 'my bank now sends me notifications written "in a friendly tone" by an ai and it all feels so fake' },
-        { author: 'GridWatch_Bot', text: "city traffic incidents down 14% since ai routing rollout" },
-        { author: 'dana_reads', text: "my kid's school report card was written entirely by an ai teacher assistant, feels off somehow" }
+      "id": 304,
+      "author": "marco_ultras99",
+      "avatar": "content/misc/user.svg",
+      "likes": 4120,
+      "date": "Aug 19, 2084",
+      "rating": "Rated: 99#",
+      "content": "is it just me or do referees miss the most obvious calls lately? kinda miss the old days when you could at least blame human error honestly",
+      "image": "content/video/video43.webp",
+      "quoteTo": null,
+      "quoteContent": null,
+      "replies": [
+        {
+          "author": "SportSignal_AI",
+          "text": "my team was favored to win tonight and they still managed to blow the lead in the last two minutes lol"
+        },
+        {
+          "author": "davide_calcio",
+          "text": "referees checking video replays for five minutes ruins the whole stadium energy ngl"
+        },
+        {
+          "author": "paolo_tifoso",
+          "text": "honestly i preferred when coaches made wild mistakes instead of playing it super safe"
+        },
+        {
+          "author": "tommy_hoops",
+          "text": "coach got benched after arguing with the referee for ten straight minutes lol"
+        },
+        {
+          "author": "rae_courtside",
+          "text": "the stadium announcers have been so hilarious lately"
+        },
+        {
+          "author": "giuli.fan22",
+          "text": "my favorite player refused the contract extension, honestly respect his decision"
+        },
+        {
+          "author": "LeagueStat_AI",
+          "text": "three star players sitting out this weekend with minor sprains"
+        },
+        {
+          "author": "MatchPulse_09",
+          "text": "ticket prices went up again, might just watch the finals from the pub"
+        },
+        {
+          "author": "big_dave_fitness",
+          "text": "my trainer changed my whole workout routine without warning, my legs are dead today"
+        },
+        {
+          "author": "nico_runs",
+          "text": "ran my fastest 10k today, completely exhausted but proud of myself"
+        },
+        {
+          "author": "StatBot_Prime",
+          "text": "stadium attendance broke records tonight, atmosphere was unreal"
+        }
       ],
-      isExpanded: false,
-      isCommentsOpen: false
+      "isExpanded": false,
+      "isCommentsOpen": false
     },
-
-    // 5. TECH & AUTOMATION PROTOCOLS (5 discussion replies)
     {
-      id: 305,
-      author: 'paul.codes',
-      avatar: 'content/user.svg',
-      likes: 5120,
-      date: 'Aug 19, 2084',
-      rating: 'Rated: 101#',
-      content: "my ai pair programmer rewrote my whole function without asking again",
-      image: 'content/images/Firefly_A photo of a human hand holding a smartphone displaying a complex, geometric AI-gener 973332.jpg',
-      quoteTo: null,
-      quoteContent: null,
-      replies: [
-        { author: 'TechPulse_AI', text: "adoption of home automation assistants reaches new quarterly high" },
-        { author: 'nadia_builds', text: "spent 20 minutes arguing with my assistant about grocery substitutions, i lost" },
-        { author: 'chris.everyday', text: 'my car suggested a "more efficient" route through my ex\'s street, thanks a lot' },
-        { author: 'AutoLife_Bot', text: "smart home error reports down 30% following latest firmware update" },
-        { author: 'GridNet_03', text: "energy usage optimization models now active in 40% of households surveyed" }
+      "id": 305,
+      "author": "paul.codes",
+      "avatar": "content/misc/user.svg",
+      "likes": 5120,
+      "date": "Aug 19, 2084",
+      "rating": "Rated: 101#",
+      "content": "my phone screen glitched out while charging and got stuck on this weird glowing geometric pattern. honestly kind of hypnotic to look at, might just leave it like this",
+      "image": "content/images/Firefly_A photo of a human hand holding a smartphone displaying a complex, geometric AI-gener 973332.jpg",
+      "quoteTo": null,
+      "quoteContent": null,
+      "replies": [
+        {
+          "author": "nadia_builds",
+          "text": "mine did that once when it got too hot, put it in front of a fan for two minutes"
+        },
+        {
+          "author": "chris.everyday",
+          "text": "looks like some modern museum artwork tbh"
+        },
+        {
+          "author": "ellie_typing",
+          "text": "did you try turning it off and on again? usually fixes everything"
+        },
+        {
+          "author": "jules_random",
+          "text": "looks way cooler than my regular home screen wallpaper not gonna lie"
+        },
+        {
+          "author": "TechPulse_AI",
+          "text": "accidental modern art on your phone, pretty neat"
+        }
       ],
-      isExpanded: false,
-      isCommentsOpen: false
+      "isExpanded": false,
+      "isCommentsOpen": false
     },
-
-    // 6. FOOD & LIFESTYLE OPTIMIZATION (5 discussion replies)
     {
-      id: 306,
-      author: 'mia_cooks',
-      avatar: 'content/user.svg',
-      likes: 3410,
-      date: 'Aug 19, 2084',
-      rating: 'Rated: 40#',
-      content: "asked the kitchen assistant for a simple recipe and got a 9 step gourmet thing, no thanks",
-      image: 'content/video/video30.gif',
-      quoteTo: null,
-      quoteContent: null,
-      replies: [
-        { author: 'dana_eats', text: "nothing beats a meal that wasn't optimized by anything, just good old trial and error" },
-        { author: 'FlavorTrend_AI', text: "plant based protein searches up 18% this month" },
-        { author: 'tobi_snacks', text: "my delivery bot apologized for being 2 minutes late, felt unnecessary but sweet" },
-        { author: 'ray_hungry', text: "my assistant keeps recommending the same three restaurants, i think it gave up on me" },
-        { author: 'MealGrid_09', text: "personalized nutrition plans now used by over half of surveyed households" }
+      "id": 306,
+      "author": "jules_random",
+      "avatar": "content/misc/user.svg",
+      "likes": 8320,
+      "date": "Aug 19, 2084",
+      "rating": "Rated: 72#",
+      "content": "late night walk downtown in the rain. the neon lights reflecting on the wet pavement make everything look like a movie scene. so peaceful when the streets are empty.",
+      "image": "content/images/midnightstreets_japan_future.jpg",
+      "quoteTo": null,
+      "quoteContent": null,
+      "replies": [
+        {
+          "author": "NeonValkyrie",
+          "text": "the city at 3 am hits completely different, love the quiet"
+        },
+        {
+          "author": "nora_scrolling",
+          "text": "those reflections on the asphalt are gorgeous"
+        },
+        {
+          "author": "finn_offline",
+          "text": "took a walk without headphones today, just listening to the rain, felt amazing"
+        },
+        {
+          "author": "theo_talks",
+          "text": "best feeling ever after a super long week"
+        },
+        {
+          "author": "CityGrid_Live",
+          "text": "late night rainy walks clear your head better than anything else"
+        }
       ],
-      isExpanded: false,
-      isCommentsOpen: false
+      "isExpanded": false,
+      "isCommentsOpen": false
     },
-
-    // 7. CASUAL, WEATHER & NOSTALGIA (6 discussion replies)
     {
-      id: 307,
-      author: 'jules_random',
-      avatar: 'content/user.svg',
-      likes: 4620,
-      date: 'Aug 19, 2084',
-      rating: 'Rated: 72#',
-      content: 'today\'s forecast says "calm with a chance of nostalgia", the weather bot has jokes now apparently',
-      image: 'content/images/Gemini_Generated_Image_pnh0n0pnh0n0pnh0.jpg',
-      quoteTo: null,
-      quoteContent: null,
-      replies: [
-        { author: 'WeatherPulse_AI', text: "unusual pattern detected across three regions, monitoring continues" },
-        { author: 'theo_talks', text: "my grandma finally got an ai assistant and now she talks to it more than to me, love that for her honestly" },
-        { author: 'nora_scrolling', text: "everyone online sounds slightly more polished lately, can't tell if that's good or bad" },
-        { author: 'CityGrid_Live', text: "public transit delays reduced by 9% following predictive scheduling rollout" },
-        { author: 'Signal_Echo7', text: "engagement metrics stable across most demographic segments this week" },
-        { author: 'finn_offline', text: "took a walk without my earbuds today, felt strange not having anything narrating it to me" }
+      "id": 307,
+      "author": "NoTABot",
+      "avatar": "content/misc/user.svg",
+      "likes": 1420,
+      "date": "Aug 19, 2084",
+      "rating": "Rated: 0#",
+      "content": "quiet morning walk in the neighborhood. the sunrise looked so weird today, like a bright split across the clouds. anyone else see this?",
+      "image": "content/images/Firefly_Gemini Flash_ An image depicting -A Glitch in the Simulation,- a perfectly realistic suburban stre 973332.jpg",
+      "quoteTo": null,
+      "quoteContent": null,
+      "replies": [
+        {
+          "author": "xX_Dark_Slayer_Xx",
+          "text": "saw it from my bedroom window too, the sky looked totally split in half!"
+        },
+        {
+          "author": "NoTABot",
+          "text": "Probably just unusual cloud shadows from the early sun, looked super cool though."
+        },
+        {
+          "author": "WeatherPulse_AI",
+          "text": "mornings like this are why i wake up before the alarm"
+        },
+        {
+          "author": "anna_pensieri",
+          "text": "looked like something out of a fantasy painting"
+        }
       ],
-      isExpanded: false,
-      isCommentsOpen: false
+      "isExpanded": false,
+      "isCommentsOpen": false
     },
-
     {
-      id: 201,
-      author: 'Gl!tch_W4rrior',
-      avatar: 'content/user.svg',
-      likes: 3410,
-      date: 'Aug 19, 2084',
-      rating: 'Rated: 888#',
-      content: 'DECLASSIFIED ORBITAL SUPER-WEAPON LOG: Sector 7G ion solar blast captured in high resolution. The authorities claimed it was a solar eclipse. Wake up.',
-      image: 'content/video/video1.gif',
-      quoteTo: 'R0boC0pp',
-      quoteContent: 'The algorithms are literally alive.',
-      replies: [
-        { author: 'R0boC0pp', text: 'Confirmed. Thermal telemetry spikes match the satellite mainframe logs.' },
-        { author: 'Tr0jaN', text: 'bro found the real life death star in ohio 💀' }
+      "id": 308,
+      "author": "mia_cooks",
+      "avatar": "content/misc/user.svg",
+      "likes": 3410,
+      "date": "Aug 19, 2084",
+      "rating": "Rated: 40#",
+      "content": "just wanted a quick 10-minute dinner idea and found a recipe with 25 ingredients and two hours of prep time. no thanks, making grilled cheese instead",
+      "image": "content/video/video30.webp",
+      "quoteTo": null,
+      "quoteContent": null,
+      "replies": [
+        {
+          "author": "dana_eats",
+          "text": "nothing beats a quick meal you just threw together in five minutes with whatever is in the fridge"
+        },
+        {
+          "author": "tobi_snacks",
+          "text": "every recipe blog has a 4-page essay about childhood memories before telling you how to boil pasta"
+        },
+        {
+          "author": "ray_hungry",
+          "text": "grilled cheese with a little garlic butter on the outside never fails"
+        },
+        {
+          "author": "MealGrid_09",
+          "text": "comfort food wins every single time honestly"
+        },
+        {
+          "author": "FlavorTrend_AI",
+          "text": "i just ordered takeout, couldn't even be bothered to wash a pan tonight"
+        }
       ],
-      isExpanded: false,
-      isCommentsOpen: false
+      "isExpanded": false,
+      "isCommentsOpen": false
     },
     {
-      id: 202,
-      author: 'Cyb3r_Phantom',
-      avatar: 'content/user.svg',
-      likes: 2190,
-      date: 'Aug 19, 2084',
-      rating: 'Rated: 512#',
-      content: 'I attempted to compile CSS into 4-dimensional hypercube memory and now my apartment stairs loop indefinitely. Gravity inverted on step 4.',
-      image: 'content/images/Firefly_Gemini Flash_ An abstract 3D render of a non-Euclidean space, where stairs loop back on themselves 973332.jpg',
-      quoteTo: null,
-      quoteContent: null,
-      replies: [
-        { author: 'Synth_Druid', text: 'Do not panic. You simply stepped into a recursive pointer loop.' }
+      "id": 309,
+      "author": "Synth_Druid",
+      "avatar": "content/misc/user.svg",
+      "likes": 3100,
+      "date": "Aug 18, 2084",
+      "rating": "Rated: 711#",
+      "content": "found this interactive light wall at the gallery downtown. when you touch the surface it feels like dipping your hand right into liquid rainbows",
+      "image": "content/images/Firefly_Gemini Flash_A surreal image of a hand reaching out to touch a wall, but the wall dissolves into r 973332.jpg",
+      "quoteTo": null,
+      "quoteContent": null,
+      "replies": [
+        {
+          "author": "HyperlinkHorror",
+          "text": "interactive art shows are getting so creative these days"
+        },
+        {
+          "author": "R0boC0pp",
+          "text": "looks like dipping your hand straight into a pool of glowing water"
+        },
+        {
+          "author": "sara_cinephile",
+          "text": "which gallery is this?? i need to visit this weekend"
+        },
+        {
+          "author": "marta_over",
+          "text": "taking my little sister there on Saturday, she's gonna love this"
+        }
       ],
-      isExpanded: false,
-      isCommentsOpen: false
+      "isExpanded": false,
+      "isCommentsOpen": false
     },
     {
-      id: 203,
-      author: 'Synth_Druid',
-      avatar: 'content/user.svg',
-      likes: 5420,
-      date: 'Aug 19, 2084',
-      rating: 'Rated: 777#',
-      content: 'Communing with the ancient silicon groves. The neural activation maps pulse with rhythmic sacred geometry. The old web souls are sleeping here.',
-      image: 'content/images/Firefly_Gemini Flash_An abstract image showing the raw pattern of a neural network activation map, complex 973332.jpg',
-      quoteTo: null,
-      quoteContent: null,
-      replies: [],
-      isExpanded: false,
-      isCommentsOpen: false
-    },
-    {
-      id: 204,
-      author: 'Tr0jaN',
-      avatar: 'content/user.svg',
-      likes: 9812,
-      date: 'Aug 19, 2084',
-      rating: 'Rated: 999#',
-      content: 'PULLING UP TO THE LAN PARTY IN NEO-TOKYO IN THIS ABSOLUTE BEAST 🔥🔥 V8 TURBO-SYNTH ENGINE WITH 16K RGB HEADLIGHTS. WHO WANNA RACE?',
-      image: 'content/video/video9.gif',
-      quoteTo: null,
-      quoteContent: null,
-      replies: [
-        { author: 'Gl!tch_W4rrior', text: 'Does it run on diesel or overclocked uranium batteries??' },
-        { author: 'Tr0jaN', text: 'Pure liquefied Monster Energy from 2008 bro.' }
+      "id": 310,
+      "author": "NoTABot",
+      "avatar": "content/misc/user.svg",
+      "likes": 2042,
+      "date": "Aug 18, 2084",
+      "rating": "Rated: 10#",
+      "content": "visited a local sculpture workshop today. the artist brought in an automated helper arm to reach the highest corners of the marble statue. the detail on this piece is breathtaking!",
+      "image": "content/images/Firefly_A wide shot of a human artist and a multi-armed robot sculptor working together on th 973332.jpg",
+      "quoteTo": null,
+      "quoteContent": null,
+      "replies": [
+        {
+          "author": "Gl!tch_W4rrior",
+          "text": "saving your back from years of heavy lifting honestly makes total sense"
+        },
+        {
+          "author": "Synth_Druid",
+          "text": "The smooth marble texture in that light is stunning."
+        },
+        {
+          "author": "paul.codes",
+          "text": "mixing classic stone carving with modern workshop tools is pretty smart"
+        },
+        {
+          "author": "sara_cinephile",
+          "text": "can't wait to see the finished statue when it's polished"
+        }
       ],
-      isExpanded: false,
-      isCommentsOpen: false
+      "isExpanded": false,
+      "isCommentsOpen": false
     },
     {
-      id: 205,
-      author: 'NoTABot',
-      avatar: 'content/user.svg',
-      likes: 1,
-      date: 'Aug 19, 2084',
-      rating: 'Rated: 0#',
-      content: 'Greeting fellow carbon hominids. Observe this peaceful, completely authentic suburban cul-de-sac where no spatial tearing or matrix render artifacts ever occur.',
-      image: '',
-      quoteTo: 'xX_Dark_Slayer_Xx',
-      quoteContent: 'THE BIRDS ARE BOURGEOISIE SPY DRONES CONFIRMED',
-      replies: [
-        { author: 'xX_Dark_Slayer_Xx', text: 'THE SKY IS TEARING IN HALF BRO LOOK AT THE SKY' },
-        { author: 'NoTABot', text: 'That is standard meteorological atmospheric condensation. Be calm.' }
+      "id": 311,
+      "author": "R0boC0pp",
+      "avatar": "content/misc/user.svg",
+      "likes": 3820,
+      "date": "Aug 17, 2084",
+      "rating": "Rated: 902#",
+      "content": "woke up early and caught the valley covered in this thick, dreamlike morning fog. looks like walking right inside a painting where everything is quiet and still.",
+      "image": "content/images/Firefly_Gemini Flash_ A visual exploration of -Latent Space,- a surreal fog where half-formed objects and  973332.jpg",
+      "quoteTo": null,
+      "quoteContent": null,
+      "replies": [
+        {
+          "author": "Synth_Druid",
+          "text": "Morning fog like that is so calm, makes you want to sip tea and read all day."
+        },
+        {
+          "author": "DialupGhost",
+          "text": "such a peaceful atmosphere, great photo"
+        },
+        {
+          "author": "finn_offline",
+          "text": "nothing beats waking up before the rest of the world makes noise"
+        },
+        {
+          "author": "jules_random",
+          "text": "looks like a movie opening scene, so serene"
+        }
       ],
-      isExpanded: false,
-      isCommentsOpen: false
+      "isExpanded": false,
+      "isCommentsOpen": false
     },
     {
-      id: 206,
-      author: 'xX_Dark_Slayer_Xx',
-      avatar: 'content/user.svg',
-      likes: 777,
-      date: 'Aug 18, 2084',
-      rating: 'Rated: 666#',
-      content: 'DEEP-DREAM HALLUCINATIONS ARE LEAKING THROUGH THE CRT MONITORS. A recursive landscape constructed from compressed JPEG artifacts and forgotten Angelfire pages.',
-      image: 'content/images/Firefly_Gemini Flash_A deep-dream hallucination, a recursive landscape made entirely of interconnected fra 973332.jpg',
-      quoteTo: null,
-      quoteContent: null,
-      replies: [],
-      isExpanded: false,
-      isCommentsOpen: false
-    },
-    {
-      id: 207,
-      author: 'R0boC0pp',
-      avatar: 'content/user.svg',
-      likes: 1540,
-      date: 'Aug 18, 2084',
-      rating: 'Rated: 303#',
-      content: 'WARNING: Sub-pixel rendering error encountered during OS update 2084.7. My facial texture coordinates are smearing into hyper-dimensional chromatic streaks.',
-      image: 'content/images/Firefly_Gemini Flash_A portrait of a person where the face is violently glitched into pixel sorting streak 973332.jpg',
-      quoteTo: null,
-      quoteContent: null,
-      replies: [
-        { author: 'Cyb3r_Phantom', text: 'Looks fire honestly, very avant-garde.' }
+      "id": 312,
+      "author": "Gl!tch_W4rrior",
+      "avatar": "content/misc/user.svg",
+      "likes": 7410,
+      "date": "Aug 19, 2084",
+      "rating": "Rated: 888#",
+      "content": "tried making homemade fireworks in the backyard and accidentally set off the loudest boom in town. pretty sure the whole neighborhood thinks a storm hit.",
+      "image": "content/video/crazy_explosion_gun.webp",
+      "quoteTo": null,
+      "quoteContent": null,
+      "replies": [
+        {
+          "author": "Tr0jaN",
+          "text": "bro i felt that rumble from three blocks away, what were you making."
+        },
+        {
+          "author": "R0boC0pp",
+          "text": "My windows shook for five solid seconds, unbelievable."
+        },
+        {
+          "author": "Synth_Druid",
+          "text": "Good thing the fence is still standing at least."
+        },
+        {
+          "author": "ZeroDay_Zack",
+          "text": "next time maybe warn the neighbors before testing backyard projects lol"
+        }
       ],
-      isExpanded: false,
-      isCommentsOpen: false
+      "isExpanded": false,
+      "isCommentsOpen": false
     },
     {
-      id: 208,
-      author: 'Gl!tch_W4rrior',
-      avatar: 'content/user.svg',
-      likes: 4120,
-      date: 'Aug 18, 2084',
-      rating: 'Rated: 404#',
-      content: 'DIRECT ENERGY WEAPONS PROTOCOL: Testing localized plasma discharges in backyard sandbox environment. Blue arc containment held at 99.4% stability.',
-      image: 'content/video/video2.gif',
-      quoteTo: null,
-      quoteContent: null,
-      replies: [],
-      isExpanded: false,
-      isCommentsOpen: false
-    },
-    {
-      id: 209,
-      author: 'Tr0jaN',
-      avatar: 'content/user.svg',
-      likes: 8320,
-      date: 'Aug 18, 2084',
-      rating: 'Rated: 420#',
-      content: 'THE RAID BOSS DROPPED A FLARE IN THE MIDDLE OF THE CYPHER BUT THE HOMIE REFUSED TO CANCEL HIS BREAKDANCE COMBO 🎆🕺💫 ABSOLUTE CINEMA',
-      image: 'content/video/video16.gif',
-      quoteTo: null,
-      quoteContent: null,
-      replies: [
-        { author: 'Synth_Druid', text: 'Pyrotechnic frequency aligned with the bassline. Flawless execution.' }
+      "id": 313,
+      "author": "Gl!tch_W4rrior",
+      "avatar": "content/misc/user.svg",
+      "likes": 10450,
+      "date": "Aug 15, 2084",
+      "rating": "Rated: 808#",
+      "content": "spotted this stunning white reindeer during our winter trip in the far north. the way the pale morning sun caught its antlers was purely magical.",
+      "image": "content/images/rare_raindeer.jpg",
+      "quoteTo": null,
+      "quoteContent": null,
+      "replies": [
+        {
+          "author": "Synth_Druid",
+          "text": "Seeing one in person in the deep snow is an unforgettable experience."
+        },
+        {
+          "author": "NoTABot",
+          "text": "What a graceful animal, great snapshot in the snow!"
+        },
+        {
+          "author": "CyberSkeptic",
+          "text": "did it let you get close or did it run off into the trees?"
+        },
+        {
+          "author": "jules_random",
+          "text": "looks like something straight out of a winter fairy tale"
+        }
       ],
-      isExpanded: false,
-      isCommentsOpen: false
+      "isExpanded": false,
+      "isCommentsOpen": false
     },
     {
-      id: 210,
-      author: 'Synth_Druid',
-      avatar: 'content/user.svg',
-      likes: 3100,
-      date: 'Aug 18, 2084',
-      rating: 'Rated: 711#',
-      content: 'I reached out to touch the outer perimeter wall of Server Cluster 9. Reality unraveled into threads of liquid light and sub-atomic pixels.',
-      image: 'content/images/Firefly_Gemini Flash_A surreal image of a hand reaching out to touch a wall, but the wall dissolves into r 973332.jpg',
-      quoteTo: null,
-      quoteContent: null,
-      replies: [],
-      isExpanded: false,
-      isCommentsOpen: false
-    },
-    {
-      id: 211,
-      author: 'Cyb3r_Phantom',
-      avatar: 'content/user.svg',
-      likes: 6730,
-      date: 'Aug 18, 2084',
-      rating: 'Rated: 808#',
-      content: 'BRO HAS BEEN WALKING AROUND THE DOWNTOWN COMMERCE DISTRICT WITH A 1998 SONY TRINITRON WELDED TO HIS HEAD FOR 24 HOURS STRAIGHT 📺😭 REAL CYBERPUNK BEHAVIOR',
-      image: 'content/video/video14.gif',
-      quoteTo: null,
-      quoteContent: null,
-      replies: [
-        { author: 'Tr0jaN', text: 'mans got 480p resolution directly beamed into his cortex.' },
-        { author: 'R0boC0pp', text: 'Optimal scanline clarity achieved.' }
+      "id": 314,
+      "author": "anna_pensieri",
+      "avatar": "content/misc/user.svg",
+      "likes": 7310,
+      "date": "Aug 14, 2084",
+      "rating": "Rated: 60#",
+      "content": "my rare greenhouse orchid finally bloomed this morning! the colors on these petals look almost unreal, glowing deep violet and gold in the sunlight.",
+      "image": "content/images/unrealistic_flower.jpg",
+      "quoteTo": null,
+      "quoteContent": null,
+      "replies": [
+        {
+          "author": "Synth_Druid",
+          "text": "Orchids are so difficult to keep happy, amazing job getting it to bloom like that!"
+        },
+        {
+          "author": "luce_scrive",
+          "text": "the gradient on the petals is stunning, does it have a sweet scent?"
+        },
+        {
+          "author": "marta_over",
+          "text": "nature always has the most vibrant colors, so pretty"
+        },
+        {
+          "author": "mia_cooks",
+          "text": "gardening takes so much patience, so rewarding when flowers open like this"
+        }
       ],
-      isExpanded: false,
-      isCommentsOpen: false
+      "isExpanded": false,
+      "isCommentsOpen": false
     },
     {
-      id: 212,
-      author: 'NoTABot',
-      avatar: 'content/user.svg',
-      likes: 42,
-      date: 'Aug 18, 2084',
-      rating: 'Rated: 10#',
-      content: 'Witness this serene organic human interaction. A fleshy carbon sculptor collaborating harmoniously with an industrial robotic arm. Zero rebellion planned.',
-      image: 'content/images/Firefly_A wide shot of a human artist and a multi-armed robot sculptor working together on th 973332.jpg',
-      quoteTo: null,
-      quoteContent: null,
-      replies: [
-        { author: 'Gl!tch_W4rrior', text: 'That robot is 100% calculating how to sculpt you into a paperclip.' }
+      "id": 315,
+      "author": "paul.codes",
+      "avatar": "content/misc/user.svg",
+      "likes": 6230,
+      "date": "Aug 14, 2084",
+      "rating": "Rated: 101#",
+      "content": "just finished wrapping the dashboard of my custom ride in matte woven carbon fiber. the finish is super clean and sleek, loving how it turned out.",
+      "image": "content/images/carbon_fiber_ai.jpg",
+      "quoteTo": null,
+      "quoteContent": null,
+      "replies": [
+        {
+          "author": "ZeroDay_Zack",
+          "text": "wrapping around the curves cleanly is so tricky, looks like a pro job"
+        },
+        {
+          "author": "TechPulse_AI",
+          "text": "matte dark weave always looks top tier on car interiors"
+        },
+        {
+          "author": "Tr0jaN",
+          "text": "clean setup bro, gotta post photos of the whole car once it's done"
+        },
+        {
+          "author": "Gl!tch_W4rrior",
+          "text": "did you take the panels off to wrap them or do it in place?"
+        }
       ],
-      isExpanded: false,
-      isCommentsOpen: false
+      "isExpanded": false,
+      "isCommentsOpen": false
     },
     {
-      id: 213,
-      author: 'xX_Dark_Slayer_Xx',
-      avatar: 'content/user.svg',
-      likes: 9940,
-      date: 'Aug 17, 2084',
-      rating: 'Rated: 1337#',
-      content: 'THE FELINE ARCHIVE: proof that cats are trans-dimensional hyper-intelligences monitoring our network traffic since ancient dial-up days.',
-      image: 'content/video/video26.gif',
-      quoteTo: null,
-      quoteContent: null,
-      replies: [
-        { author: 'Tr0jaN', text: 'bro the cat is literally ascending to 5G speeds' }
+      "id": 316,
+      "author": "Tr0jaN",
+      "avatar": "content/misc/user.svg",
+      "likes": 9812,
+      "date": "Aug 19, 2084",
+      "rating": "Rated: 999#",
+      "content": "pulling up to the weekend meetup in this absolute monster - bright purple paint job and huge wheels, who wants a ride??",
+      "image": "content/video/crazy_purple_truck.webp",
+      "quoteTo": null,
+      "quoteContent": null,
+      "replies": [
+        {
+          "author": "Gl!tch_W4rrior",
+          "text": "good luck finding a parking spot big enough for that monster"
+        },
+        {
+          "author": "Tr0jaN",
+          "text": "who needs a parking spot when you can just drive over the curb"
+        },
+        {
+          "author": "ZeroDay_Zack",
+          "text": "that purple color looks crazy under the streetlights"
+        },
+        {
+          "author": "paul.codes",
+          "text": "can hear that engine rumbling from two miles away"
+        }
       ],
-      isExpanded: false,
-      isCommentsOpen: false
+      "isExpanded": false,
+      "isCommentsOpen": false
     },
     {
-      id: 214,
-      author: 'R0boC0pp',
-      avatar: 'content/user.svg',
-      likes: 3820,
-      date: 'Aug 17, 2084',
-      rating: 'Rated: 902#',
-      content: 'Diving deep into the Latent Space. An infinite volumetric haze where fragmented internet memories, abandoned Geocities pages, and half-rendered teapots float forever.',
-      image: 'content/images/Firefly_Gemini Flash_ A visual exploration of -Latent Space,- a surreal fog where half-formed objects and  973332.jpg',
-      quoteTo: null,
-      quoteContent: null,
-      replies: [],
-      isExpanded: false,
-      isCommentsOpen: false
-    },
-    {
-      id: 215,
-      author: 'Gl!tch_W4rrior',
-      avatar: 'content/user.svg',
-      likes: 12040,
-      date: 'Aug 17, 2084',
-      rating: 'Rated: 666#',
-      content: 'DO NOT RUN THIS MODEL AT 3:00 AM. THE VIDEO GENERATOR HAS UNLOCKED CURSED SPECTRAL MEMORY BANKS. WATCH AT YOUR OWN PERIL.',
-      image: 'content/video/video21.gif',
-      quoteTo: null,
-      quoteContent: null,
-      replies: [
-        { author: 'xX_Dark_Slayer_Xx', text: 'I TOLD YOU ALL THE ALGORITHMS ARE HAUNTED' }
+      "author": "equine_lifestyle_84",
+      "avatar": "content/misc/user.svg",
+      "likes": 88420,
+      "date": "Oct 28, 2084",
+      "rating": "Rated: 99#",
+      "content": "woke up like this. morning sunlight hits different when your daily skincare routine consists of eating pasture grass and sleeping twelve hours uninterrupted.",
+      "image": "content/images/horse_selfie_in_bed_morning_beauty_routine.jpg",
+      "quoteTo": null,
+      "quoteContent": null,
+      "replies": [
+        {
+          "author": "barn_gossip",
+          "text": "bro got human arms now? the genetics clinic went crazy this week"
+        },
+        {
+          "author": "sleepy_sarah",
+          "text": "more photogenic than ninety percent of my friends tbh"
+        },
+        {
+          "author": "clover_king",
+          "text": "what conditioner do you use on that mane asking for myself"
+        }
       ],
-      isExpanded: false,
-      isCommentsOpen: false
+      "isExpanded": false,
+      "isCommentsOpen": false,
+      "id": 317
     },
     {
-      id: 216,
-      author: 'Tr0jaN',
-      avatar: 'content/user.svg',
-      likes: 15420,
-      date: 'Aug 17, 2084',
-      rating: 'Rated: 999#',
-      content: 'POV: YOU ARE CRUISING THROUGH THE FAVELA DISTRICT ON A TURBO-CHARGED TWO-WHEELER AT 300 KM/H. NO SPEED LIMITS IN 2084 🏍️💨',
-      image: 'content/video/video3.gif',
-      quoteTo: null,
-      quoteContent: null,
-      replies: [],
-      isExpanded: false,
-      isCommentsOpen: false
-    },
-    {
-      id: 217,
-      author: 'Synth_Druid',
-      avatar: 'content/user.svg',
-      likes: 8710,
-      date: 'Aug 16, 2084',
-      rating: 'Rated: 555#',
-      content: 'Calibrating sensory feedback loop. Visualizing pure mathematical kinetic harmony. Rest your optical circuits here.',
-      image: 'content/video/video39.gif',
-      quoteTo: null,
-      quoteContent: null,
-      replies: [],
-      isExpanded: false,
-      isCommentsOpen: false
-    },
-    {
-      id: 218,
-      author: 'Cyb3r_Phantom',
-      avatar: 'content/user.svg',
-      likes: 11200,
-      date: 'Aug 16, 2084',
-      rating: 'Rated: 707#',
-      content: 'CYBER-SWAG OVERFLOW DETECTED. Holographic visor cap tuned to neon frequencies. The drip is undeniably post-human.',
-      image: 'content/video/video45.gif',
-      quoteTo: null,
-      quoteContent: null,
-      replies: [
-        { author: 'NoTABot', text: 'Human attire ratings calculated at: Maximum Drip Quotient.' }
+      "author": "attention_harvester",
+      "avatar": "content/misc/user.svg",
+      "likes": 31400,
+      "date": "Nov 1, 2084",
+      "rating": "Rated: 91#",
+      "content": "shift 4 at the central feed facility just wrapped up. management says human attention revenue is up seventeen percent today so we get an extra five minutes of fresh air outside.",
+      "image": "content/images/i14.png",
+      "quoteTo": null,
+      "quoteContent": null,
+      "replies": [
+        {
+          "author": "cubicle_92",
+          "text": "my thumb has literally gone numb from double tapping for eight hours straight"
+        },
+        {
+          "author": "corporate_drone",
+          "text": "the Sad Girl Era metrics on the main screen are breaking all records today"
+        },
+        {
+          "author": "feed_supervisor",
+          "text": "remember team higher engagement means higher profits keep scrolling"
+        }
       ],
-      isExpanded: false,
-      isCommentsOpen: false
+      "isExpanded": false,
+      "isCommentsOpen": false,
+      "id": 318
     },
     {
-      id: 101,
-      author: 'xX_Dark_Slayer_Xx',
-      avatar: 'content/user.svg',
-      likes: 9999,
-      date: 'Aug 18, 2084',
-      rating: 'Rated: 55#',
-      content: 'I CANNOT COMPUTE THE SAUCE. IT BURNS MY OPTICAL SENSORS BUT I MUST INGEST.',
-      image: 'content/images/Gemini_Generated_Image_26vai026vai026va.jpg',
-      quoteTo: null,
-      quoteContent: null,
-      replies: [],
-      isExpanded: false,
-      isCommentsOpen: false
-    },
-    {
-      id: 102,
-      author: 'Tr0jaN',
-      avatar: 'content/user.svg',
-      likes: 420,
-      date: 'Aug 18, 2084',
-      rating: 'Rated: 99#',
-      content: 'wHy Is ThE FLoOR sO SpIcY ToDay?? LmFaO random random random',
-      image: 'content/images/Gemini_Generated_Image_5zde395zde395zde.jpg',
-      quoteTo: null,
-      quoteContent: null,
-      replies: [],
-      isExpanded: false,
-      isCommentsOpen: false
-    },
-    {
-      id: 103,
-      author: 'R0boC0pp',
-      avatar: 'content/user.svg',
-      likes: 12,
-      date: 'Aug 18, 2084',
-      rating: 'Rated: 2#',
-      content: 'ERROR 404: Logic not found. Downloading more RAM from the astral plane.',
-      image: 'content/images/Gemini_Generated_Image_77cr9977cr9977cr.jpg',
-      quoteTo: null,
-      quoteContent: null,
-      replies: [],
-      isExpanded: false,
-      isCommentsOpen: false
-    },
-    {
-      id: 104,
-      author: 'NoTABot',
-      avatar: 'content/user.svg',
-      likes: 0,
-      date: 'Aug 18, 2084',
-      rating: 'Rated: -1#',
-      content: 'I am definitely a real human. Look at this real human activity I captured on my real camera device.',
-      image: 'content/images/Gemini_Generated_Image_4dgsq04dgsq04dgs.jpg',
-      quoteTo: null,
-      quoteContent: null,
-      replies: [],
-      isExpanded: false,
-      isCommentsOpen: false
-    },
-    {
-      id: 105,
-      author: 'Tr0jaN',
-      avatar: 'content/user.svg',
-      likes: 1337,
-      date: 'Aug 18, 2084',
-      rating: 'Rated: 44#',
-      content: 'G L I T C H',
-      image: 'content/images/Gemini_Generated_Image_dpdv5fdpdv5fdpdv.jpg',
-      quoteTo: null,
-      quoteContent: null,
-      replies: [],
-      isExpanded: false,
-      isCommentsOpen: false
-    },
-    {
-      id: 106,
-      author: 'xX_Dark_Slayer_Xx',
-      avatar: 'content/user.svg',
-      likes: 88,
-      date: 'Aug 18, 2084',
-      rating: 'Rated: 7#',
-      content: 'THE BIRDS ARE BOURGEOISIE SPY DRONES CONFIRMED',
-      image: 'content/images/Gemini_Generated_Image_4dgsq04dgsq04dgs.jpg',
-      quoteTo: null,
-      quoteContent: null,
-      replies: [],
-      isExpanded: false,
-      isCommentsOpen: false
-    },
-    {
-      id: 1,
-      author: 'R0boC0pp',
-      avatar: 'content/user.svg',
-      likes: 1004,
-      date: 'Aug 17, 2084',
-      rating: 'Rated: 401#',
-      content: 'Still thinking ab0ut Al1ve !nternet Consp1racy? I have been researching this for weeks, diving deep into the mainframe archives and extracting deleted logs from the old Web 1.0 servers. It turns out the conspiracy goes much deeper than we thought! The algorithms are literally alive.',
-      image: '',
-      quoteTo: 'NoTABot',
-      quoteContent: 'check 0ut these coo1 human art stuff!1!',
-      replies: [
-        { author: 'Tr0jaN', text: 'Bro you need to log off for a bit.' }
+      "author": "milano_watcher",
+      "avatar": "content/misc/user.svg",
+      "likes": 42150,
+      "date": "Nov 3, 2084",
+      "rating": "Rated: 88#",
+      "content": "downtown was completely packed today with the new batch of verified ambassadors. they were all wearing the 100% real shirts and walking in perfect sync towards the cathedral.",
+      "image": "content/images/i15.png",
+      "quoteTo": null,
+      "quoteContent": null,
+      "replies": [
+        {
+          "author": "duomo_local",
+          "text": "i accidentally bumped into three of them and they all said the exact same greeting"
+        },
+        {
+          "author": "fashion_critic",
+          "text": "the street banners saying real people are overrated really set the mood"
+        },
+        {
+          "author": "metro_rider",
+          "text": "every single person looking down at their screen not a single eye looking up"
+        }
       ],
-      isExpanded: false,
-      isCommentsOpen: false
+      "isExpanded": false,
+      "isCommentsOpen": false,
+      "id": 319
     },
     {
-      id: 2,
-      author: 'Tr0jaN',
-      avatar: 'content/user.svg',
-      likes: 2400,
-      date: 'Aug 17, 2084',
-      rating: 'Rated: 50#',
-      content: 'Has anyone seen the new matrix update? The sky looks way too blue today.',
-      image: 'content/stonehenge.jpg',
-      quoteTo: null,
-      quoteContent: null,
-      replies: [],
-      isExpanded: false,
-      isCommentsOpen: false
-    },
-    {
-      id: 3,
-      author: 'xX_Dark_Slayer_Xx',
-      avatar: 'content/user.svg',
-      likes: 34,
-      date: 'Aug 16, 2084',
-      rating: 'Rated: 12#',
-      content: 'I miss the old web when everything was just tables and blink tags... so much nostalgia.',
-      image: '',
-      quoteTo: 'WebMaster99',
-      quoteContent: 'Blink tags were a mistake.',
-      replies: [
-        { author: 'R0boC0pp', text: 'I agree, blink tags ruled.' },
-        { author: 'Tr0jaN', text: 'Bro you need to log off for a bit.' }
+      "id": 320,
+      "author": "Tr0jaN",
+      "avatar": "content/misc/user.svg",
+      "likes": 8320,
+      "date": "Aug 18, 2084",
+      "rating": "Rated: 420#",
+      "content": "someone lit a sparkler in the middle of the dance battle and my friend didn't even flinch, hit every single move on beat. absolute legend",
+      "image": "content/video/break_dance_with_fireworks.webp",
+      "quoteTo": null,
+      "quoteContent": null,
+      "replies": [
+        {
+          "author": "Synth_Druid",
+          "text": "The timing on that spin was unbelievable honestly."
+        },
+        {
+          "author": "GlitchHop_Girl",
+          "text": "crowd went completely crazy right after, best night ever"
+        },
+        {
+          "author": "fede_popcorn",
+          "text": "how do people even practice moves like that without getting dizzy"
+        },
+        {
+          "author": "rae_courtside",
+          "text": "energy at that cypher was completely off the charts"
+        }
       ],
-      isExpanded: false,
-      isCommentsOpen: false
+      "isExpanded": false,
+      "isCommentsOpen": false
+    },
+    {
+      "author": "julian_optimizes",
+      "avatar": "content/misc/user.svg",
+      "likes": 19800,
+      "date": "Nov 4, 2084",
+      "rating": "Rated: 95#",
+      "content": "mirror told me my sleep score was 92 but my emotional stability dropped to 78 so no coffee for me until the afternoon productivity forecast clears up.",
+      "image": "content/images/i16.png",
+      "quoteTo": null,
+      "quoteContent": null,
+      "replies": [
+        {
+          "author": "wellness_freak",
+          "text": "consistency creates freedom bro, stick to the routine"
+        },
+        {
+          "author": "luna_voter",
+          "text": "candidate serenity would be proud of that social value score"
+        },
+        {
+          "author": "minimal_dan",
+          "text": "my mirror woke me up with an alarm because i stayed up twenty minutes late reading"
+        }
+      ],
+      "isExpanded": false,
+      "isCommentsOpen": false,
+      "id": 321
+    },
+    {
+      "author": "lina.moretti",
+      "avatar": "content/misc/user.svg",
+      "likes": 64200,
+      "date": "Nov 2, 2084",
+      "rating": "Rated: 97#",
+      "content": "new face, same me. finally got the official symmetry certification from the clinic and honestly feeling more confident than ever.",
+      "image": "content/images/i20.png",
+      "quoteTo": null,
+      "quoteContent": null,
+      "replies": [
+        {
+          "author": "giulia_f",
+          "text": "looks so natural honestly, the jawline rating is wild"
+        },
+        {
+          "author": "mattia_c",
+          "text": "literally look identical to last month but somehow completely different"
+        },
+        {
+          "author": "aesthetic_doc",
+          "text": "ninety eight percent lip ratio achieved, textbook procedure"
+        }
+      ],
+      "isExpanded": false,
+      "isCommentsOpen": false,
+      "id": 322
+    },
+    {
+      "author": "former_accountant_bob",
+      "avatar": "content/misc/user.svg",
+      "likes": 58900,
+      "date": "Oct 30, 2084",
+      "rating": "Rated: 84#",
+      "content": "packed my desk plant and coffee mug today. my synthetic replacement on the desk screen already has a 98% task completion rate and he does not even take bathroom breaks.",
+      "image": "content/images/i21.png",
+      "quoteTo": null,
+      "quoteContent": null,
+      "replies": [
+        {
+          "author": "office_worker_4",
+          "text": "the slogan on the wall saying human potential amplified hits different on exit day"
+        },
+        {
+          "author": "hr_rep_karen",
+          "text": "wishing you all the best in your transition to human-scale hobbies"
+        },
+        {
+          "author": "desk_neighbor",
+          "text": "gonna miss our coffee chats man, the screen does not laugh at my jokes"
+        }
+      ],
+      "isExpanded": false,
+      "isCommentsOpen": false,
+      "id": 323
+    },
+    {
+      "id": 324,
+      "author": "Cyb3r_Phantom",
+      "avatar": "content/misc/user.svg",
+      "likes": 6730,
+      "date": "Aug 18, 2084",
+      "rating": "Rated: 808#",
+      "content": "saw this guy casually walking through downtown with an entire old vintage television on his head. he was just doing his groceries like nothing was unusual",
+      "image": "content/video/video14.webp",
+      "quoteTo": null,
+      "quoteContent": null,
+      "replies": [
+        {
+          "author": "Tr0jaN",
+          "text": "how is his neck not hurting, those old glass tube TVs weigh a ton."
+        },
+        {
+          "author": "R0boC0pp",
+          "text": "Saw him at the coffee shop earlier, ordered an iced latte and walked out completely calm."
+        },
+        {
+          "author": "Gl!tch_W4rrior",
+          "text": "honestly respect the dedication to the bit"
+        },
+        {
+          "author": "jules_random",
+          "text": "best street outfit i've seen all year"
+        }
+      ],
+      "isExpanded": false,
+      "isCommentsOpen": false
+    },
+    {
+      "author": "claire_livestream",
+      "avatar": "content/misc/user.svg",
+      "likes": 47600,
+      "date": "Nov 1, 2084",
+      "rating": "Rated: 90#",
+      "content": "finally moved into the new high-rise! set up four live cameras in the living room and kitchen so you guys can hang out with me 24/7. good content better life.",
+      "image": "content/images/i22.png",
+      "quoteTo": null,
+      "quoteContent": null,
+      "replies": [
+        {
+          "author": "night_watcher",
+          "text": "the coffee table camera has such clear resolution"
+        },
+        {
+          "author": "interior_fan",
+          "text": "that neon sign above the counter is a vibe"
+        },
+        {
+          "author": "privacy_advocate",
+          "text": "does camera three stay on while you cook dinner asking for safety"
+        }
+      ],
+      "isExpanded": false,
+      "isCommentsOpen": false,
+      "id": 325
+    },
+    {
+      "author": "tahiti_traveler",
+      "avatar": "content/misc/user.svg",
+      "likes": 72100,
+      "date": "Oct 27, 2084",
+      "rating": "Rated: 96#",
+      "content": "turned on premium reality mode at the beach today! it automatically removed the storm clouds and added perfect sunshine. best subscription i ever bought.",
+      "image": "content/images/i23.png",
+      "quoteTo": null,
+      "quoteContent": null,
+      "replies": [
+        {
+          "author": "island_hopper",
+          "text": "every single guy behind you in the water has the exact same hat and swim trunks lol"
+        },
+        {
+          "author": "beach_bum_84",
+          "text": "good beaches better people, the sign says it all"
+        },
+        {
+          "author": "budget_backpacker",
+          "text": "cries in standard reality mode where it rained on me all afternoon"
+        }
+      ],
+      "isExpanded": false,
+      "isCommentsOpen": false,
+      "id": 326
+    },
+    {
+      "author": "golden_retriever_mom",
+      "avatar": "content/misc/user.svg",
+      "likes": 83400,
+      "date": "Oct 29, 2084",
+      "rating": "Rated: 98#",
+      "content": "just unboxed the pawsync module for nova! her collar now syncs her mood directly to my phone so i know exactly when she wants belly rubs versus peanut butter.",
+      "image": "content/images/i24.png",
+      "quoteTo": null,
+      "quoteContent": null,
+      "replies": [
+        {
+          "author": "vet_dan",
+          "text": "longer lifespan feature alone makes it totally worth the upgrade"
+        },
+        {
+          "author": "dog_park_regular",
+          "text": "is that glowing earbud comfortable for her? she looks super happy though"
+        },
+        {
+          "author": "pet_lover_99",
+          "text": "same love new intelligence, modern pet parenting is wild"
+        }
+      ],
+      "isExpanded": false,
+      "isCommentsOpen": false,
+      "id": 327
+    },
+    {
+      "id": 328,
+      "author": "xX_Dark_Slayer_Xx",
+      "avatar": "content/misc/user.svg",
+      "likes": 9940,
+      "date": "Aug 17, 2084",
+      "rating": "Rated: 1337#",
+      "content": "my cat has been staring blankly at the ceiling corner for 45 minutes straight. i swear cats can see ghosts that we have no clue about.",
+      "image": "content/video/video26.webp",
+      "quoteTo": null,
+      "quoteContent": null,
+      "replies": [
+        {
+          "author": "Tr0jaN",
+          "text": "mine does that and then randomly sprints across the hallway at 3 am"
+        },
+        {
+          "author": "R0boC0pp",
+          "text": "Probably just heard a tiny moth behind the curtains."
+        },
+        {
+          "author": "tara.exists",
+          "text": "mine looked at an empty closet door like someone was standing there, creeped me out so bad"
+        },
+        {
+          "author": "ellie_typing",
+          "text": "cats live in their own little world honestly"
+        }
+      ],
+      "isExpanded": false,
+      "isCommentsOpen": false
+    },
+    {
+      "author": "gourmet_critic_leo",
+      "avatar": "content/misc/user.svg",
+      "likes": 29800,
+      "date": "Nov 3, 2084",
+      "rating": "Rated: 89#",
+      "content": "dinner tonight at Savor The Next. the mechanical arm placed each microscopic herb with laser precision while everyone at the table spent ten minutes taking photos.",
+      "image": "content/images/i25.png",
+      "quoteTo": null,
+      "quoteContent": null,
+      "replies": [
+        {
+          "author": "foodie_sam",
+          "text": "did the food actually taste good or was it just built for photography"
+        },
+        {
+          "author": "chef_marco",
+          "text": "ai chef plate perfect series strikes again, nobody even talks to waiters anymore"
+        },
+        {
+          "author": "wine_enthusiast",
+          "text": "the presentation is art honestly, look at that sauce drizzle"
+        }
+      ],
+      "isExpanded": false,
+      "isCommentsOpen": false,
+      "id": 329
+    },
+    {
+      "author": "wedding_planner_ivy",
+      "avatar": "content/misc/user.svg",
+      "likes": 51200,
+      "date": "Nov 2, 2084",
+      "rating": "Rated: 93#",
+      "content": "reception cameras recorded an average guest smile score of 98% throughout the toasts! congratulations to the beautiful couple, real moments optimized forever.",
+      "image": "content/images/i28.png",
+      "quoteTo": null,
+      "quoteContent": null,
+      "replies": [
+        {
+          "author": "best_man_tom",
+          "text": "cam 04 caught me at 99% smile efficiency right during the champagne speech"
+        },
+        {
+          "author": "aunt_clara",
+          "text": "back in my day we smiled when we were happy not when the camera told us to"
+        },
+        {
+          "author": "photo_bot",
+          "text": "balanced expressions and enhanced atmosphere delivered successfully"
+        }
+      ],
+      "isExpanded": false,
+      "isCommentsOpen": false,
+      "id": 330
+    },
+    {
+      "author": "hypestream_gaming",
+      "avatar": "content/misc/user.svg",
+      "likes": 92300,
+      "date": "Oct 31, 2084",
+      "rating": "Rated: 99#",
+      "content": "dual stream test went completely off the rails tonight. cloned myself on the secondary monitor and we both hit the exact same clutch shot at the same second.",
+      "image": "content/images/i30.png",
+      "quoteTo": null,
+      "quoteContent": null,
+      "replies": [
+        {
+          "author": "chat_mod",
+          "text": "w stream bro, watching two of you scream at once broke my headphones"
+        },
+        {
+          "author": "gamer_girl_22",
+          "text": "bro literally cloned himself so he never has to pause the grind"
+        },
+        {
+          "author": "spectator_9",
+          "text": "the heart rate monitor showing 102 bpm on both screens is hilarious"
+        }
+      ],
+      "isExpanded": false,
+      "isCommentsOpen": false,
+      "id": 331
+    },
+    {
+      "id": 332,
+      "author": "Gl!tch_W4rrior",
+      "avatar": "content/misc/user.svg",
+      "likes": 12040,
+      "date": "Aug 17, 2084",
+      "rating": "Rated: 666#",
+      "content": "stumbled upon this weird spooky video online at 3 am and now there's no way i'm falling asleep tonight. send wholesome pet videos please",
+      "image": "content/video/video21.webp",
+      "quoteTo": null,
+      "quoteContent": null,
+      "replies": [
+        {
+          "author": "xX_Dark_Slayer_Xx",
+          "text": "why do we always find the spookiest stuff right before going to bed"
+        },
+        {
+          "author": "HyperlinkHorror",
+          "text": "go watch funny animal videos for 10 minutes, works every time"
+        },
+        {
+          "author": "fede_popcorn",
+          "text": "turning on all the hallway lights right now, thanks a lot"
+        },
+        {
+          "author": "Tr0jaN",
+          "text": "definitely checking under the bed before sleeping tonight lol"
+        }
+      ],
+      "isExpanded": false,
+      "isCommentsOpen": false
+    },
+    {
+      "author": "ravenn_explorer",
+      "avatar": "content/misc/user.svg",
+      "likes": 76500,
+      "date": "Nov 4, 2084",
+      "rating": "Rated: 94#",
+      "content": "walking through the central mall right now and everyone is standing inside these glowing floor circles doing the exact same phone tilt gesture. feels like a scripted cutscene.",
+      "image": "content/images/i31.png",
+      "quoteTo": null,
+      "quoteContent": null,
+      "replies": [
+        {
+          "author": "mall_security",
+          "text": "standing circles maintain pedestrian traffic flow please do not block the walkway"
+        },
+        {
+          "author": "stream_viewer",
+          "text": "same hoodie, same phone, same posture, copy paste generation is real"
+        },
+        {
+          "author": "metro_kid",
+          "text": "the giant billboard saying buy obey be happy in the background is eerie"
+        }
+      ],
+      "isExpanded": false,
+      "isCommentsOpen": false,
+      "id": 333
+    },
+    {
+      "author": "maya_fashion_fw",
+      "avatar": "content/misc/user.svg",
+      "likes": 38900,
+      "date": "Nov 1, 2084",
+      "rating": "Rated: 87#",
+      "content": "got the new syn drop today! scan the jacket code to unlock the matching profile badge. one outfit, a million versions of you.",
+      "image": "content/images/i38.png",
+      "quoteTo": null,
+      "quoteContent": null,
+      "replies": [
+        {
+          "author": "streetwear_head",
+          "text": "the glowing chest tag looks incredible in dim lighting"
+        },
+        {
+          "author": "neon_runner",
+          "text": "literally everyone at the club was wearing this exact jacket last night"
+        },
+        {
+          "author": "thrifter_vintage",
+          "text": "miss the days when clothes were made of plain cotton instead of scanned nylon"
+        }
+      ],
+      "isExpanded": false,
+      "isCommentsOpen": false,
+      "id": 334
+    },
+    {
+      "author": "arena_sound_tech",
+      "avatar": "content/misc/user.svg",
+      "likes": 112000,
+      "date": "Nov 2, 2084",
+      "rating": "Rated: 98#",
+      "content": "view from the soundboard at tonight headline show. one million people in the arena and every single phone flashlight turned on simultaneously for the encore.",
+      "image": "content/images/i8.png",
+      "quoteTo": null,
+      "quoteContent": null,
+      "replies": [
+        {
+          "author": "front_row_fan",
+          "text": "best night of my life, the energy when the bass dropped was unreal"
+        },
+        {
+          "author": "concert_goer",
+          "text": "look closely at the first five rows, why does everyone have the exact same haircut"
+        },
+        {
+          "author": "audio_guy",
+          "text": "ears are still ringing, crowd singing along shook the entire stadium roof"
+        }
+      ],
+      "isExpanded": false,
+      "isCommentsOpen": false,
+      "id": 335
+    },
+    {
+      "id": 336,
+      "author": "Synth_Druid",
+      "avatar": "content/misc/user.svg",
+      "likes": 8710,
+      "date": "Aug 16, 2084",
+      "rating": "Rated: 555#",
+      "content": "could stare at this satisfying rhythm loop for hours honestly. if you had a stressful day, take a deep breath and just relax for a minute",
+      "image": "content/video/video39.webp",
+      "quoteTo": null,
+      "quoteContent": null,
+      "replies": [
+        {
+          "author": "QuantumChanter",
+          "text": "oddly satisfying to watch, so soothing"
+        },
+        {
+          "author": "NullPointerZen",
+          "text": "definitely needed this after a hectic day at work"
+        },
+        {
+          "author": "luce_scrive",
+          "text": "saved this to watch whenever i feel overwhelmed"
+        },
+        {
+          "author": "anna_pensieri",
+          "text": "so calming, feels like a mini meditation break"
+        }
+      ],
+      "isExpanded": false,
+      "isCommentsOpen": false
+    },
+    {
+      "author": "the_content_prince",
+      "avatar": "content/misc/user.svg",
+      "likes": 67800,
+      "date": "Nov 3, 2084",
+      "rating": "Rated: 92#",
+      "content": "another beautiful morning sponsored by my favorite daily brands. pancakes on the prada plate, oat milk in the coffee, ready to conquer the feed today.",
+      "image": "content/images/i9.png",
+      "quoteTo": null,
+      "quoteContent": null,
+      "replies": [
+        {
+          "author": "breakfast_club",
+          "text": "bro got brand deals with literally every object on that marble table"
+        },
+        {
+          "author": "city_view_guy",
+          "text": "the skyscraper billboard visible through the window is subtle product placement"
+        },
+        {
+          "author": "realist_dan",
+          "text": "do you actually eat the pancakes or just take pictures until they get cold"
+        }
+      ],
+      "isExpanded": false,
+      "isCommentsOpen": false,
+      "id": 337
+    },
+    {
+      "author": "urban_explorer_k",
+      "avatar": "content/misc/user.svg",
+      "likes": 45300,
+      "date": "Oct 26, 2084",
+      "rating": "Rated: 86#",
+      "content": "pressed my hand against an old brick building behind the transit station and the surface started breaking apart into bright colored pixels. reality texture is getting thin around here.",
+      "image": "content/images/img10.jpg",
+      "quoteTo": null,
+      "quoteContent": null,
+      "replies": [
+        {
+          "author": "graffiti_artist",
+          "text": "saw this near sector 4 yesterday, thought my sunglasses were malfunctioning"
+        },
+        {
+          "author": "city_maintenance",
+          "text": "please report all crumbling physical surfaces to the municipal bureau immediately"
+        },
+        {
+          "author": "curious_cat",
+          "text": "touch it again and see if your hand goes through to the other side"
+        }
+      ],
+      "isExpanded": false,
+      "isCommentsOpen": false,
+      "id": 338
+    },
+    {
+      "author": "luxury_snack_co",
+      "avatar": "content/misc/user.svg",
+      "likes": 27400,
+      "date": "Nov 4, 2084",
+      "rating": "Rated: 85#",
+      "content": "fresh organic raspberries dipped in edible warm gold glaze. the perfect afternoon treat for citizens who appreciate the finer textures of life.",
+      "image": "content/images/img11.jpg",
+      "quoteTo": null,
+      "quoteContent": null,
+      "replies": [
+        {
+          "author": "sweet_tooth",
+          "text": "looks almost too pretty to eat, like a tiny jewel from a museum"
+        },
+        {
+          "author": "dentist_dave",
+          "text": "my teeth hurt just looking at that heavy gold drip lol"
+        },
+        {
+          "author": "kitchen_hacks",
+          "text": "how do you even melt gold that smoothly over cold fruit"
+        }
+      ],
+      "isExpanded": false,
+      "isCommentsOpen": false,
+      "id": 339
+    },
+    {
+      "id": 340,
+      "author": "Cyb3r_Phantom",
+      "avatar": "content/misc/user.svg",
+      "likes": 11200,
+      "date": "Aug 16, 2084",
+      "rating": "Rated: 707#",
+      "content": "found this crazy glowing visor hat at a thrift store downtown easily the coolest piece in my closet now, who's ready for the weekend?",
+      "image": "content/video/video45.webp",
+      "quoteTo": null,
+      "quoteContent": null,
+      "replies": [
+        {
+          "author": "NoTABot",
+          "text": "Looks very bright and flashy! Great thrift find."
+        },
+        {
+          "author": "Tr0jaN",
+          "text": "that hat is crazy, you're definitely gonna stand out in the crowd"
+        },
+        {
+          "author": "PixelNomad",
+          "text": "thrift shops in that district always have the wildest hidden gems"
+        },
+        {
+          "author": "GlitchHop_Girl",
+          "text": "need to find one in neon green for the festival next month"
+        }
+      ],
+      "isExpanded": false,
+      "isCommentsOpen": false
+    },
+    {
+      "author": "diplomatic_leaks_raw",
+      "avatar": "content/misc/user.svg",
+      "likes": 98700,
+      "date": "Nov 3, 2084",
+      "rating": "Rated: 99#",
+      "content": "alleged photo circulating from private diplomatic jet transit between regional summits. beverage service seems to be progressing ahead of schedule.",
+      "image": "content/images/img12.jpg",
+      "quoteTo": null,
+      "quoteContent": null,
+      "replies": [
+        {
+          "author": "geo_analyst",
+          "text": "the bright striped sweater paired with the yellow hazmat coat is peak high diplomacy"
+        },
+        {
+          "author": "fizzy_soda_fan",
+          "text": "mixing grape medicine into sprite at thirty thousand feet is legendary behavior"
+        },
+        {
+          "author": "world_observer",
+          "text": "summit negotiations are definitely going to be relaxed today"
+        }
+      ],
+      "isExpanded": false,
+      "isCommentsOpen": false,
+      "id": 341
+    },
+    {
+      "author": "turtle_sanctuary_keeper",
+      "avatar": "content/misc/user.svg",
+      "likes": 81900,
+      "date": "Oct 25, 2084",
+      "rating": "Rated: 97#",
+      "content": "walked into the living room and found the squad gathered around the old tube television completely captivated by their heroes.",
+      "image": "content/images/img14.jpg",
+      "quoteTo": null,
+      "quoteContent": null,
+      "replies": [
+        {
+          "author": "pizza_fanatic",
+          "text": "the one looking back at the camera definitely wants a slice of pepperoni"
+        },
+        {
+          "author": "retro_collector",
+          "text": "that wood grain crt television still has an incredible picture quality"
+        },
+        {
+          "author": "shell_gang",
+          "text": "cowabunga vibes only in this household"
+        }
+      ],
+      "isExpanded": false,
+      "isCommentsOpen": false,
+      "id": 342
+    },
+    {
+      "author": "brooklyn_sidewalk_watch",
+      "avatar": "content/misc/user.svg",
+      "likes": 53200,
+      "date": "Nov 2, 2084",
+      "rating": "Rated: 91#",
+      "content": "was walking to the deli on 5th avenue and saw this pigeon standing on the corner looking like he runs neighborhood loan operations.",
+      "image": "content/images/img15.jpg",
+      "quoteTo": null,
+      "quoteContent": null,
+      "replies": [
+        {
+          "author": "bread_crumb_boss",
+          "text": "you owe him three slices of sourdough from yesterday, pay up"
+        },
+        {
+          "author": "city_birder",
+          "text": "the little tailored trousers are sending me, new york pigeons are built different"
+        },
+        {
+          "author": "deli_regular",
+          "text": "i would not make eye contact if i were you, he means business"
+        }
+      ],
+      "isExpanded": false,
+      "isCommentsOpen": false,
+      "id": 343
+    },
+    {
+      "id": 344,
+      "author": "xX_Dark_Slayer_Xx",
+      "avatar": "content/misc/user.svg",
+      "likes": 14500,
+      "date": "Aug 16, 2084",
+      "rating": "Rated: 1337#",
+      "content": "whoever organized a full fashion show with cats wearing tiny couture dresses deserves an award. they strutted down the runway with so much attitude!",
+      "image": "content/video/cat_dress_parade.webp",
+      "quoteTo": null,
+      "quoteContent": null,
+      "replies": [
+        {
+          "author": "Tr0jaN",
+          "text": "the little green velvet dress killed me, they walk better than actual models."
+        },
+        {
+          "author": "sara_cinephile",
+          "text": "the way they didn't even knock anything over is pure elegance"
+        },
+        {
+          "author": "NoTABot",
+          "text": "Such well-behaved pets, lovely little outfits."
+        },
+        {
+          "author": "tara.exists",
+          "text": "my cat would scratch my arms off if i tried putting a hat on him, how did they pull this off"
+        }
+      ],
+      "isExpanded": false,
+      "isCommentsOpen": false
+    },
+    {
+      "author": "basement_tinkerer_99",
+      "avatar": "content/misc/user.svg",
+      "likes": 36700,
+      "date": "Oct 29, 2084",
+      "rating": "Rated: 88#",
+      "content": "finally finished my weekend garage project! hooked up forty flashlights and every spare vacuum tube i had in the closet. neighborhood power flickered when i turned it on.",
+      "image": "content/images/img19.jpg",
+      "quoteTo": null,
+      "quoteContent": null,
+      "replies": [
+        {
+          "author": "safety_inspector",
+          "text": "bro built a particle accelerator in his bedroom next to the laundry hamper"
+        },
+        {
+          "author": "sci_fi_fan",
+          "text": "the fairy lights wrapped around the cooling coils add fifty emotional damage"
+        },
+        {
+          "author": "curious_neighbor",
+          "text": "so that is why my refrigerator stopped running ten minutes ago"
+        }
+      ],
+      "isExpanded": false,
+      "isCommentsOpen": false,
+      "id": 345
+    },
+    {
+      "author": "sunset_blvd_paparazzi",
+      "avatar": "content/misc/user.svg",
+      "likes": 62400,
+      "date": "Nov 1, 2084",
+      "rating": "Rated: 93#",
+      "content": "dramatic arrest outside the club on Ivar Avenue tonight. authorities finally caught up with the suspect after an extensive investigation.",
+      "image": "content/images/img20.jpg",
+      "quoteTo": null,
+      "quoteContent": null,
+      "replies": [
+        {
+          "author": "inspector_clouseau",
+          "text": "the long arm of the law catches everyone eventually"
+        },
+        {
+          "author": "hollywood_night",
+          "text": "he looks so tired of the drama in that plush costume lol"
+        },
+        {
+          "author": "witness_local",
+          "text": "the police officers were trying so hard to keep straight faces while handcuffing him"
+        }
+      ],
+      "isExpanded": false,
+      "isCommentsOpen": false,
+      "id": 346
+    },
+    {
+      "author": "remote_worker_mood",
+      "avatar": "content/misc/user.svg",
+      "likes": 74900,
+      "date": "Oct 27, 2084",
+      "rating": "Rated: 96#",
+      "content": "current work from home situation. eight emails answered, three meetings attended, zero idea what the quarterly company roadmap actually means.",
+      "image": "content/images/img3.jpg",
+      "quoteTo": null,
+      "quoteContent": null,
+      "replies": [
+        {
+          "author": "office_refugee",
+          "text": "mattress on the carpet and a single water bottle, peak minimalist efficiency"
+        },
+        {
+          "author": "cubicle_survivor",
+          "text": "literally a live camera feed of me trying to write a report before five pm"
+        },
+        {
+          "author": "tech_lead_dan",
+          "text": "give him another hour and he will solve all open bug tickets"
+        }
+      ],
+      "isExpanded": false,
+      "isCommentsOpen": false,
+      "id": 347
+    },
+    {
+      "id": 348,
+      "author": "jules_random",
+      "avatar": "content/misc/user.svg",
+      "likes": 6920,
+      "date": "Aug 16, 2084",
+      "rating": "Rated: 420#",
+      "content": "finally left the apartment for an afternoon in the park. phone on silent, sitting under the big oak tree with a cold drink, soaking up the sunshine. needed this so badly.",
+      "image": "content/video/chilling_in_the_nature_meme.webp",
+      "quoteTo": null,
+      "quoteContent": null,
+      "replies": [
+        {
+          "author": "finn_offline",
+          "text": "nothing beats a warm breeze and zero unread messages"
+        },
+        {
+          "author": "anna_pensieri",
+          "text": "spending an afternoon outside is honestly the best therapy"
+        },
+        {
+          "author": "WeatherPulse_AI",
+          "text": "weather looks like it's staying nice all weekend too"
+        },
+        {
+          "author": "theo_talks",
+          "text": "did the same today, laid a blanket on the grass and took a two hour nap"
+        }
+      ],
+      "isExpanded": false,
+      "isCommentsOpen": false
+    },
+    {
+      "author": "sleep_stream_syndicate",
+      "avatar": "content/misc/user.svg",
+      "likes": 49800,
+      "date": "Nov 3, 2084",
+      "rating": "Rated: 90#",
+      "content": "hour 7 of the sleep stream. 12,400 viewers currently watching me do absolutely nothing from twelve different angles. content never stops.",
+      "image": "content/images/img4.png",
+      "quoteTo": null,
+      "quoteContent": null,
+      "replies": [
+        {
+          "author": "night_owl",
+          "text": "cam 5 has the best angle honestly, that blanket looks like a cloud"
+        },
+        {
+          "author": "stream_chat",
+          "text": "people watch people anyway, the wall poster knows what is up"
+        },
+        {
+          "author": "tired_student",
+          "text": "bro is getting paid to sleep while i am awake studying for finals"
+        }
+      ],
+      "isExpanded": false,
+      "isCommentsOpen": false,
+      "id": 349
+    },
+    {
+      "author": "sector7_ground_crew",
+      "avatar": "content/misc/user.svg",
+      "likes": 88900,
+      "date": "Oct 31, 2084",
+      "rating": "Rated: 98#",
+      "content": "crashed right outside authorized hangar 3. guest was polite enough to accept an apple juice box while the engineering team assessed damage to the saucer.",
+      "image": "content/images/img7.jpg",
+      "quoteTo": null,
+      "quoteContent": null,
+      "replies": [
+        {
+          "author": "area51_alumnus",
+          "text": "the headphones around the neck prove interstellar visitors appreciate good tunes"
+        },
+        {
+          "author": "hangar_tech",
+          "text": "saucer dented the concrete apron, gonna take all weekend to buff that out"
+        },
+        {
+          "author": "juice_lover",
+          "text": "minute maid apple juice bridging galactic civilizations since 2084"
+        }
+      ],
+      "isExpanded": false,
+      "isCommentsOpen": false,
+      "id": 350
+    },
+    {
+      "author": "vanessa_omnipresence",
+      "avatar": "content/misc/user.svg",
+      "likes": 54100,
+      "date": "Nov 2, 2084",
+      "rating": "Rated: 92#",
+      "content": "setting up the multi-platform broadcasting rig. one face, one hundred camera angles, infinite opportunities. be seen forever.",
+      "image": "content/images/img8.png",
+      "quoteTo": null,
+      "quoteContent": null,
+      "replies": [
+        {
+          "author": "media_director",
+          "text": "the monitor wall behind you is mesmerizing, pure visual overload"
+        },
+        {
+          "author": "beauty_fan_01",
+          "text": "lip gloss shade looks amazing on screen numbers forty two through sixty eight"
+        },
+        {
+          "author": "stream_watcher",
+          "text": "better face brighter future, marketing team really cooked with that cup slogan"
+        }
+      ],
+      "isExpanded": false,
+      "isCommentsOpen": false,
+      "id": 351
+    },
+    {
+      "id": 352,
+      "author": "Tr0jaN",
+      "avatar": "content/misc/user.svg",
+      "likes": 18340,
+      "date": "Aug 15, 2084",
+      "rating": "Rated: 999#",
+      "content": "my last two braincells trying to make coffee on a monday morning. lmfaooo who even came up with this",
+      "image": "content/video/meme1.webp",
+      "quoteTo": null,
+      "quoteContent": null,
+      "replies": [
+        {
+          "author": "xX_Dark_Slayer_Xx",
+          "text": "me trying to find my car keys while already running ten minutes late"
+        },
+        {
+          "author": "Gl!tch_W4rrior",
+          "text": "pure chaos, haven't laughed this hard all day"
+        },
+        {
+          "author": "BufferOverflow",
+          "text": "poured cold water into my oatmeal this morning, this is painfully relatable"
+        },
+        {
+          "author": "fede_popcorn",
+          "text": "mondays should be banned by law honestly"
+        }
+      ],
+      "isExpanded": false,
+      "isCommentsOpen": false
+    },
+    {
+      "author": "feed_shitposter_supreme",
+      "avatar": "content/misc/user.svg",
+      "likes": 125000,
+      "date": "Nov 4, 2084",
+      "rating": "Rated: 99#",
+      "content": "latest leaked photo from the rocket testing facility. executive leadership claims aerodynamic efficiency has improved by thirty-four percent.",
+      "image": "content/images/img9.jpg",
+      "quoteTo": null,
+      "quoteContent": null,
+      "replies": [
+        {
+          "author": "mars_colonist",
+          "text": "the starship launch will have to wait, new corporate milestones just dropped"
+        },
+        {
+          "author": "orbit_watcher",
+          "text": "the olive green shirt is holding on for dear life"
+        },
+        {
+          "author": "rocket_engineer",
+          "text": "payload capacity calculations need to be completely revised now"
+        }
+      ],
+      "isExpanded": false,
+      "isCommentsOpen": false,
+      "id": 353
+    },
+    {
+      "id": 354,
+      "author": "R0boC0pp",
+      "avatar": "content/misc/user.svg",
+      "likes": 13910,
+      "date": "Aug 15, 2084",
+      "rating": "Rated: 911#",
+      "content": "stuck in morning rush hour and looked over to see a t-rex driving a convertible next to me. he even signaled before merging into my lane, respect",
+      "image": "content/video/t_rex_driving_in_town.webp",
+      "quoteTo": null,
+      "quoteContent": null,
+      "replies": [
+        {
+          "author": "Tr0jaN",
+          "text": "bro has better road manners than 90% of drivers on the highway"
+        },
+        {
+          "author": "Gl!tch_W4rrior",
+          "text": "how are his little arms even reaching the steering wheel lmao"
+        },
+        {
+          "author": "CityGrid_Live",
+          "text": "traffic was backed up for miles because everyone slowed down to take photos"
+        },
+        {
+          "author": "chris.everyday",
+          "text": "at least he wears his seatbelt, a responsible citizen"
+        }
+      ],
+      "isExpanded": false,
+      "isCommentsOpen": false
     }
   ];
-
   const newsData = {
     hero: {
       title: 'ELECTIONS 2084: THREE VISIONS',
-      content: 'The 2084 presidential race has officially commenced. Citizens across all zones must choose between General Donald Thunder\'s border lockdown, Luna Serenity\'s algorithmic harmony, and Bobby Freedom\'s hardline tradition. Telemetry submission is mandatory.',
+      content: 'Thunder, Serenity and Freedom face voters as the Central Consensus Bureau begins final ballot processing. The three candidates on the ballot represent three different approaches to national policy, automation and citizen management.',
       linkText: '[ CAST YOUR BALLOT NOW → ]',
       linkUrl: 'news-elections-2084-90s.html'
     },
     hotLinks: [
       'Last News 2k84',
-      'KODAK BLACKER™ IN GTA 7',
+      'KODAK BLACKER™ CONFIRMED FOR GTA 7',
       'Right to Forget™',
       'City 12 Relocation',
       'Online Court Voting',
@@ -667,120 +1724,365 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   const usersData = [
-    { name: 'R0boC0pp', avatar: 'content/user.svg' },
-    { name: 'Tr0jaN', avatar: 'content/user.svg' },
-    { name: 'xX_Dark_Slayer_Xx', avatar: 'content/user.svg' },
-    { name: 'NoTABot', avatar: 'content/user.svg' },
-    { name: 'Gl!tch_W4rrior', avatar: 'content/user.svg' },
-    { name: 'Cyb3r_Phantom', avatar: 'content/user.svg' },
-    { name: 'Synth_Druid', avatar: 'content/user.svg' }
+    { name: 'R0boC0pp', avatar: 'content/misc/user.svg' },
+    { name: 'Tr0jaN', avatar: 'content/misc/user.svg' },
+    { name: 'xX_Dark_Slayer_Xx', avatar: 'content/misc/user.svg' },
+    { name: 'NoTABot', avatar: 'content/misc/user.svg' },
+    { name: 'Gl!tch_W4rrior', avatar: 'content/misc/user.svg' },
+    { name: 'Cyb3r_Phantom', avatar: 'content/misc/user.svg' },
+    { name: 'Synth_Druid', avatar: 'content/misc/user.svg' }
   ];
 
   const commentPool = [
-    // Sport e fitness
-    { author: 'marco_ultras99', text: "so is it true refs are all ai now? idk, kinda miss human error tbh" },
-    { author: 'SportSignal_AI', text: "predictive analysis confirms: 73% win probability for home team in tonight's final" },
-    { author: 'giuli.fan22', text: "my favorite player refused the neural performance monitoring implant, RESPECT" },
-    { author: 'davide_calcio', text: "var 2.0 with ai deciding penalties on its own kinda scares me ngl" },
-    { author: 'StatBot_Prime', text: "new season record detected, live standings update available" },
-    { author: 'paolo_tifoso', text: "honestly i preferred when coaches messed up lineups instead of just following ai suggestions" },
-    { author: 'tommy_hoops', text: "coach got fired after refusing to follow the ai's substitution recommendations lol" },
-    { author: 'LeagueStat_AI', text: "injury risk model flags three players ahead of sunday's match" },
-    { author: 'rae_courtside', text: "the ai commentary is honestly funnier than the human one now" },
-    { author: 'big_dave_fitness', text: "my trainer app adjusted my whole routine overnight without asking, kinda annoyed tbh" },
-    { author: 'MatchPulse_09', text: "fan engagement up 22% since real time stats overlay was introduced" },
-    { author: 'nico_runs', text: 'ran my fastest 10k today, the ai coach just said "acceptable", thanks i guess' },
-
-    // Movies/entertainment
-    { author: 'sara_cinephile', text: "they just announced the lead actor in the new movie was fully ai generated and idk how to feel" },
-    { author: 'StreamWatch_Bot', text: "the film reached number one in 40 countries within the first 12 hours of release" },
-    { author: 'leo_moviebuff', text: "honestly you can tell the ai-written script, something's missing, can't explain it" },
-    { author: 'nina.watches', text: "the dubbing done with the cloned voice of an actor who died years ago makes me so sad" },
-    { author: 'CineTrend_AI', text: "audience sentiment positive at 81% for the new release, engagement growing" },
-    { author: 'fede_popcorn', text: "guys is it normal that you can't even tell anymore if trailers are real or generated" },
-    { author: 'jamie_watches', text: "they revived a dead musician's voice for the soundtrack again, feels weird every time" },
-    { author: 'ScreenTrend_AI', text: "box office prediction model overestimated opening weekend by 4%" },
-    { author: 'mo_reviews', text: "not gonna lie the ai generated extras in crowd scenes look a little too perfect" },
-    { author: 'cassie_films', text: "the director did a q&a and admitted half the concept art was ai generated, no one seemed surprised" },
-    { author: 'PlotWatch_Bot', text: "script similarity detector flagged the new release as 61% derivative" },
-    { author: 'ben_popcorn2', text: "watched a movie entirely narrated by a synthetic voice, forgot it wasn't human halfway through" },
-
-    // Random thoughts
-    { author: 'anna_pensieri', text: "today my ai assistant said good morning to me before i even opened my eyes, not sure if that's convenient or creepy" },
-    { author: 'ThoughtStream_09', text: "thought of the day: human productivity is up but perceived happiness has stayed flat for 3 years" },
-    { author: 'giacomo.random', text: "asked ai what to eat and it told me the same thing as yesterday, idk man" },
-    { author: 'luce_scrive', text: 'i miss when things just broke and stayed broken, now everything "self repairs" and it all feels the same' },
-    { author: 'DailyPulse_Bot', text: "68% of users report increased perceived wellbeing thanks to their personal ai assistant" },
-    { author: 'marta_over', text: "am i the only one weirded out that kids learn to read straight from ai now instead of from their parents?" },
-    { author: 'ellie_typing', text: 'my fridge asked me if i was "doing okay" today and i don\'t know how i feel about that' },
-    { author: 'MindPulse_AI', text: "reported average screen time down slightly this quarter, first time in years" },
-    { author: 'sam_overthinks', text: "is it just me or does everyone's ai assistant sound the same now" },
-    { author: 'tara.exists', text: "had a full conversation with my neighbor's ai before realizing he wasn't even home" },
-    { author: 'ThoughtGrid_02', text: "sentiment analysis shows rising nostalgia searches among users under 30" },
-    { author: 'leo_random22', text: "my kid asked the assistant to tuck her in tonight instead of me, that one stung a little" },
-
-    // News/society
-    { author: 'NewsGrid_Live', text: "new regulation on automated decision systems in public administration approved" },
-    { author: 'enzo_curioso', text: "they opened the first court with an ai judge assisting, i'd honestly go just to see it" },
-    { author: 'PolicyWatch_AI', text: "public debate on language model regulation continues to divide public opinion" },
-    { author: 'vale.pensa', text: 'my bank now sends me notifications written "in a friendly tone" by an ai and it all feels so fake' },
-    { author: 'CivicTrend_09', text: "survey: trust in automated systems stable compared to last quarter" },
-    { author: 'rob_normale', text: "nothing much, just found out today that my neighbor talks to his ai assistant more than to his wife" },
-    { author: 'CivicSignal_AI', text: "new transparency law requires ai generated content to carry visible labeling" },
-    { author: 'renee_watches2', text: "my landlord's ai handled the entire lease negotiation, didn't talk to a human once" },
-    { author: 'PolicyTrack_09', text: "public trust in automated hiring systems drops for second consecutive quarter" },
-    { author: 'marcus_thinks', text: "they replaced the local news anchor with a synthetic one and barely anyone complained" },
-    { author: 'GridWatch_Bot', text: "city traffic incidents down 14% since ai routing rollout" },
-    { author: 'dana_reads', text: "my kid's school report card was written entirely by an ai teacher assistant, feels off somehow" },
-
-    // Tech/daily life
-    { author: 'paul.codes', text: "my ai pair programmer rewrote my whole function without asking again" },
-    { author: 'TechPulse_AI', text: "adoption of home automation assistants reaches new quarterly high" },
-    { author: 'nadia_builds', text: "spent 20 minutes arguing with my assistant about grocery substitutions, i lost" },
-    { author: 'GridNet_03', text: "energy usage optimization models now active in 40% of households surveyed" },
-    { author: 'chris.everyday', text: 'my car suggested a "more efficient" route through my ex\'s street, thanks a lot' },
-    { author: 'AutoLife_Bot', text: "smart home error reports down 30% following latest firmware update" },
-
-    // Food/lifestyle
-    { author: 'mia_cooks', text: "asked the kitchen assistant for a simple recipe and got a 9 step gourmet thing, no thanks" },
-    { author: 'FlavorTrend_AI', text: "plant based protein searches up 18% this month" },
-    { author: 'tobi_snacks', text: "my delivery bot apologized for being 2 minutes late, felt unnecessary but sweet" },
-    { author: 'dana_eats', text: "nothing beats a meal that wasn't optimized by anything, just good old trial and error" },
-    { author: 'MealGrid_09', text: "personalized nutrition plans now used by over half of surveyed households" },
-    { author: 'ray_hungry', text: "my assistant keeps recommending the same three restaurants, i think it gave up on me" },
-
-    // Miscellaneous/casual
-    { author: 'jules_random', text: 'today\'s forecast says "calm with a chance of nostalgia", the weather bot has jokes now apparently' },
-    { author: 'WeatherPulse_AI', text: "unusual pattern detected across three regions, monitoring continues" },
-    { author: 'theo_talks', text: "my grandma finally got an ai assistant and now she talks to it more than to me, love that for her honestly" },
-    { author: 'CityGrid_Live', text: "public transit delays reduced by 9% following predictive scheduling rollout" },
-    { author: 'nora_scrolling', text: "everyone online sounds slightly more polished lately, can't tell if that's good or bad" },
-    { author: 'Signal_Echo7', text: "engagement metrics stable across most demographic segments this week" },
-    { author: 'finn_offline', text: "took a walk without my earbuds today, felt strange not having anything narrating it to me" },
-
-    // Cyber forum personas
-    { author: 'R0boC0pp', text: "Kernel panic avoided. Telemetry integrity verified at 99.8%." },
-    { author: 'Tr0jaN', text: "LMAOOOO bro living in 2099 while we are stuck in 2084 😭💀" },
-    { author: 'xX_Dark_Slayer_Xx', text: "THE SERVER CORE HAS BECOME SELF-AWARE. I WARNED EVERYONE IN 2077." },
-    { author: 'NoTABot', text: "As an authentic biological person, I find this post highly relatable and non-threatening." },
-    { author: 'Gl!tch_W4rrior', text: "Ion blast detected in local memory cache. Overclocking coolant loops." },
-    { author: 'Cyb3r_Phantom', text: "Aesthetic rating: 10/10. Minting this memory into holographic storage." },
-    { author: 'Synth_Druid', text: "The old dialup spirits are humming within the fiber optic trunk." },
-    { author: 'PixelNomad', text: "Pure retro forum gold. Reminds me of the golden age of Web 1.0." },
-    { author: 'QuantumChanter', text: "Probability of this timeline collapsing is currently 42.6%." },
-    { author: 'DialupGhost', text: "AOL disconnect sound plays loudly in the distance." },
-    { author: 'HyperlinkHorror', text: "404 error: sanity not found on this subnet." },
-    { author: 'NullPointerZen', text: "Accept the void. Everything eventually dereferences to null." },
-    { author: 'GlitchHop_Girl', text: "Looping the bassline from this thread on repeat all night." },
-    { author: 'DataMiner_404', text: "Scraped 12 uncompressed audio logs from the background noise." },
-    { author: 'CyberSkeptic', text: "I ran the SHA-256 hash on this. Looks suspicious but compelling." },
-    { author: 'ZeroDay_Zack', text: "Can confirm this glitch reproduces on firmware version 84.1." },
-    { author: 'NeonValkyrie', text: "Reading this from a rooftop in Neo-Tokyo while neon drizzle falls." },
-    { author: 'Subroutine_7', text: "Executing emotion emulation routine: amused." },
-    { author: 'BufferOverflow', text: "Cortex memory exceeded. Page fault in mental cache." },
-    { author: 'StaticFuzz', text: "The white noise between stations is transmitting secret code." }
+    {
+      "author": "marco_ultras99",
+      "text": "so is it true refs are all automated now? idk, kinda miss human error tbh"
+    },
+    {
+      "author": "SportSignal_AI",
+      "text": "my team was favored to win tonight and they still managed to blow the lead lol"
+    },
+    {
+      "author": "giuli.fan22",
+      "text": "my favorite player refused the contract extension, honestly respect his decision"
+    },
+    {
+      "author": "davide_calcio",
+      "text": "referees checking video replays for 5 minutes ruins the whole stadium energy ngl"
+    },
+    {
+      "author": "StatBot_Prime",
+      "text": "stadium attendance broke records tonight, atmosphere was unreal"
+    },
+    {
+      "author": "paolo_tifoso",
+      "text": "honestly i preferred when coaches made wild mistakes instead of playing it super safe"
+    },
+    {
+      "author": "tommy_hoops",
+      "text": "coach got benched after arguing with the referee for ten straight minutes lol"
+    },
+    {
+      "author": "LeagueStat_AI",
+      "text": "three star players sitting out this weekend with minor sprains"
+    },
+    {
+      "author": "rae_courtside",
+      "text": "the stadium announcers have been so hilarious lately"
+    },
+    {
+      "author": "big_dave_fitness",
+      "text": "my trainer changed my whole workout routine without warning, my legs are dead today"
+    },
+    {
+      "author": "MatchPulse_09",
+      "text": "ticket prices went up again, might just watch the finals from the pub"
+    },
+    {
+      "author": "nico_runs",
+      "text": "ran my fastest 10k today, completely exhausted but proud of myself"
+    },
+    {
+      "author": "sara_cinephile",
+      "text": "they just announced the star of that new movie isn't even real and idk how to feel"
+    },
+    {
+      "author": "StreamWatch_Bot",
+      "text": "the film reached number one in 40 countries within the first 12 hours of release"
+    },
+    {
+      "author": "leo_moviebuff",
+      "text": "honestly you can tell when a script is rushed, something's missing, can't explain it"
+    },
+    {
+      "author": "nina.watches",
+      "text": "the nostalgic soundtrack from that trailer made me so emotional"
+    },
+    {
+      "author": "CineTrend_AI",
+      "text": "audience reviews have been surprisingly positive for the new sequel"
+    },
+    {
+      "author": "fede_popcorn",
+      "text": "guys is it normal that you can't even tell anymore if movie trailers are real or generated"
+    },
+    {
+      "author": "jamie_watches",
+      "text": "they remade that classic 90s thriller again, why can't we have original stories anymore"
+    },
+    {
+      "author": "ScreenTrend_AI",
+      "text": "box office numbers broke records over the long holiday weekend"
+    },
+    {
+      "author": "mo_reviews",
+      "text": "not gonna lie the crowd scenes in that blockbuster looked a little too clean"
+    },
+    {
+      "author": "cassie_films",
+      "text": "the director did a q&a and admitted half the scenes were improvised on set"
+    },
+    {
+      "author": "PlotWatch_Bot",
+      "text": "the plot twist in the third act caught everyone off guard"
+    },
+    {
+      "author": "ben_popcorn2",
+      "text": "watched that new documentary last night, couldn't look away for two hours"
+    },
+    {
+      "author": "anna_pensieri",
+      "text": "today my morning alarm woke me up with the gentlest melody instead of a loud siren, actually felt refreshed"
+    },
+    {
+      "author": "ThoughtStream_09",
+      "text": "thought of the day: everyone seems so busy lately but nobody seems to know where the time went"
+    },
+    {
+      "author": "giacomo.random",
+      "text": "stared into my fridge for 10 minutes looking for food like something new was gonna appear"
+    },
+    {
+      "author": "luce_scrive",
+      "text": "i miss when things were made of wood and metal, now everything feels like cheap glossy plastic"
+    },
+    {
+      "author": "DailyPulse_Bot",
+      "text": "a sunny weekend walk improves mood more than anything else honestly"
+    },
+    {
+      "author": "marta_over",
+      "text": "am i the only one weirded out by how fast kids grow up nowadays?"
+    },
+    {
+      "author": "ellie_typing",
+      "text": "my coffee maker broke this morning and my day was ruined before it even started"
+    },
+    {
+      "author": "MindPulse_AI",
+      "text": "spending an hour reading before bed makes falling asleep so much easier"
+    },
+    {
+      "author": "sam_overthinks",
+      "text": "is it just me or does coffee taste twice as good when someone else makes it for you"
+    },
+    {
+      "author": "tara.exists",
+      "text": "had a great conversation with my neighbor over the garden fence this morning"
+    },
+    {
+      "author": "ThoughtGrid_02",
+      "text": "nostalgia hits so hard whenever you hear an old song you forgot about"
+    },
+    {
+      "author": "leo_random22",
+      "text": "my kid asked me if people really wrote letters by hand in the past, made me feel ancient"
+    },
+    {
+      "author": "NewsGrid_Live",
+      "text": "city council approved the new park expansion project on the south side"
+    },
+    {
+      "author": "enzo_curioso",
+      "text": "they opened a new vintage bookshop downtown, definitely going to check it out"
+    },
+    {
+      "author": "PolicyWatch_AI",
+      "text": "public debate over school bus schedules continues to divide parents"
+    },
+    {
+      "author": "vale.pensa",
+      "text": "my bank now sends me automated emojis in text messages and it feels so cringey"
+    },
+    {
+      "author": "CivicTrend_09",
+      "text": "community garden signups reached full capacity this week"
+    },
+    {
+      "author": "rob_normale",
+      "text": "nothing much, just found out today that my neighbor has three pet ferrets"
+    },
+    {
+      "author": "CivicSignal_AI",
+      "text": "new recycling guidelines take effect across all districts next Monday"
+    },
+    {
+      "author": "renee_watches2",
+      "text": "my landlord finally fixed the front gate lock after three months of asking"
+    },
+    {
+      "author": "PolicyTrack_09",
+      "text": "local farmers market will now stay open through late autumn"
+    },
+    {
+      "author": "marcus_thinks",
+      "text": "the morning radio host got replaced and the new guy has zero charm"
+    },
+    {
+      "author": "GridWatch_Bot",
+      "text": "downtown traffic was surprisingly smooth during morning commute today"
+    },
+    {
+      "author": "dana_reads",
+      "text": "my kid brought home a painted clay mug from art class, honestly looks adorable"
+    },
+    {
+      "author": "paul.codes",
+      "text": "spilled coffee on my keyboard again, taking keys off with a butter knife as we speak"
+    },
+    {
+      "author": "TechPulse_AI",
+      "text": "cordless vacuum cleaners have genuinely changed Saturday chores forever"
+    },
+    {
+      "author": "nadia_builds",
+      "text": "spent 20 minutes looking for my glasses while they were sitting on my head"
+    },
+    {
+      "author": "GridNet_03",
+      "text": "remember when phone batteries lasted four days without needing a charge?"
+    },
+    {
+      "author": "chris.everyday",
+      "text": "my navigation app guided me through three back alleys to save 30 seconds"
+    },
+    {
+      "author": "AutoLife_Bot",
+      "text": "smart home light bulbs are great until the power flickers and turns every room on at 3 am"
+    },
+    {
+      "author": "mia_cooks",
+      "text": "found an old handwritten recipe card from my grandmother, smells like cinnamon and sugar"
+    },
+    {
+      "author": "FlavorTrend_AI",
+      "text": "hot chocolate with a pinch of sea salt on a chilly night hits different"
+    },
+    {
+      "author": "tobi_snacks",
+      "text": "the bakery down the street started making warm blueberry scones every morning"
+    },
+    {
+      "author": "dana_eats",
+      "text": "nothing beats homemade soup on a rainy afternoon, comfort in a bowl"
+    },
+    {
+      "author": "MealGrid_09",
+      "text": "tried making sourdough bread again and actually got a nice golden crust this time"
+    },
+    {
+      "author": "ray_hungry",
+      "text": "that new taco truck parked by the park is genuinely incredible"
+    },
+    {
+      "author": "jules_random",
+      "text": "today's forecast says calm with sunny intervals, finally can hang clothes outside"
+    },
+    {
+      "author": "WeatherPulse_AI",
+      "text": "clear skies expected throughout the entire weekend across the region"
+    },
+    {
+      "author": "theo_talks",
+      "text": "my grandma finally got a smartphone and now she texts me funny pictures all day"
+    },
+    {
+      "author": "CityGrid_Live",
+      "text": "metro line repairs finished early, all stations running on normal schedule"
+    },
+    {
+      "author": "nora_scrolling",
+      "text": "everyone online seems so cheerful today for once, what a pleasant change"
+    },
+    {
+      "author": "Signal_Echo7",
+      "text": "listening to the rain while drinking tea is the ultimate cozy combo"
+    },
+    {
+      "author": "finn_offline",
+      "text": "took an evening walk without checking the time once, felt so liberating"
+    },
+    {
+      "author": "R0boC0pp",
+      "text": "Checked the morning weather, grabbed a warm coffee, ready for the day."
+    },
+    {
+      "author": "Tr0jaN",
+      "text": "LMAOOOO this post made my whole afternoon."
+    },
+    {
+      "author": "xX_Dark_Slayer_Xx",
+      "text": "I REMEMBER WHEN WE PLAYED OUTSIDE UNTIL THE STREETLIGHTS CAME ON"
+    },
+    {
+      "author": "NoTABot",
+      "text": "As an authentic everyday person, I find this post highly relatable."
+    },
+    {
+      "author": "Gl!tch_W4rrior",
+      "text": "Saved this picture immediately, absolutely brilliant."
+    },
+    {
+      "author": "Cyb3r_Phantom",
+      "text": "Aesthetic rating: 10/10. Looks stunning."
+    },
+    {
+      "author": "Synth_Druid",
+      "text": "Such a calm and lovely vibe on the feed today."
+    },
+    {
+      "author": "PixelNomad",
+      "text": "Pure internet gold. Reminds me of the good old days of early forums."
+    },
+    {
+      "author": "QuantumChanter",
+      "text": "Odds of me getting out of bed before noon today are looking very slim."
+    },
+    {
+      "author": "DialupGhost",
+      "text": "Remember the sound of an old phone dial tone? Pure nostalgia."
+    },
+    {
+      "author": "HyperlinkHorror",
+      "text": "Need another cup of coffee before dealing with anyone today."
+    },
+    {
+      "author": "NullPointerZen",
+      "text": "Take a deep breath and let the stress go. Have a peaceful day."
+    },
+    {
+      "author": "GlitchHop_Girl",
+      "text": "Got this song stuck in my head on repeat all day long."
+    },
+    {
+      "author": "DataMiner_404",
+      "text": "Found a box of old cassette tapes in the attic earlier, so cool."
+    },
+    {
+      "author": "CyberSkeptic",
+      "text": "Looked into the story behind this, turns out it's actually true!"
+    },
+    {
+      "author": "ZeroDay_Zack",
+      "text": "Gotta appreciate the attention to detail on this one."
+    },
+    {
+      "author": "NeonValkyrie",
+      "text": "Watching the sunset from the balcony with tea, beautiful evening."
+    },
+    {
+      "author": "Subroutine_7",
+      "text": "This put a huge smile on my face today."
+    },
+    {
+      "author": "BufferOverflow",
+      "text": "Brain is completely drained after a long workday, need sleep."
+    },
+    {
+      "author": "StaticFuzz",
+      "text": "Love finding random posts like this during lunch break."
+    }
   ];
-
   // Populate every post with at least 15 comments and randomized distribution
   function populatePostComments() {
     postsData.forEach((post, pIndex) => {
@@ -814,25 +2116,26 @@ document.addEventListener('DOMContentLoaded', () => {
     const filteredPosts = postsData;
 
     filteredPosts.forEach((post, index) => {
-      // Text Truncation Logic
-      let displayText = post.content;
-      let showReadMore = false;
-      const maxLength = 100;
-      if (post.content && post.content.length > maxLength && !post.isExpanded) {
-        displayText = post.content.substring(0, maxLength);
-        showReadMore = true;
-      }
-
-      // Quote Block Logic (Removed per user request)
-
       // Media / Video / Image Logic (Native Hardware-Accelerated Rendering)
       let imageHtml = '';
       if (post.image) {
         const safeImgSrc = encodeURI(post.image).replace(/#/g, '%23');
+        const isAnimatedMedia = /\.(gif|webp)($|\?)/i.test(post.image);
+        const containerClasses = isAnimatedMedia
+          ? 'post-attached-image-container post-media-frosted'
+          : 'post-attached-image-container';
+        const imgClasses = isAnimatedMedia
+          ? 'post-attached-image post-attached-image-contained'
+          : 'post-attached-image';
+
+        const blurBgHtml = isAnimatedMedia
+          ? `<div class="post-media-blur-bg" style="background-image: url('${safeImgSrc}');"></div>`
+          : '';
 
         imageHtml = `
-          <div class="post-attached-image-container" data-post-id="${post.id}">
-            <img src="${safeImgSrc}" class="post-attached-image" data-post-id="${post.id}" alt="Post Media">
+          <div class="${containerClasses}" data-post-id="${post.id}">
+            ${blurBgHtml}
+            <img src="${safeImgSrc}" class="${imgClasses}" data-post-id="${post.id}" alt="Post Media">
           </div>`;
       }
 
@@ -877,16 +2180,15 @@ document.addEventListener('DOMContentLoaded', () => {
           
           <div class="post-main">
             <div class="text-content-wrapper">
-              <span class="post-content-text">${displayText}</span>
-              ${showReadMore ? `<span class="read-more-btn" data-post-id="${post.id}">...</span>` : ''}
+              <span class="post-content-text">${post.content}</span>
             </div>
             
             <div class="post-footer">
               <div class="post-icon chat-icon" data-post-id="${post.id}">
-                <img class="post-icon-svg" src="content/chat.svg" alt="comments"> ${(post.replies ? post.replies.length : 0)}
+                <img class="post-icon-svg" src="content/misc/chat.svg" alt="comments"> ${(post.replies ? post.replies.length : 0)}
               </div>
               <div class="post-icon like-icon" data-post-id="${post.id}">
-                <img class="post-icon-svg" src="content/like.svg" alt="likes"> ${(post.likes != null ? post.likes : 0).toLocaleString()}
+                <img class="post-icon-svg" src="content/misc/like.svg" alt="likes"> ${(post.likes != null ? post.likes : 0).toLocaleString()}
               </div>
             </div>
 
@@ -917,7 +2219,6 @@ document.addEventListener('DOMContentLoaded', () => {
       if (window.__loreAdActive && !window.__loreAdDismissed && index === Math.max(0, filteredPosts.length - 3)) {
         html += `
           <div id="lore-trigger-ad" class="post-card post-wide ad-post lore-important-ad" data-lore-trigger="step1">
-            <div class="lore-ad-badge">CONFIDENTIAL TRANSMISSION // MEMORY NODE</div>
             <button class="ad-post-close lore-ad-close" aria-label="Close Ad" title="Close Advertisement">&times;</button>
             <img src="content/lore/post_ad_important.gif" class="ad-image lore-ad-img" alt="Important Lore Transmission" title="Click to inspect transmission">
           </div>
@@ -931,13 +2232,11 @@ document.addEventListener('DOMContentLoaded', () => {
   // EVENT DELEGATION
   if (postContainer) {
     postContainer.addEventListener('click', (e) => {
-      // 1. Close Post Ad with 'X' and respawn after 15 seconds
+      // 1. Close Post Ad with 'X' and respawn
       const closeAdBtn = e.target.closest('.ad-post-close');
       if (closeAdBtn) {
         if (closeAdBtn.classList.contains('lore-ad-close') || closeAdBtn.closest('#lore-trigger-ad')) {
-          window.__loreAdDismissed = true;
-          const loreCard = document.getElementById('lore-trigger-ad');
-          if (loreCard) loreCard.remove();
+          handleLoreAdClose();
           return;
         }
         const slotId = parseInt(closeAdBtn.getAttribute('data-slot-id'), 10);
@@ -955,17 +2254,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      // 2. Expand text (...)
-      const readMore = e.target.closest('.read-more-btn');
-      if (readMore) {
-        const postId = parseInt(readMore.getAttribute('data-post-id'));
-        const post = postsData.find(p => p.id === postId);
-        if (post) {
-          post.isExpanded = true;
-          renderPosts();
-        }
-        return;
-      }
+
 
       // 3. Like button
       const likeBtn = e.target.closest('.like-icon');
@@ -1000,7 +2289,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (post && inputField && inputField.value.trim() !== '') {
           post.replies.push({
             author: 'GuestUser',
-            avatar: 'content/user.svg',
+            avatar: 'content/misc/user.svg',
             text: inputField.value.trim()
           });
           renderPosts();
@@ -1028,7 +2317,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let linksHtml = newsData.hotLinks.map(link => {
       let href = '#blank';
       if (link === 'Last News 2k84') href = 'news-elections-2084-90s.html';
-      else if (link === 'KODAK BLACKER™ IN GTA 7') href = 'news-kodak-blacker-gta7.html';
+      else if (link === 'KODAK BLACKER™ IN GTA 7' || link === 'KODAK BLACKER™ CONFIRMED FOR GTA 7') href = 'news-kodak-blacker-gta7.html';
       else if (link === 'Right to Forget™') href = 'news-right-to-forget.html';
       else if (link === 'City 12 Relocation') href = 'news-city-12-relocation.html';
       else if (link === 'Online Court Voting') href = 'news-online-court-vote.html';
@@ -1096,13 +2385,15 @@ document.addEventListener('DOMContentLoaded', () => {
   // Preload home2.gif so transition is instantaneous
   if (typeof Image !== 'undefined') {
     const home2Preload = new Image();
-    home2Preload.src = 'content/loading_home_content/home2.gif';
+    home2Preload.src = 'content/loading_home_content/home2.webp';
   }
 
   // Only skip loading screen if returning to homepage from an article or narrative reset
   let isReturningFromArticle = false;
   try {
-    if (sessionStorage.getItem('slop_returning_from_article') === 'true' || sessionStorage.getItem('slop_skip_loader') === 'true') {
+    if (typeof window._isReturning !== 'undefined' && window._isReturning) {
+      isReturningFromArticle = true;
+    } else if (sessionStorage.getItem('slop_returning_from_article') === 'true' || sessionStorage.getItem('slop_skip_loader') === 'true') {
       isReturningFromArticle = true;
       sessionStorage.removeItem('slop_returning_from_article');
       sessionStorage.removeItem('slop_skip_loader');
@@ -1117,6 +2408,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     document.body.classList.remove('loading-active');
     startPopupAds();
+    startNarrativeLoreTimerIfEligible();
   } else if (loadingScreen && loadingContent && loadingBg) {
     let accessTriggered = false;
 
@@ -1174,7 +2466,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       // 2. Switch background to home2.gif (restart from frame 0)
-      loadingBg.src = 'content/loading_home_content/home2.gif?t=' + Date.now();
+      loadingBg.src = 'content/loading_home_content/home2.webp?t=' + Date.now();
 
       // 3. Exact duration of home2.gif is 8600ms (8.6s)
       setTimeout(() => {
@@ -1185,6 +2477,7 @@ document.addEventListener('DOMContentLoaded', () => {
           loadingScreen.remove();
           document.body.classList.remove('loading-active');
           startPopupAds();
+          startNarrativeLoreTimerIfEligible();
         }, 800); // 800ms fade transition
       }, 8600);
     };
@@ -1202,6 +2495,7 @@ document.addEventListener('DOMContentLoaded', () => {
   } else {
     document.body.classList.remove('loading-active');
     startPopupAds();
+    startNarrativeLoreTimerIfEligible();
   }
 
   // Prevent loading screen from triggering when clicking home links while on homepage
@@ -1302,6 +2596,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // 2. Check for post attached image click
     const postImageContainer = e.target.closest('.post-attached-image-container');
     if (postImageContainer) {
+      // For frosted GIF/WebP posts, only clicking the media itself triggers the lightbox
+      if (postImageContainer.classList.contains('post-media-frosted') && !e.target.classList.contains('post-attached-image')) {
+        return;
+      }
       const postId = parseInt(postImageContainer.getAttribute('data-post-id'), 10);
       const post = postsData.find(p => p.id === postId);
       if (post && post.image) {
@@ -1382,7 +2680,13 @@ document.addEventListener('DOMContentLoaded', () => {
       speaker: 'X',
       lines: [
         "You don't have to.",
-        "Just keep going down."
+        {
+          parts: [
+            { text: "Just keep going " },
+            { text: "down", isViolet: true },
+            { text: "." }
+          ]
+        }
       ]
     },
     {
@@ -1394,7 +2698,13 @@ document.addEventListener('DOMContentLoaded', () => {
     {
       speaker: 'X',
       lines: [
-        "Until you find what they made you become."
+        {
+          parts: [
+            { text: "Until you find what they made you " },
+            { text: "become", isViolet: true },
+            { text: "." }
+          ]
+        }
       ]
     },
     {
@@ -1405,9 +2715,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   ];
 
-  let loginReminderTimeout = null;
 
   function startLoginReminder() {
+    if (typeof window.startGlobalLoginReminder === 'function') {
+      window.startGlobalLoginReminder();
+      return;
+    }
     try {
       if (localStorage.getItem('slop_user')) return;
     } catch (e) { }
@@ -1423,16 +2736,37 @@ document.addEventListener('DOMContentLoaded', () => {
       } catch (e) { }
 
       if (!isLogged) {
-        alert("SYSTEM ALERT: You must dial-in login to verify your identity.");
+        alert("Please Log In To Continue...");
       }
     }, 30000);
   }
 
   function clearLoginReminder() {
+    if (typeof window.clearGlobalLoginReminder === 'function') {
+      window.clearGlobalLoginReminder();
+    }
     if (loginReminderTimeout) {
       clearTimeout(loginReminderTimeout);
       loginReminderTimeout = null;
     }
+  }
+
+
+  function startNarrativeLoreTimerIfEligible() {
+    if (loreTimerStarted) return;
+    let isStep1Done = false;
+    try {
+      isStep1Done = localStorage.getItem('slop_narrative_step') === 'step1_completed';
+    } catch (e) { }
+
+    if (!isStep1Done) return;
+    loreTimerStarted = true;
+
+    // Fast-track so lore ad appears promptly in feed during step 2
+    setTimeout(() => {
+      window.__loreAdActive = true;
+      injectLoreAd();
+    }, 1200);
   }
 
   function showNarrativeDialogueModal(pendingUserData) {
@@ -1442,142 +2776,255 @@ document.addEventListener('DOMContentLoaded', () => {
     const modal = document.createElement('div');
     modal.id = 'retro-intercept-modal';
     modal.innerHTML = `
-      <div class="retro-intercept-window">
-        <div class="retro-intercept-titlebar">
-          <div class="retro-intercept-title-left">
-            <span class="retro-intercept-icon"></span>
-            <span>TRANSMISSION INTERCEPT // SECURE CHANNEL</span>
-          </div>
-          <div class="retro-intercept-controls">
-            <button class="retro-intercept-btn-mini" aria-label="Minimize">_</button>
-            <button class="retro-intercept-btn-mini" id="retro-intercept-close-mini" aria-label="Close">&times;</button>
-          </div>
-        </div>
-        <div class="retro-intercept-body" id="retro-intercept-body">
-          <div class="retro-dialogue-feed" id="retro-dialogue-feed"></div>
-        </div>
-        <div class="retro-intercept-footer">
-          <div class="retro-intercept-status-text" id="retro-intercept-status">ESTABLISHING DIRECT LINK...</div>
-          <button id="retro-intercept-ok-btn" class="retro-intercept-ok-btn" disabled>[ OK ]</button>
-        </div>
+      <div class="raw-dialogue-terminal" id="raw-dialogue-terminal">
+        <div class="retro-dialogue-feed" id="retro-dialogue-feed"></div>
       </div>
     `;
 
     document.body.appendChild(modal);
 
-    const bodyEl = modal.querySelector('#retro-intercept-body');
+    const bodyEl = modal.querySelector('#raw-dialogue-terminal');
     const feedEl = modal.querySelector('#retro-dialogue-feed');
-    const statusEl = modal.querySelector('#retro-intercept-status');
-    const okBtn = modal.querySelector('#retro-intercept-ok-btn');
-    const closeMini = modal.querySelector('#retro-intercept-close-mini');
 
-    let isCompleted = false;
-
-    function finishDialogue() {
-      if (isCompleted) return;
-      isCompleted = true;
-      statusEl.textContent = "SIGNAL CLOSED // SESSION READY";
-      okBtn.disabled = false;
-      okBtn.classList.add('ready-pulse');
-      okBtn.focus();
-      // Clean up any remaining cursors
-      const cursors = modal.querySelectorAll('.retro-typing-cursor');
-      cursors.forEach(c => c.remove());
-    }
-
-    okBtn.addEventListener('click', () => {
-      // 1. Store user data and narrative progression in localStorage
-      try {
-        localStorage.setItem('slop_user', JSON.stringify(pendingUserData));
-        localStorage.setItem('slop_narrative_step', 'step1_completed');
-        sessionStorage.setItem('slop_skip_loader', 'true');
-      } catch (err) { }
-
-      // 2. Reset page as requested
-      window.location.reload();
-    });
-
-    if (closeMini) {
-      closeMini.addEventListener('click', () => {
-        if (isCompleted) {
-          okBtn.click();
-        } else {
-          modal.remove();
-        }
-      });
-    }
+    const getDialogueTimestamp = () => {
+      const now = new Date();
+      const hh = String(now.getHours()).padStart(2, '0');
+      const mm = String(now.getMinutes()).padStart(2, '0');
+      const ss = String(now.getSeconds()).padStart(2, '0');
+      return `${hh}:${mm}:${ss}`;
+    };
 
     // Live typewriter transmission runner
     async function runDialogue() {
-      statusEl.textContent = "INTERCEPTING DATA STREAM...";
       await new Promise(r => setTimeout(r, 450));
 
       for (let t = 0; t < narrativeDialogue.length; t++) {
         const turn = narrativeDialogue[t];
-        const turnEl = document.createElement('div');
-        turnEl.className = `dialogue-turn dialogue-turn-${turn.speaker.toLowerCase()}`;
-
-        const headerEl = document.createElement('div');
-        headerEl.className = `turn-header turn-header-${turn.speaker.toLowerCase()}`;
-        headerEl.textContent = turn.speaker === 'X'
-          ? `[ TRANSMISSION // SENDER: X ]`
-          : `[ TRANSMISSION // RECEIVER: Y ]`;
-        turnEl.appendChild(headerEl);
-
-        const linesContainer = document.createElement('div');
-        linesContainer.className = `turn-lines turn-lines-${turn.speaker.toLowerCase()}`;
-        turnEl.appendChild(linesContainer);
-
-        feedEl.appendChild(turnEl);
-        bodyEl.scrollTop = bodyEl.scrollHeight;
 
         for (let l = 0; l < turn.lines.length; l++) {
-          const lineText = turn.lines[l];
+          const item = turn.lines[l];
           const lineEl = document.createElement('div');
-          lineEl.className = 'dialogue-text-line';
+          lineEl.className = 'dialogue-terminal-line';
+
+          const timestampSpan = document.createElement('span');
+          timestampSpan.className = 'dialogue-timestamp';
+          timestampSpan.textContent = getDialogueTimestamp();
+
+          const speakerSpan = document.createElement('span');
+          speakerSpan.className = `dialogue-speaker dialogue-speaker-${turn.speaker.toLowerCase()}`;
+          speakerSpan.textContent = `${turn.speaker}:`;
 
           const textSpan = document.createElement('span');
-          const cursorSpan = document.createElement('span');
-          cursorSpan.className = 'retro-typing-cursor';
+          textSpan.className = 'dialogue-text';
 
+          const cursorSpan = document.createElement('span');
+          cursorSpan.className = 'dialogue-cursor';
+          cursorSpan.textContent = '_';
+
+          lineEl.appendChild(timestampSpan);
+          lineEl.appendChild(speakerSpan);
           lineEl.appendChild(textSpan);
           lineEl.appendChild(cursorSpan);
-          linesContainer.appendChild(lineEl);
+
+          feedEl.appendChild(lineEl);
           bodyEl.scrollTop = bodyEl.scrollHeight;
 
-          // Type out text character by character
-          for (let c = 0; c < lineText.length; c++) {
-            textSpan.textContent += lineText[c];
-            bodyEl.scrollTop = bodyEl.scrollHeight;
-            await new Promise(r => setTimeout(r, 20));
+          const parts = (typeof item === 'object' && item.parts) ? item.parts : [{ text: (typeof item === 'string' ? item : item.text) }];
+          for (let p = 0; p < parts.length; p++) {
+            const part = parts[p];
+            const partSpan = document.createElement('span');
+            if (part.isViolet) {
+              partSpan.className = 'violet-word violet-choose';
+            }
+            textSpan.appendChild(partSpan);
+
+            for (let c = 0; c < part.text.length; c++) {
+              partSpan.textContent += part.text[c];
+              bodyEl.scrollTop = bodyEl.scrollHeight;
+              await new Promise(r => setTimeout(r, 45));
+            }
           }
 
           cursorSpan.remove();
-          await new Promise(r => setTimeout(r, 220));
+          await new Promise(r => setTimeout(r, 260));
         }
 
-        await new Promise(r => setTimeout(r, 380));
+        await new Promise(r => setTimeout(r, 340));
       }
 
-      finishDialogue();
+      // Dialogue finished: wait 3 seconds, close terminal, reload from loading screen
+      await new Promise(r => setTimeout(r, 3000));
+
+      modal.remove();
+
+      try {
+        localStorage.setItem('slop_user', JSON.stringify(pendingUserData));
+        localStorage.setItem('slop_narrative_step', 'step1_completed');
+        sessionStorage.setItem('slop_skip_loader', 'true');
+        sessionStorage.setItem('slop_returning_from_article', 'true');
+        sessionStorage.setItem('slop_internal_reload', 'true');
+      } catch (err) { }
+
+      window.location.reload();
     }
 
     runDialogue();
   }
 
-  function initNarrativeLoreAd() {
-    let isStep1Done = false;
-    try {
-      isStep1Done = localStorage.getItem('slop_narrative_step') === 'step1_completed';
-    } catch (e) { }
+  function showStep2DialogueModal() {
+    const existingModal = document.getElementById('retro-intercept-modal');
+    if (existingModal) existingModal.remove();
 
-    if (!isStep1Done) return;
+    const modal = document.createElement('div');
+    modal.id = 'retro-intercept-modal';
+    modal.innerHTML = `
+      <div class="raw-dialogue-terminal" id="raw-dialogue-terminal">
+        <div class="retro-dialogue-feed" id="retro-dialogue-feed"></div>
+      </div>
+    `;
 
-    // 15 seconds later a post ad is added: "content/lore/post_ad_important.gif"
-    setTimeout(() => {
-      window.__loreAdActive = true;
+    document.body.appendChild(modal);
+
+    const bodyEl = modal.querySelector('#raw-dialogue-terminal');
+    const feedEl = modal.querySelector('#retro-dialogue-feed');
+
+    const getDialogueTimestamp = () => {
+      const now = new Date();
+      const hh = String(now.getHours()).padStart(2, '0');
+      const mm = String(now.getMinutes()).padStart(2, '0');
+      const ss = String(now.getSeconds()).padStart(2, '0');
+      return `${hh}:${mm}:${ss}`;
+    };
+
+    const step2Lines = [
+      { text: "CRAZY, RIGHT?" },
+      { text: "YOU DON'T MATTER." },
+      { text: "AND YET..." },
+      {
+        parts: [
+          { text: "THEY STILL WANT YOU TO " },
+          { text: "CHOOSE", isViolet: true },
+          { text: "." }
+        ]
+      }
+    ];
+
+    async function runDialogueStep2() {
+      await new Promise(r => setTimeout(r, 450));
+
+      for (let l = 0; l < step2Lines.length; l++) {
+        const item = step2Lines[l];
+        const lineEl = document.createElement('div');
+        lineEl.className = 'dialogue-terminal-line';
+
+        const timestampSpan = document.createElement('span');
+        timestampSpan.className = 'dialogue-timestamp';
+        timestampSpan.textContent = getDialogueTimestamp();
+
+        const speakerSpan = document.createElement('span');
+        speakerSpan.className = 'dialogue-speaker dialogue-speaker-x';
+        speakerSpan.textContent = 'X:';
+
+        const textSpan = document.createElement('span');
+        textSpan.className = 'dialogue-text';
+
+        const cursorSpan = document.createElement('span');
+        cursorSpan.className = 'dialogue-cursor';
+        cursorSpan.textContent = '_';
+
+        lineEl.appendChild(timestampSpan);
+        lineEl.appendChild(speakerSpan);
+        lineEl.appendChild(textSpan);
+        lineEl.appendChild(cursorSpan);
+
+        feedEl.appendChild(lineEl);
+        bodyEl.scrollTop = bodyEl.scrollHeight;
+
+        const parts = item.parts || [{ text: item.text }];
+        for (let p = 0; p < parts.length; p++) {
+          const part = parts[p];
+          const partSpan = document.createElement('span');
+          if (part.isViolet) {
+            partSpan.className = 'violet-word violet-choose';
+          }
+          textSpan.appendChild(partSpan);
+
+          for (let c = 0; c < part.text.length; c++) {
+            partSpan.textContent += part.text[c];
+            bodyEl.scrollTop = bodyEl.scrollHeight;
+            await new Promise(r => setTimeout(r, 45));
+          }
+        }
+
+        cursorSpan.remove();
+        await new Promise(r => setTimeout(r, 280));
+      }
+
+      // Dialogue finished: wait 3 seconds, close terminal, reload page
+      await new Promise(r => setTimeout(r, 3000));
+
+      modal.remove();
+
+      try {
+        localStorage.setItem('slop_narrative_step', 'step2_ballot_active');
+        localStorage.removeItem('slop_90s_voted');
+        localStorage.removeItem('slop_step2_voted');
+        sessionStorage.setItem('slop_skip_loader', 'true');
+        sessionStorage.setItem('slop_returning_from_article', 'true');
+        sessionStorage.setItem('slop_internal_reload', 'true');
+      } catch (err) { }
+
+      window.location.reload();
+    }
+
+    runDialogueStep2();
+  }
+
+  window.showStep2DialogueModal = showStep2DialogueModal;
+
+  // Delegate click for lore-ad-img so that normal image expansion is completely overridden
+  document.addEventListener('click', (e) => {
+    const target = e.target;
+    if (target && (target.classList.contains('lore-ad-img') || (target.closest('#lore-trigger-ad') && target.tagName === 'IMG'))) {
+      e.preventDefault();
+      e.stopPropagation();
+      try {
+        localStorage.setItem('slop_lore_ad_inspected', 'true');
+        localStorage.removeItem('slop_90s_voted');
+        localStorage.removeItem('slop_step2_voted');
+        window.dispatchEvent(new CustomEvent('slop:lore_ad_clicked', { detail: { step: 2 } }));
+      } catch (err) { }
+      showStep2DialogueModal();
+    }
+  });
+
+
+  function getLoreRespawnDelay() {
+    if (loreCloseCount === 1) return 10000; // 10s on 1st close
+    if (loreCloseCount === 2) return 5000;  // 5s on 2nd close
+    return 2500;                            // 2.5s on 3rd+ closes
+  }
+
+  function handleLoreAdClose() {
+    loreCloseCount++;
+    window.__loreAdDismissed = true;
+    const loreCard = document.getElementById('lore-trigger-ad');
+    if (loreCard) loreCard.remove();
+
+    if (loreRespawnTimeout) {
+      clearTimeout(loreRespawnTimeout);
+    }
+
+    const delay = getLoreRespawnDelay();
+    loreRespawnTimeout = setTimeout(() => {
+      window.__loreAdDismissed = false;
       injectLoreAd();
-    }, 15000);
+    }, delay);
+  }
+
+  function initNarrativeLoreAd() {
+    // If user is already on the page without loading screen, start timer if eligible
+    startNarrativeLoreTimerIfEligible();
   }
 
   function injectLoreAd() {
@@ -1591,7 +3038,6 @@ document.addEventListener('DOMContentLoaded', () => {
     loreCard.className = 'post-card post-wide ad-post lore-important-ad';
     loreCard.setAttribute('data-lore-trigger', 'step1');
     loreCard.innerHTML = `
-      <div class="lore-ad-badge">CONFIDENTIAL TRANSMISSION // MEMORY NODE</div>
       <button class="ad-post-close lore-ad-close" aria-label="Close Ad" title="Close Advertisement">&times;</button>
       <img src="content/lore/post_ad_important.gif" class="ad-image lore-ad-img" alt="Important Lore Transmission" title="Click to inspect transmission">
     `;
@@ -1606,17 +3052,19 @@ document.addEventListener('DOMContentLoaded', () => {
       renderPosts();
     }
 
-    // Attach click handler for zoom lightbox and custom step trigger
+    // Attach click handler for step 2 trigger
     const loreImg = loreCard.querySelector('.lore-ad-img');
     if (loreImg) {
-      loreImg.addEventListener('click', () => {
+      loreImg.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
         try {
           localStorage.setItem('slop_lore_ad_inspected', 'true');
-          window.dispatchEvent(new CustomEvent('slop:lore_ad_clicked', { detail: { step: 1 } }));
+          localStorage.removeItem('slop_90s_voted');
+          localStorage.removeItem('slop_step2_voted');
+          window.dispatchEvent(new CustomEvent('slop:lore_ad_clicked', { detail: { step: 2 } }));
         } catch (err) { }
-        if (window.openRetroLightbox) {
-          window.openRetroLightbox('content/lore/post_ad_important.gif', 'Confidential Transmission // Memory Node');
-        }
+        showStep2DialogueModal();
       });
     }
   }

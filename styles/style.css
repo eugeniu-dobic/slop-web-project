@@ -233,7 +233,7 @@ p {
 }
 
 .logo {
-  background-image: url("../content/slop_logo.gif");
+  background-image: url("../content/misc/slop_logo.webp");
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -834,6 +834,68 @@ a:hover {
 .post-attached-image-container::after {
   content: none !important;
   display: none !important;
+}
+
+/* Transparent Blurry Background for GIF / WebP Posts */
+.post-attached-image-container.post-media-frosted {
+  position: relative;
+  background: transparent !important;
+  background-color: transparent !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: none;
+  padding: 16px 0;
+  cursor: default;
+  transform: none !important;
+  filter: none !important;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.post-attached-image-container.post-media-frosted:hover {
+  transform: none !important;
+  filter: none !important;
+}
+
+.post-media-blur-bg {
+  position: absolute;
+  top: -24px;
+  left: -24px;
+  right: -24px;
+  bottom: -24px;
+  background-size: cover;
+  background-position: center;
+  filter: blur(28px);
+  -webkit-filter: blur(28px);
+  opacity: 0.45;
+  transform: scale(1.15);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.post-attached-image.post-attached-image-contained {
+  position: relative;
+  z-index: 1;
+  width: auto;
+  max-width: 78%;
+  height: auto;
+  max-height: 480px;
+  object-fit: contain;
+  border-radius: 6px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.14), 0 1px 4px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+  transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), filter 0.25s ease, box-shadow 0.25s ease;
+}
+
+.post-attached-image.post-attached-image-contained:hover {
+  transform: scale(1.02);
+  filter: brightness(1.03);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18), 0 2px 6px rgba(0, 0, 0, 0.12);
 }
 
 @keyframes glitch-base {
@@ -2536,9 +2598,9 @@ a:hover {
   z-index: 95;
 }
 
-.article-sidebar-container > *,
-.article-gutter-column > *,
-.article-gutter-sticky > * {
+.article-sidebar-container>*,
+.article-gutter-column>*,
+.article-gutter-sticky>* {
   flex-shrink: 0;
   width: 100%;
 }
@@ -2818,4 +2880,12 @@ a:hover {
   .news-election-hero-link {
     animation: none;
   }
+}
+
+/* Violet & Bold keywords for narrative terminals (down, become, choose) */
+.violet-choose,
+.violet-word {
+  color: #bf55ec !important;
+  font-weight: bold !important;
+  text-shadow: 0 0 6px rgba(191, 85, 236, 0.7);
 }

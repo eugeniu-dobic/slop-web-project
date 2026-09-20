@@ -5,6 +5,42 @@
 
 window.__articleAdsActive = true;
 
+// Check if user manually refreshed/reloaded the page
+(function checkManualReloadReset() {
+  let isInternalDialogueReload = false;
+  try {
+    if (sessionStorage.getItem('slop_internal_reload') === 'true') {
+      isInternalDialogueReload = true;
+      sessionStorage.removeItem('slop_internal_reload');
+    }
+  } catch (e) { }
+
+  const nav = (window.performance && performance.getEntriesByType) ? performance.getEntriesByType('navigation')[0] : null;
+  const isManualReload = nav ? (nav.type === 'reload') : (window.performance && window.performance.navigation && window.performance.navigation.type === 1);
+
+  let hasReachedFinalStep = false;
+  try {
+    hasReachedFinalStep = localStorage.getItem('slop_final_popup_seen') === 'true' ||
+      localStorage.getItem('slop_narrative_step') === 'step2_approved';
+  } catch (e) { }
+
+  if (isManualReload && !isInternalDialogueReload && hasReachedFinalStep) {
+    try {
+      localStorage.removeItem('slop_user');
+      localStorage.removeItem('slop_narrative_step');
+      localStorage.removeItem('slop_lore_ad_inspected');
+      localStorage.removeItem('slop_90s_voted');
+      localStorage.removeItem('slop_step2_voted');
+      localStorage.removeItem('slop_side_ads_overwritten');
+      localStorage.removeItem('slop_final_popup_seen');
+      localStorage.removeItem('slop_final_popup_time');
+      localStorage.removeItem('slop_terminal_visited');
+      sessionStorage.removeItem('slop_skip_loader');
+      sessionStorage.removeItem('slop_returning_from_article');
+    } catch (e) { }
+  }
+})();
+
 // Only mark returning from article if currently on an article page (news-*.html)
 if (window.location.pathname.includes('news-') || window.location.href.includes('news-')) {
   try {
@@ -38,7 +74,18 @@ document.addEventListener('DOMContentLoaded', () => {
     'content/side_ad/27.jpg', 'content/side_ad/28.jpg', 'content/side_ad/29.jpg', 'content/side_ad/30.jpg'
   ];
 
+  function isLoreSideAdActive() {
+    try {
+      return localStorage.getItem('slop_side_ads_overwritten') === 'true';
+    } catch (e) {
+      return false;
+    }
+  }
+
   function getRandom(arr) {
+    if (isLoreSideAdActive() && arr === sideAds) {
+      return 'content/lore/side_ad_important.webp';
+    }
     return arr[Math.floor(Math.random() * arr.length)];
   }
 
@@ -158,6 +205,12 @@ document.addEventListener('DOMContentLoaded', () => {
       !e.target.classList.contains('post-avatar') &&
       !e.target.classList.contains('comment-avatar') &&
       !e.target.closest('.author-avatar') &&
+      !e.target.classList.contains('lore-ad-img') &&
+      !e.target.closest('#lore-trigger-ad') &&
+      !e.target.closest('.lore-important-ad') &&
+      !e.target.closest('#truth-terminal-backdrop') &&
+      !e.target.closest('#truth-terminal-box') &&
+      !e.target.closest('#giant-lore-modal') &&
       !e.target.closest('button');
 
     let zoomSrc = null;
@@ -169,6 +222,9 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
       const postImageContainer = e.target.closest('.post-attached-image-container');
       if (postImageContainer) {
+        if (postImageContainer.classList.contains('post-media-frosted') && !e.target.classList.contains('post-attached-image')) {
+          return;
+        }
         const childImg = postImageContainer.querySelector('img');
         if (childImg && childImg.src) {
           zoomSrc = childImg.src;
@@ -254,10 +310,178 @@ document.addEventListener('DOMContentLoaded', () => {
   const shuffledRetroAds = [...sideAds].sort(() => 0.5 - Math.random());
   let retroAdIndex = 0;
   function getNextRetroSideAd() {
+    if (isLoreSideAdActive()) {
+      return 'content/lore/side_ad_important.webp';
+    }
     const ad = shuffledRetroAds[retroAdIndex % shuffledRetroAds.length];
     retroAdIndex++;
     return ad;
   }
+
+  function showGiantLoreModal() {
+    const existing = document.getElementById('giant-lore-modal');
+    if (existing) existing.remove();
+
+    const modal = document.createElement('div');
+    modal.id = 'giant-lore-modal';
+    modal.innerHTML = `
+      <div class="giant-lore-container">
+        <button class="ad-post-close giant-lore-close" id="giant-lore-close-btn" aria-label="Close Pop-up" title="Close Pop-up">&times;</button>
+        <img src="content/lore/side_ad_important.webp" class="giant-lore-img" alt="Important Transmission Alert">
+      </div>
+    `;
+
+    try {
+      localStorage.setItem('slop_final_popup_seen', 'true');
+    } catch (e) { }
+
+    document.body.appendChild(modal);
+
+    const closeBtn = modal.querySelector('#giant-lore-close-btn');
+    const closeModal = () => {
+      modal.style.transition = 'opacity 0.25s ease';
+      modal.style.opacity = '0';
+      setTimeout(() => {
+        modal.remove();
+      }, 250);
+    };
+
+    if (closeBtn) {
+      closeBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        closeModal();
+      });
+    }
+
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        closeModal();
+      }
+    });
+
+    const onKey = (e) => {
+      if (e.key === 'Escape') {
+        closeModal();
+        document.removeEventListener('keydown', onKey);
+      }
+    };
+    document.addEventListener('keydown', onKey);
+  }
+
+  window.showGiantLoreModal = showGiantLoreModal;
+
+  window.startGradualSideAdReplacement = function () {
+    try {
+      localStorage.setItem('slop_side_ads_overwritten', 'true');
+    } catch (e) { }
+
+    const sideAdContainers = [
+      ...Array.from(document.querySelectorAll('.retro-ad-wrapper')),
+      ...Array.from(document.querySelectorAll('.sidebar-ad-wrapper')),
+      ...Array.from(document.querySelectorAll('.article-gutter-wrapper')),
+      document.getElementById('retro-left-ad-1'),
+      document.getElementById('retro-right-ad-1'),
+      document.getElementById('retro-left-ad-2'),
+      document.getElementById('retro-right-ad-2'),
+      document.getElementById('article-sidebar-ad-1'),
+      document.getElementById('article-right-ad-1'),
+      document.getElementById('article-sidebar-ad-2'),
+      document.getElementById('article-right-ad-2'),
+      document.getElementById('login-ad-container'),
+      document.getElementById('news-ad-container')
+    ].filter(Boolean);
+
+    const activeSlots = [...new Set(sideAdContainers)].filter(el => document.body.contains(el));
+
+    // 1. Swap existing side ads every 3 seconds
+    activeSlots.forEach((slot, idx) => {
+      setTimeout(() => {
+        const img = slot.querySelector('img.ad-image') || slot.querySelector('img');
+        if (img) {
+          img.style.transition = 'opacity 0.4s ease';
+          img.style.opacity = '0';
+          setTimeout(() => {
+            img.src = 'content/lore/side_ad_important.webp';
+            img.alt = 'Important Transmission';
+            img.style.opacity = '1';
+          }, 400);
+        }
+      }, idx * 3000);
+    });
+
+    // 2. Then, on the left sidebar gradually make pop up 3 more side_ad_important (every 3s)
+    const baseExtraDelay = activeSlots.length * 3000;
+    const leftSidebar = document.querySelector('.retro-left-column') ||
+      document.querySelector('.article-sidebar') ||
+      document.querySelector('aside.retro-left-column') ||
+      document.querySelector('aside');
+
+    for (let i = 0; i < 3; i++) {
+      setTimeout(() => {
+        if (!leftSidebar) return;
+        const extraAd = document.createElement('div');
+        extraAd.className = 'retro-ad-wrapper extra-left-lore-ad';
+        extraAd.style.opacity = '0';
+        extraAd.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+        extraAd.style.transform = 'translateY(10px)';
+        extraAd.innerHTML = `
+          <div class="retro-ad-label">SPONSOR ADVERTISEMENT</div>
+          <div class="retro-ad-box">
+            <button class="ad-post-close retro-ad-close" aria-label="Close Ad" title="Close Advertisement">&times;</button>
+            <img class="ad-image" alt="Important Transmission" src="content/lore/side_ad_important.webp" title="Click to zoom in Win95 Lightbox">
+          </div>
+        `;
+        leftSidebar.appendChild(extraAd);
+
+        const closeBtn = extraAd.querySelector('.retro-ad-close');
+        if (closeBtn) {
+          closeBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            extraAd.style.display = 'none';
+          });
+        }
+
+        requestAnimationFrame(() => {
+          extraAd.style.opacity = '1';
+          extraAd.style.transform = 'translateY(0)';
+        });
+      }, baseExtraDelay + (i * 3000));
+    }
+
+    // 3. Then, swap dispatch thumbnails, portraits, and post attached images in bulk
+    const bulkSwapDelay = baseExtraDelay + (3 * 3000);
+    setTimeout(() => {
+      // a) .retro-dispatch-thumb
+      document.querySelectorAll('.retro-dispatch-thumb').forEach(img => {
+        img.style.transition = 'opacity 0.4s ease';
+        img.style.opacity = '0';
+        setTimeout(() => {
+          img.src = 'content/lore/side_ad_important.webp';
+          img.style.opacity = '1';
+        }, 400);
+      });
+
+      // b) .retro-candidate-portrait
+      document.querySelectorAll('.retro-candidate-portrait').forEach(img => {
+        img.style.transition = 'opacity 0.4s ease';
+        img.style.opacity = '0';
+        setTimeout(() => {
+          img.src = 'content/lore/side_ad_important.webp';
+          img.style.opacity = '1';
+        }, 400);
+      });
+
+      // c) .post-attached-image
+      document.querySelectorAll('.post-attached-image').forEach(img => {
+        img.style.transition = 'opacity 0.4s ease';
+        img.style.opacity = '0';
+        setTimeout(() => {
+          img.src = 'content/lore/side_ad_important.webp';
+          img.style.opacity = '1';
+        }, 400);
+      });
+    }, bulkSwapDelay);
+  };
 
   function setupRetroAdSlot(containerId) {
     const container = document.getElementById(containerId);
@@ -335,5 +559,248 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   injectInArticleAd();
+
+  // If already overwritten from previous session, initialize immediately
+  if (isLoreSideAdActive()) {
+    setTimeout(() => {
+      document.querySelectorAll('.retro-dispatch-thumb, .retro-candidate-portrait, .post-attached-image').forEach(img => {
+        img.src = 'content/lore/side_ad_important.webp';
+      });
+
+      const leftCol = document.querySelector('.retro-left-column') || document.querySelector('.article-sidebar') || document.querySelector('aside');
+      if (leftCol && !leftCol.querySelector('.extra-left-lore-ad')) {
+        for (let i = 0; i < 3; i++) {
+          const extraAd = document.createElement('div');
+          extraAd.className = 'retro-ad-wrapper extra-left-lore-ad';
+          extraAd.innerHTML = `
+            <div class="retro-ad-label">SPONSOR ADVERTISEMENT</div>
+            <div class="retro-ad-box">
+              <button class="ad-post-close retro-ad-close" aria-label="Close Ad" title="Close Advertisement">&times;</button>
+              <img class="ad-image" alt="Important Transmission" src="content/lore/side_ad_important.webp" title="Click to zoom in Win95 Lightbox">
+            </div>
+          `;
+          leftCol.appendChild(extraAd);
+        }
+      }
+    }, 150);
+  }
+
+  // --------------------------------------------------------------------------
+  // 4. Universal Login Reminder: every 15 seconds if user is not logged in
+  // --------------------------------------------------------------------------
+  let loginReminderTimeout = null;
+  function startUniversalLoginReminder() {
+    try {
+      if (localStorage.getItem('slop_user')) return;
+    } catch (e) { }
+
+    if (loginReminderTimeout) {
+      clearTimeout(loginReminderTimeout);
+    }
+
+    loginReminderTimeout = setTimeout(() => {
+      let isLogged = false;
+      try {
+        isLogged = !!localStorage.getItem('slop_user');
+      } catch (e) { }
+
+      if (!isLogged) {
+        alert("Please Log In To Continue...");
+        startUniversalLoginReminder();
+      }
+    }, 15000); // Trigger every 15 seconds
+  }
+
+  function clearUniversalLoginReminder() {
+    if (loginReminderTimeout) {
+      clearTimeout(loginReminderTimeout);
+      loginReminderTimeout = null;
+    }
+  }
+
+  window.startGlobalLoginReminder = startUniversalLoginReminder;
+  window.clearGlobalLoginReminder = clearUniversalLoginReminder;
+  startUniversalLoginReminder();
+
+  // --------------------------------------------------------------------------
+  // 5. Step 2 Narrative Dialogue Modal (Shared across all pages)
+  // --------------------------------------------------------------------------
+  function showStep2DialogueModal() {
+    const existingModal = document.getElementById('retro-intercept-modal');
+    if (existingModal) existingModal.remove();
+
+    const modal = document.createElement('div');
+    modal.id = 'retro-intercept-modal';
+    modal.innerHTML = `
+      <div class="raw-dialogue-terminal" id="raw-dialogue-terminal">
+        <div class="retro-dialogue-feed" id="retro-dialogue-feed"></div>
+      </div>
+    `;
+
+    document.body.appendChild(modal);
+
+    const bodyEl = modal.querySelector('#raw-dialogue-terminal');
+    const feedEl = modal.querySelector('#retro-dialogue-feed');
+
+    const getDialogueTimestamp = () => {
+      const now = new Date();
+      const hh = String(now.getHours()).padStart(2, '0');
+      const mm = String(now.getMinutes()).padStart(2, '0');
+      const ss = String(now.getSeconds()).padStart(2, '0');
+      return `${hh}:${mm}:${ss}`;
+    };
+
+    const step2Lines = [
+      { text: "CRAZY, RIGHT?" },
+      { text: "YOU DON'T MATTER." },
+      { text: "AND YET..." },
+      {
+        parts: [
+          { text: "THEY STILL WANT YOU TO " },
+          { text: "CHOOSE", isViolet: true },
+          { text: "." }
+        ]
+      }
+    ];
+
+    async function runDialogueStep2() {
+      await new Promise(r => setTimeout(r, 450));
+
+      for (let l = 0; l < step2Lines.length; l++) {
+        const item = step2Lines[l];
+        const lineEl = document.createElement('div');
+        lineEl.className = 'dialogue-terminal-line';
+
+        const timestampSpan = document.createElement('span');
+        timestampSpan.className = 'dialogue-timestamp';
+        timestampSpan.textContent = getDialogueTimestamp();
+
+        const speakerSpan = document.createElement('span');
+        speakerSpan.className = 'dialogue-speaker dialogue-speaker-x';
+        speakerSpan.textContent = 'X:';
+
+        const textSpan = document.createElement('span');
+        textSpan.className = 'dialogue-text';
+
+        const cursorSpan = document.createElement('span');
+        cursorSpan.className = 'dialogue-cursor';
+        cursorSpan.textContent = '_';
+
+        lineEl.appendChild(timestampSpan);
+        lineEl.appendChild(speakerSpan);
+        lineEl.appendChild(textSpan);
+        lineEl.appendChild(cursorSpan);
+
+        feedEl.appendChild(lineEl);
+        bodyEl.scrollTop = bodyEl.scrollHeight;
+
+        const parts = item.parts || [{ text: item.text }];
+        for (let p = 0; p < parts.length; p++) {
+          const part = parts[p];
+          const partSpan = document.createElement('span');
+          if (part.isViolet) {
+            partSpan.className = 'violet-word violet-choose';
+          }
+          textSpan.appendChild(partSpan);
+
+          for (let c = 0; c < part.text.length; c++) {
+            partSpan.textContent += part.text[c];
+            bodyEl.scrollTop = bodyEl.scrollHeight;
+            await new Promise(r => setTimeout(r, 45));
+          }
+        }
+
+        cursorSpan.remove();
+        await new Promise(r => setTimeout(r, 280));
+      }
+
+      // Dialogue finished: wait 3 seconds, close terminal, reload page in place (user discovers elections on their own)
+      await new Promise(r => setTimeout(r, 3000));
+
+      modal.remove();
+
+      try {
+        localStorage.setItem('slop_narrative_step', 'step2_ballot_active');
+        localStorage.removeItem('slop_90s_voted');
+        localStorage.removeItem('slop_step2_voted');
+        sessionStorage.setItem('slop_skip_loader', 'true');
+        sessionStorage.setItem('slop_returning_from_article', 'true');
+        sessionStorage.setItem('slop_internal_reload', 'true');
+      } catch (err) { }
+
+      window.location.reload();
+    }
+
+    runDialogueStep2();
+  }
+  window.showStep2DialogueModal = showStep2DialogueModal;
+
+
+
+  // --------------------------------------------------------------------------
+  // 7. Final Small Truth Terminal Check (Appears after 45 seconds post-ballot)
+  // --------------------------------------------------------------------------
+  function checkAndTriggerTruthTerminal() {
+    try {
+      const isApproved = localStorage.getItem('slop_narrative_step') === 'step2_approved';
+      const popupTime = localStorage.getItem('slop_final_popup_time');
+      const terminalVisited = localStorage.getItem('slop_terminal_visited') === 'true';
+
+      if (isApproved && !terminalVisited) {
+        if (popupTime) {
+          const elapsed = Date.now() - parseInt(popupTime, 10);
+          if (elapsed >= 45000) {
+            showFinalTruthTerminal();
+          } else {
+            setTimeout(showFinalTruthTerminal, Math.max(0, 45000 - elapsed));
+          }
+        } else {
+          localStorage.setItem('slop_final_popup_time', Date.now().toString());
+          setTimeout(showFinalTruthTerminal, 45000);
+        }
+      }
+    } catch (e) { }
+  }
+
+  function showFinalTruthTerminal() {
+    if (document.getElementById('truth-terminal-backdrop')) return;
+
+    const giantModal = document.getElementById('giant-lore-modal');
+    if (giantModal) {
+      giantModal.remove();
+    }
+
+    const backdrop = document.createElement('div');
+    backdrop.id = 'truth-terminal-backdrop';
+
+    const box = document.createElement('div');
+    box.id = 'truth-terminal-box';
+    box.innerHTML = `<span class="truth-terminal-cursor">_</span>`;
+
+    backdrop.appendChild(box);
+    document.body.appendChild(backdrop);
+
+    const goToTruth = () => {
+      try {
+        localStorage.setItem('slop_terminal_visited', 'true');
+      } catch (e) { }
+      window.location.href = 'truth.html';
+    };
+
+    backdrop.addEventListener('click', goToTruth);
+    box.addEventListener('click', (e) => {
+      e.stopPropagation();
+      goToTruth();
+    });
+    window.addEventListener('keydown', (e) => {
+      if (document.getElementById('truth-terminal-backdrop')) {
+        goToTruth();
+      }
+    });
+  }
+
+  window.showFinalTruthTerminal = showFinalTruthTerminal;
+  checkAndTriggerTruthTerminal();
 });
+
 

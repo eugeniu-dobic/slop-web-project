@@ -113,7 +113,7 @@ a:hover {
 
 /* Big Logo Header (Identical to Home Page) */
 .logo {
-  background-image: url("../content/slop_logo.gif");
+  background-image: url("../content/misc/slop_logo.webp");
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -590,7 +590,7 @@ a:hover {
   font-family: 'Verdana', Geneva, sans-serif;
   font-size: 16px;
   font-weight: bold;
-  color: var(--retro-red);
+  color: var(--color-text-dark, #333333);
   margin: 0 0 10px 0;
   letter-spacing: 0.5px;
 }
@@ -1797,6 +1797,68 @@ a:hover {
   display: none !important;
 }
 
+/* Transparent Blurry Background for GIF / WebP Posts */
+.post-attached-image-container.post-media-frosted {
+  position: relative;
+  background: transparent !important;
+  background-color: transparent !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: none;
+  padding: 16px 0;
+  cursor: default;
+  transform: none !important;
+  filter: none !important;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.post-attached-image-container.post-media-frosted:hover {
+  transform: none !important;
+  filter: none !important;
+}
+
+.post-media-blur-bg {
+  position: absolute;
+  top: -24px;
+  left: -24px;
+  right: -24px;
+  bottom: -24px;
+  background-size: cover;
+  background-position: center;
+  filter: blur(28px);
+  -webkit-filter: blur(28px);
+  opacity: 0.45;
+  transform: scale(1.15);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.post-attached-image.post-attached-image-contained {
+  position: relative;
+  z-index: 1;
+  width: auto;
+  max-width: 78%;
+  height: auto;
+  max-height: 480px;
+  object-fit: contain;
+  border-radius: 6px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.14), 0 1px 4px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+  transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), filter 0.25s ease, box-shadow 0.25s ease;
+}
+
+.post-attached-image.post-attached-image-contained:hover {
+  transform: scale(1.02);
+  filter: brightness(1.03);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18), 0 2px 6px rgba(0, 0, 0, 0.12);
+}
+
 /* Comments Section */
 .comments-section {
   font-family: 'Verdana', Geneva, Tahoma, sans-serif;
@@ -1991,7 +2053,7 @@ a:hover {
 }
 
 /* ==========================================================================
-   NARRATIVE TRANSMISSION INTERCEPT MODAL (STEP 1: DIALOGUE BETWEEN X AND Y)
+   NARRATIVE TRANSMISSION TERMINAL (STEP 1: LIVE DIALOGUE BETWEEN X AND Y)
    ========================================================================== */
 
 #retro-intercept-modal {
@@ -2000,245 +2062,105 @@ a:hover {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.72);
+  background-color: rgba(0, 0, 0, 0.85);
   z-index: 99999;
   display: flex;
   justify-content: center;
   align-items: center;
-  backdrop-filter: blur(2px);
   padding: 16px;
   box-sizing: border-box;
+  animation: terminalFadeIn 0.3s ease-out;
 }
 
-.retro-intercept-window {
+@keyframes terminalFadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.raw-dialogue-terminal {
   width: 580px;
   max-width: 95vw;
-  background-color: var(--retro-win-gray);
-  border: 3px solid;
-  border-color: var(--retro-win-light) var(--retro-win-dark) var(--retro-win-dark) var(--retro-win-light);
-  box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.85);
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
-  animation: interceptPop 0.25s cubic-bezier(0.18, 0.89, 0.32, 1.28);
-}
-
-@keyframes interceptPop {
-  0% { transform: scale(0.85); opacity: 0; }
-  100% { transform: scale(1); opacity: 1; }
-}
-
-.retro-intercept-titlebar {
-  background: linear-gradient(90deg, #000080, #1084d0);
-  color: #FFFFFF;
-  padding: 4px 8px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-family: 'Verdana', sans-serif;
-  font-size: 11px;
-  font-weight: bold;
-  letter-spacing: 0.5px;
-  user-select: none;
-}
-
-.retro-intercept-title-left {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.retro-intercept-icon {
-  width: 14px;
-  height: 14px;
-  display: inline-block;
-  background: #ffcc00;
-  border-radius: 2px;
-  border: 1px solid #ffffff;
-  position: relative;
-}
-.retro-intercept-icon::after {
-  content: "!";
-  color: #000000;
-  font-family: 'Arial Black', sans-serif;
-  font-size: 10px;
-  line-height: 14px;
-  position: absolute;
-  top: 0;
-  left: 4px;
-  font-weight: bold;
-}
-
-.retro-intercept-controls {
-  display: flex;
-  gap: 3px;
-}
-
-.retro-intercept-btn-mini {
-  width: 16px;
-  height: 14px;
-  background-color: var(--retro-win-gray);
-  border: 1px solid;
-  border-color: var(--retro-win-light) var(--retro-win-dark) var(--retro-win-dark) var(--retro-win-light);
-  font-family: 'Courier New', monospace;
-  font-size: 10px;
-  line-height: 11px;
-  font-weight: bold;
-  color: #000000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: default;
-  padding: 0;
-}
-
-.retro-intercept-body {
-  margin: 8px;
-  background-color: #070e09;
-  border: 2px inset var(--retro-win-shadow);
-  padding: 14px 16px;
+  background-color: #050805;
+  border: 1px solid #1a3a22;
+  box-shadow: none;
+  padding: 24px 28px;
   min-height: 240px;
-  max-height: 360px;
+  max-height: 420px;
   overflow-y: auto;
   font-family: 'Courier New', 'Lucida Console', monospace;
   font-size: 13px;
-  line-height: 1.55;
+  line-height: 1.6;
   color: #00ff66;
   position: relative;
-  text-shadow: 0 0 4px rgba(0, 255, 102, 0.45);
+  text-shadow: 0 0 4px rgba(0, 255, 102, 0.4);
   box-sizing: border-box;
 }
 
 .retro-dialogue-feed {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-}
-
-.dialogue-turn {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  animation: turnFadeIn 0.2s ease-out;
-}
-
-@keyframes turnFadeIn {
-  from { opacity: 0; transform: translateY(3px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.turn-header {
-  font-size: 11px;
-  font-weight: bold;
-  letter-spacing: 0.8px;
-  display: flex;
-  align-items: center;
   gap: 6px;
 }
 
-.turn-header-x {
-  color: #00ff88;
-  text-shadow: 0 0 6px rgba(0, 255, 136, 0.6);
-}
-
-.turn-header-y {
-  color: #00e5ff;
-  text-shadow: 0 0 6px rgba(0, 229, 255, 0.6);
-}
-
-.turn-lines {
-  padding-left: 10px;
-  border-left: 2px solid rgba(0, 255, 102, 0.25);
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-}
-
-.turn-lines-x {
-  color: #a3ffbd;
-  border-left-color: rgba(0, 255, 136, 0.4);
-}
-
-.turn-lines-y {
-  color: #d2f8ff;
-  border-left-color: rgba(0, 229, 255, 0.4);
-}
-
-.dialogue-text-line {
+.dialogue-terminal-line {
+  margin: 0;
+  padding: 0;
   white-space: pre-wrap;
   word-break: break-word;
+  color: #d0d0d0;
+  font-size: 13px;
+  line-height: 1.6;
+  animation: lineFadeIn 0.15s ease-out;
 }
 
-.retro-typing-cursor {
-  display: inline-block;
-  width: 8px;
-  height: 14px;
-  background-color: #00ff66;
-  margin-left: 3px;
-  vertical-align: middle;
-  animation: retroBlink 0.7s infinite;
+@keyframes lineFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(2px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-@keyframes retroBlink {
-  0%, 49% { opacity: 1; }
-  50%, 100% { opacity: 0; }
-}
-
-.retro-intercept-footer {
-  padding: 4px 10px 10px 10px;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  gap: 12px;
-}
-
-.retro-intercept-status-text {
-  font-family: 'Verdana', sans-serif;
-  font-size: 11px;
-  color: #444444;
-  margin-right: auto;
-}
-
-.retro-intercept-ok-btn {
-  background-color: var(--retro-win-gray);
-  border: 2px outset var(--retro-win-light);
-  color: #000000;
-  font-family: 'Verdana', sans-serif;
-  font-size: 12px;
-  font-weight: bold;
-  padding: 6px 28px;
-  min-width: 90px;
-  cursor: pointer;
-  box-shadow: 1px 1px 0px #000000;
-  transition: none;
-}
-
-.retro-intercept-ok-btn:disabled {
+.dialogue-timestamp {
   color: #888888;
-  cursor: not-allowed;
-  border-color: #e0e0e0 #999999 #999999 #e0e0e0;
-  box-shadow: none;
+  margin-right: 8px;
+  user-select: none;
 }
 
-.retro-intercept-ok-btn:not(:disabled):hover {
-  background-color: #d4d0c8;
+.dialogue-speaker {
+  font-weight: bold;
+  margin-right: 6px;
 }
 
-.retro-intercept-ok-btn:not(:disabled):active {
-  border-style: inset;
-  border-color: var(--retro-win-shadow) var(--retro-win-light) var(--retro-win-light) var(--retro-win-shadow);
-  transform: translate(1px, 1px);
-  box-shadow: none;
+.dialogue-speaker-x {
+  color: #33ff33;
+  text-shadow: none;
 }
 
-.retro-intercept-ok-btn.ready-pulse {
-  outline: 2px solid #000080;
-  animation: okPulse 1s infinite alternate ease-in-out;
+.dialogue-speaker-y {
+  color: #00e5ff;
+  text-shadow: none;
 }
 
-@keyframes okPulse {
-  0% { box-shadow: 1px 1px 0px #000000, 0 0 4px rgba(0, 0, 128, 0.4); }
-  100% { box-shadow: 1px 1px 0px #000000, 0 0 10px rgba(0, 0, 128, 0.9); }
+.dialogue-text {
+  color: #d0d0d0;
+}
+
+.dialogue-cursor {
+  display: inline-block;
+  font-weight: bold;
+  color: #33ff33;
+  margin-left: 2px;
+  animation: terminalBlink 0.75s infinite steps(1, start);
 }
 
 /* ==========================================================================
@@ -2246,7 +2168,6 @@ a:hover {
    ========================================================================== */
 
 .lore-important-ad {
-  border: 2px solid #512914 !important;
   background-color: #12100e !important;
   box-shadow: 0 0 8px rgba(81, 41, 20, 0.45) !important;
   position: relative;
@@ -2255,25 +2176,15 @@ a:hover {
 }
 
 @keyframes loreFadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
 
-.lore-important-ad:hover {
-  box-shadow: 0 0 14px rgba(240, 57, 31, 0.6) !important;
-  border-color: var(--retro-red) !important;
-}
-
-.lore-ad-badge {
-  background-color: #512914;
-  color: #F1EAE7;
-  font-family: 'Courier New', monospace;
-  font-size: 10px;
-  font-weight: bold;
-  letter-spacing: 1px;
-  padding: 4px 8px;
-  text-align: left;
-  border-bottom: 1px solid rgba(241, 234, 231, 0.2);
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .lore-ad-img {
@@ -2283,4 +2194,277 @@ a:hover {
   height: auto;
   max-height: 480px;
   object-fit: contain;
+}
+
+/* Violet & Bold keywords for narrative terminals (down, become, choose) */
+.violet-choose,
+.violet-word {
+  color: #bf55ec !important;
+  font-weight: bold !important;
+  text-shadow: 0 0 6px rgba(191, 85, 236, 0.7);
+}
+
+/* Narrative step 2 ballot header background override */
+.retro-ballot-header.lore-header-active {
+  background-color: #000000 !important;
+  background-image: url('../content/misc/post_header.webp') !important;
+  background-size: cover !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+  border-bottom: none !important;
+  min-height: 54px !important;
+  box-sizing: border-box !important;
+  color: #111111 !important;
+  text-shadow: none !important;
+}
+
+.retro-ballot-header.lore-header-active h3,
+.retro-ballot-header.lore-header-active span {
+  color: #111111 !important;
+  text-shadow: none !important;
+}
+
+/* ==========================================================================
+   PERPETUAL GLITCHY SHAKE FOR BALLOT BOOTH
+   ========================================================================== */
+
+#retro-ballot-booth.lore-glitch-shake,
+.retro-ballot-section.lore-glitch-shake,
+#retro-ballot-booth:has(.lore-header-active),
+.retro-ballot-section:has(.lore-header-active) {
+  animation: ballotGlitchShake 2.4s infinite ease-in-out;
+  will-change: transform;
+}
+
+@keyframes ballotGlitchShake {
+  0%, 100% {
+    transform: translate(0, 0);
+  }
+  3% {
+    transform: translate(-2px, 1px);
+  }
+  6% {
+    transform: translate(2px, -1px);
+  }
+  9% {
+    transform: translate(-1px, 0);
+  }
+  12% {
+    transform: translate(1px, 1px);
+  }
+  15% {
+    transform: translate(0, 0);
+  }
+  38% {
+    transform: translate(0, 0);
+  }
+  40% {
+    transform: translate(-4px, 2px) skewX(0.7deg);
+    filter: contrast(1.08);
+  }
+  42% {
+    transform: translate(3px, -2px) skewX(-0.5deg);
+    filter: none;
+  }
+  44% {
+    transform: translate(-2px, 1px);
+  }
+  46% {
+    transform: translate(0, 0);
+  }
+  68% {
+    transform: translate(0, 0);
+  }
+  70% {
+    transform: translate(2px, -1px);
+  }
+  72% {
+    transform: translate(-2px, 1px);
+  }
+  74% {
+    transform: translate(0, 0);
+  }
+  88% {
+    transform: translate(0, 0);
+  }
+  90% {
+    transform: translate(-3px, 0);
+  }
+  92% {
+    transform: translate(3px, 1px);
+  }
+  94% {
+    transform: translate(0, 0);
+  }
+}
+
+/* Giant Lore Ad Modal ("content/lore/side_ad_important.webp") - Jumpscare Edition */
+#giant-lore-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.94);
+  z-index: 100000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px;
+  box-sizing: border-box;
+  animation: jumpscareSnap 0.08s cubic-bezier(0.1, 0.9, 0.2, 1);
+}
+
+@keyframes jumpscareSnap {
+  0% {
+    opacity: 0;
+    transform: scale(1.35);
+    filter: brightness(2) contrast(1.5);
+  }
+
+  50% {
+    transform: scale(0.98);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
+    filter: brightness(1) contrast(1);
+  }
+}
+
+.giant-lore-container {
+  position: relative;
+  max-width: 96vw;
+  max-height: 96vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #000000;
+  border: 3px solid #1a1a1a;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.95);
+}
+
+.giant-lore-img {
+  max-width: 95vw;
+  max-height: 94vh;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  display: block;
+}
+
+/* Giant close button identical to ad-post-close */
+.giant-lore-close {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 22px;
+  height: 22px;
+  background-color: var(--retro-win-dark);
+  color: var(--retro-win-gray);
+  border-radius: 50%;
+  border: none;
+  box-shadow: 1px 1px 0px #000000;
+  font-family: 'Arial Black', Arial, sans-serif;
+  font-weight: 100;
+  font-size: 13px;
+  line-height: 16px;
+  text-align: center;
+  cursor: pointer;
+  z-index: 25;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: none;
+}
+
+.giant-lore-close:hover {
+  background-color: var(--retro-win-shadow);
+}
+
+
+
+/* ==========================================================================
+   FINAL SMALL TRUTH TERMINAL (Centered floating box with dim backdrop, 45s timer)
+   ========================================================================== */
+
+#truth-terminal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.75);
+  z-index: 99999999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  animation: truthBackdropFadeIn 0.3s ease-in;
+}
+
+@keyframes truthBackdropFadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+#truth-terminal-box {
+  width: 360px;
+  height: 180px;
+  max-width: 90vw;
+  max-height: 80vh;
+  background-color: #000000 !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.95);
+  margin: 0;
+  padding: 24px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  cursor: pointer;
+  user-select: none;
+  animation: truthBoxFadeIn 0.25s ease-out;
+}
+
+@keyframes truthBoxFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.truth-terminal-cursor {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 26px;
+  font-weight: bold;
+  color: #ffffff;
+  line-height: 1;
+  animation: truthCursorBlink 0.75s infinite steps(1);
+}
+
+@keyframes truthCursorBlink {
+
+  0%,
+  49% {
+    opacity: 1;
+  }
+
+  50%,
+  100% {
+    opacity: 0;
+  }
 }

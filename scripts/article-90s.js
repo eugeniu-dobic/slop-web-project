@@ -7,6 +7,42 @@
    4. Side Ads rotation & Win95 Lightbox Modal
    ========================================================================== */
 
+// Check if user manually refreshed/reloaded the page
+(function checkManualReloadReset() {
+  let isInternalDialogueReload = false;
+  try {
+    if (sessionStorage.getItem('slop_internal_reload') === 'true') {
+      isInternalDialogueReload = true;
+      sessionStorage.removeItem('slop_internal_reload');
+    }
+  } catch (e) { }
+
+  const nav = (window.performance && performance.getEntriesByType) ? performance.getEntriesByType('navigation')[0] : null;
+  const isManualReload = nav ? (nav.type === 'reload') : (window.performance && window.performance.navigation && window.performance.navigation.type === 1);
+
+  let hasReachedFinalStep = false;
+  try {
+    hasReachedFinalStep = localStorage.getItem('slop_final_popup_seen') === 'true' ||
+      localStorage.getItem('slop_narrative_step') === 'step2_approved';
+  } catch (e) { }
+
+  if (isManualReload && !isInternalDialogueReload && hasReachedFinalStep) {
+    try {
+      localStorage.removeItem('slop_user');
+      localStorage.removeItem('slop_narrative_step');
+      localStorage.removeItem('slop_lore_ad_inspected');
+      localStorage.removeItem('slop_90s_voted');
+      localStorage.removeItem('slop_step2_voted');
+      localStorage.removeItem('slop_side_ads_overwritten');
+      localStorage.removeItem('slop_final_popup_seen');
+      localStorage.removeItem('slop_final_popup_time');
+      localStorage.removeItem('slop_terminal_visited');
+      sessionStorage.removeItem('slop_skip_loader');
+      sessionStorage.removeItem('slop_returning_from_article');
+    } catch (e) { }
+  }
+})();
+
 document.addEventListener('DOMContentLoaded', () => {
 
   // ========================================================================
@@ -16,6 +52,50 @@ document.addEventListener('DOMContentLoaded', () => {
   const voteBtn = document.getElementById('retro-vote-btn');
   const telemetryBox = document.getElementById('retro-vote-telemetry');
   const candidateRadios = document.querySelectorAll('input[name="retro-candidate"]');
+
+  // Narrative Story Step 2 Detection & Setup
+  const narrativeStep = localStorage.getItem('slop_narrative_step');
+  const isStep2Active = narrativeStep === 'step2_ballot_active' || narrativeStep === 'step2_approved';
+
+  // "first of all if the user already voted then reset the vote."
+  if (narrativeStep === 'step2_ballot_active' && !localStorage.getItem('slop_step2_voted')) {
+    try {
+      localStorage.removeItem('slop_90s_voted');
+    } catch (e) { }
+  }
+
+  // "change the retro-ballot-header background to 'misc/post_header.webp'"
+  if (isStep2Active) {
+    const ballotHeader = document.querySelector('.retro-ballot-header');
+    if (ballotHeader) {
+      ballotHeader.classList.add('lore-header-active');
+      ballotHeader.style.setProperty('background-color', '#000000', 'important');
+      ballotHeader.style.setProperty('background-image', "url('content/misc/post_header.webp')", 'important');
+      ballotHeader.style.setProperty('background-size', 'cover', 'important');
+      ballotHeader.style.setProperty('background-position', 'center', 'important');
+      ballotHeader.style.setProperty('background-repeat', 'no-repeat', 'important');
+      ballotHeader.style.setProperty('border-bottom', 'none', 'important');
+      ballotHeader.style.setProperty('min-height', '54px', 'important');
+      ballotHeader.style.setProperty('box-sizing', 'border-box', 'important');
+      ballotHeader.style.color = "#111111";
+      const h3 = ballotHeader.querySelector('h3');
+      if (h3) {
+        h3.style.color = "#111111";
+        h3.style.textShadow = "none";
+      }
+      const span = ballotHeader.querySelector('span');
+      if (span) {
+        span.style.color = "#111111";
+        span.style.textShadow = "none";
+      }
+    }
+
+    // Give perpetual glitchy shake to the ballot box
+    const ballotBooth = document.getElementById('retro-ballot-booth') || document.querySelector('.retro-ballot-section');
+    if (ballotBooth) {
+      ballotBooth.classList.add('lore-glitch-shake');
+    }
+  }
 
   // Candidate tallies state
   let voteCounts = {
@@ -137,7 +217,7 @@ document.addEventListener('DOMContentLoaded', () => {
     ].join('\n');
   }
 
-  function revealTerminalTelemetry(candidate, isInstant) {
+  function revealTerminalTelemetry(candidate, isInstant, onComplete) {
     if (!telemetryBox) return;
 
     telemetryBox.style.display = 'block';
@@ -163,6 +243,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (isInstant) {
       asciiPre.textContent = renderAsciiTable(targetT, targetL, targetB);
+      if (typeof onComplete === 'function') onComplete();
       return;
     }
 
@@ -178,9 +259,167 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (step >= maxSteps) {
         clearInterval(interval);
+        if (typeof onComplete === 'function') onComplete();
       }
     }, 70);
   }
+
+  function handlePostVoteApproval() {
+    let approvalEl = document.getElementById('retro-approval-status');
+    if (!approvalEl) {
+      approvalEl = document.createElement('div');
+      approvalEl.id = 'retro-approval-status';
+      approvalEl.style.cssText = 'margin-top: 10px; font-family: "Courier New", monospace; font-size: 13px; font-weight: bold; color: #ffcc00; letter-spacing: 0.5px;';
+      telemetryBox.appendChild(approvalEl);
+    }
+    approvalEl.textContent = '> approving...';
+
+    setTimeout(() => {
+      approvalEl.innerHTML = '&gt; <span style="color: #00FF66; font-weight: bold; text-shadow: 0 0 8px rgba(0,255,102,0.6);">[Approved]</span>';
+
+      try {
+        localStorage.setItem('slop_narrative_step', 'step2_approved');
+        localStorage.setItem('slop_step2_voted', 'true');
+        localStorage.setItem('slop_side_ads_overwritten', 'true');
+        localStorage.setItem('slop_final_popup_time', Date.now().toString());
+      } catch (e) { }
+
+      // Make "lore/side_ad_important.webp" appear giant on the screen
+      showGiantLoreModal();
+
+      // Gradually replace every side ad with this ad
+      if (typeof window.startGradualSideAdReplacement === 'function') {
+        window.startGradualSideAdReplacement();
+      }
+
+      // After 45 seconds, make appear a small black borderless terminal with only "_" flickering as waiting for input
+      scheduleFinalTruthTerminal(45000);
+    }, 2000);
+  }
+
+  function showGiantLoreModal() {
+    if (typeof window.showGiantLoreModal === 'function' && window.showGiantLoreModal !== showGiantLoreModal) {
+      window.showGiantLoreModal();
+      return;
+    }
+    const existing = document.getElementById('giant-lore-modal');
+    if (existing) existing.remove();
+
+    const modal = document.createElement('div');
+    modal.id = 'giant-lore-modal';
+    modal.innerHTML = `
+      <div class="giant-lore-container">
+        <button class="ad-post-close giant-lore-close" id="giant-lore-close-btn" aria-label="Close Pop-up" title="Close Pop-up">&times;</button>
+        <img src="content/lore/side_ad_important.webp" class="giant-lore-img" alt="Important Transmission Alert">
+      </div>
+    `;
+
+    try {
+      localStorage.setItem('slop_final_popup_seen', 'true');
+    } catch (e) { }
+
+    document.body.appendChild(modal);
+
+    const closeBtn = modal.querySelector('#giant-lore-close-btn');
+    const closeModal = () => {
+      modal.style.transition = 'opacity 0.25s ease';
+      modal.style.opacity = '0';
+      setTimeout(() => {
+        modal.remove();
+      }, 250);
+    };
+
+    if (closeBtn) {
+      closeBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        closeModal();
+      });
+    }
+
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        closeModal();
+      }
+    });
+
+    const onKey = (e) => {
+      if (e.key === 'Escape') {
+        closeModal();
+        document.removeEventListener('keydown', onKey);
+      }
+    };
+    document.addEventListener('keydown', onKey);
+  }
+
+  window.showGiantLoreModal = showGiantLoreModal;
+
+  function scheduleFinalTruthTerminal(delayMs = 45000) {
+    if (window.__truthTerminalTimeout) clearTimeout(window.__truthTerminalTimeout);
+    window.__truthTerminalTimeout = setTimeout(() => {
+      showFinalTruthTerminal();
+    }, Math.max(0, delayMs));
+  }
+  window.scheduleFinalTruthTerminal = scheduleFinalTruthTerminal;
+
+  function showFinalTruthTerminal() {
+    if (document.getElementById('truth-terminal-backdrop')) return;
+
+    // Close giant lore modal if active
+    const giantModal = document.getElementById('giant-lore-modal');
+    if (giantModal) {
+      giantModal.remove();
+    }
+
+    const backdrop = document.createElement('div');
+    backdrop.id = 'truth-terminal-backdrop';
+
+    const box = document.createElement('div');
+    box.id = 'truth-terminal-box';
+    box.innerHTML = `<span class="truth-terminal-cursor">_</span>`;
+
+    backdrop.appendChild(box);
+    document.body.appendChild(backdrop);
+
+    const goToTruth = () => {
+      try {
+        localStorage.setItem('slop_terminal_visited', 'true');
+      } catch (e) { }
+      window.location.href = 'truth.html';
+    };
+
+    backdrop.addEventListener('click', goToTruth);
+    box.addEventListener('click', (e) => {
+      e.stopPropagation();
+      goToTruth();
+    });
+    window.addEventListener('keydown', (e) => {
+      if (document.getElementById('truth-terminal-backdrop')) {
+        goToTruth();
+      }
+    });
+  }
+  window.showFinalTruthTerminal = showFinalTruthTerminal;
+
+  // Check if small truth terminal should be shown or scheduled (45s timer)
+  try {
+    const isApproved = localStorage.getItem('slop_narrative_step') === 'step2_approved';
+    const popupTime = localStorage.getItem('slop_final_popup_time');
+    const terminalVisited = localStorage.getItem('slop_terminal_visited') === 'true';
+
+    if (isApproved && !terminalVisited) {
+      if (popupTime) {
+        const elapsed = Date.now() - parseInt(popupTime, 10);
+        if (elapsed >= 45000) {
+          showFinalTruthTerminal();
+        } else {
+          scheduleFinalTruthTerminal(45000 - elapsed);
+        }
+      } else {
+        localStorage.setItem('slop_final_popup_time', Date.now().toString());
+        scheduleFinalTruthTerminal(45000);
+      }
+    }
+  } catch (e) { }
 
   function submitBallotVote(selected) {
     if (!selected) {
@@ -228,7 +467,15 @@ document.addEventListener('DOMContentLoaded', () => {
         voteCounts[selected] += 1;
         updateLeaderboard();
         localStorage.setItem('slop_90s_voted', selected);
-        revealTerminalTelemetry(selected, false);
+        revealTerminalTelemetry(selected, false, () => {
+          const isGlitchHeaderActive = localStorage.getItem('slop_narrative_step') === 'step2_ballot_active' ||
+            localStorage.getItem('slop_narrative_step') === 'step2_approved' ||
+            (document.querySelector('.retro-ballot-header') && document.querySelector('.retro-ballot-header').classList.contains('lore-header-active'));
+
+          if (isGlitchHeaderActive) {
+            handlePostVoteApproval();
+          }
+        });
       }
     }, 180);
   }
@@ -247,6 +494,31 @@ document.addEventListener('DOMContentLoaded', () => {
       </div>
     `;
     revealTerminalTelemetry(hasVoted, true);
+
+    if (localStorage.getItem('slop_step2_voted') === 'true') {
+      let approvalEl = document.getElementById('retro-approval-status');
+      if (!approvalEl) {
+        approvalEl = document.createElement('div');
+        approvalEl.id = 'retro-approval-status';
+        approvalEl.style.cssText = 'margin-top: 10px; font-family: "Courier New", monospace; font-size: 13px; font-weight: bold; color: #00FF66; letter-spacing: 0.5px;';
+        approvalEl.innerHTML = '&gt; <span style="color: #00FF66; font-weight: bold;">[Approved]</span>';
+        telemetryBox.appendChild(approvalEl);
+      }
+    }
+  } else {
+    // Ballot is active or reset: ensure vote button, telemetry, and radios are ready for voting
+    if (voteBtn) {
+      voteBtn.disabled = false;
+      voteBtn.textContent = '[ TRANSMIT BALLOT TO CENTRAL LEDGER ]';
+    }
+    if (telemetryBox) {
+      telemetryBox.style.display = 'none';
+      telemetryBox.innerHTML = '';
+    }
+    candidateRadios.forEach(r => {
+      r.disabled = false;
+      r.checked = false;
+    });
   }
 
   if (voteBtn) {

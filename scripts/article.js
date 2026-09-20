@@ -150,7 +150,7 @@ document.addEventListener('DOMContentLoaded', () => {
       author: '@sector_04',
       badge: 'system',
       badgeText: 'Sector 04',
-      avatar: 'content/user.svg',
+      avatar: 'content/misc/user.svg',
       timestamp: 'Nov 4, 2084 @ 18:02 EST',
       text: 'mine says vote already submitted. didnt vote yet'
     },
@@ -158,7 +158,7 @@ document.addEventListener('DOMContentLoaded', () => {
       author: '@lena_772',
       badge: 'system',
       badgeText: 'Citizen',
-      avatar: 'content/user.svg',
+      avatar: 'content/misc/user.svg',
       timestamp: 'Nov 4, 2084 @ 18:04 EST',
       text: 'same'
     },
@@ -166,7 +166,7 @@ document.addEventListener('DOMContentLoaded', () => {
       author: '@CivicDad88',
       badge: 'system',
       badgeText: 'Citizen',
-      avatar: 'content/user.svg',
+      avatar: 'content/misc/user.svg',
       timestamp: 'Nov 4, 2084 @ 18:07 EST',
       text: 'probably system delay. happens every election'
     },
@@ -174,7 +174,7 @@ document.addEventListener('DOMContentLoaded', () => {
       author: '@user_5518',
       badge: 'system',
       badgeText: 'Citizen',
-      avatar: 'content/user.svg',
+      avatar: 'content/misc/user.svg',
       timestamp: 'Nov 4, 2084 @ 18:14 EST',
       text: 'you guys still vote manually?'
     },
@@ -182,7 +182,7 @@ document.addEventListener('DOMContentLoaded', () => {
       author: '@oldinternetguy',
       badge: 'system',
       badgeText: 'Veteran',
-      avatar: 'content/user.svg',
+      avatar: 'content/misc/user.svg',
       timestamp: 'Nov 4, 2084 @ 18:19 EST',
       text: 'back in my day you had to physically stand somewhere'
     },
@@ -190,7 +190,7 @@ document.addEventListener('DOMContentLoaded', () => {
       author: '@Sector_12Resident',
       badge: 'system',
       badgeText: 'Sector 12',
-      avatar: 'content/user.svg',
+      avatar: 'content/misc/user.svg',
       timestamp: 'Nov 4, 2084 @ 18:25 EST',
       text: 'polling station is closed but the app says open'
     },
@@ -198,7 +198,7 @@ document.addEventListener('DOMContentLoaded', () => {
       author: '@admin',
       badge: 'system',
       badgeText: 'Admin',
-      avatar: 'content/user.svg',
+      avatar: 'content/misc/user.svg',
       timestamp: 'Nov 4, 2084 @ 18:26 EST',
       text: 'Please refresh your Civic Interface.'
     },
@@ -206,7 +206,7 @@ document.addEventListener('DOMContentLoaded', () => {
       author: '@Sector_12Resident',
       badge: 'system',
       badgeText: 'Sector 12',
-      avatar: 'content/user.svg',
+      avatar: 'content/misc/user.svg',
       timestamp: 'Nov 4, 2084 @ 18:27 EST',
       text: 'did that'
     },
@@ -214,7 +214,7 @@ document.addEventListener('DOMContentLoaded', () => {
       author: '@admin',
       badge: 'system',
       badgeText: 'Admin',
-      avatar: 'content/user.svg',
+      avatar: 'content/misc/user.svg',
       timestamp: 'Nov 4, 2084 @ 18:28 EST',
       text: 'Please refresh again.'
     },
@@ -222,7 +222,7 @@ document.addEventListener('DOMContentLoaded', () => {
       author: '@user_1883',
       badge: 'system',
       badgeText: 'Citizen',
-      avatar: 'content/user.svg',
+      avatar: 'content/misc/user.svg',
       timestamp: 'Nov 4, 2084 @ 18:35 EST',
       text: 'can we vote for none'
     },
@@ -230,7 +230,7 @@ document.addEventListener('DOMContentLoaded', () => {
       author: '@admin',
       badge: 'system',
       badgeText: 'Admin',
-      avatar: 'content/user.svg',
+      avatar: 'content/misc/user.svg',
       timestamp: 'Nov 4, 2084 @ 18:36 EST',
       text: 'No.'
     },
@@ -238,7 +238,7 @@ document.addEventListener('DOMContentLoaded', () => {
       author: '@user_1883',
       badge: 'system',
       badgeText: 'Citizen',
-      avatar: 'content/user.svg',
+      avatar: 'content/misc/user.svg',
       timestamp: 'Nov 4, 2084 @ 18:38 EST',
       text: 'ok'
     }
@@ -270,7 +270,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     commentsList.innerHTML = allComments.map(c => `
       <li class="comment-item">
-        <img class="comment-avatar-img" src="${c.avatar || 'content/user.svg'}" alt="Avatar">
+        <img class="comment-avatar-img" src="${c.avatar || 'content/misc/user.svg'}" alt="Avatar">
         <div class="comment-body">
           <div class="comment-author">
             ${c.author}
@@ -308,7 +308,7 @@ document.addEventListener('DOMContentLoaded', () => {
         author: author.startsWith('@') ? author : `@${author}`,
         badge: selectedCandidate || 'system',
         badgeText: selectedCandidate ? selectedCandidate.toUpperCase() : 'CITIZEN',
-        avatar: 'content/user.svg',
+        avatar: 'content/misc/user.svg',
         timestamp: 'Just now',
         text: text
       };
@@ -316,7 +316,7 @@ document.addEventListener('DOMContentLoaded', () => {
       userComments.push(newComment);
       try {
         localStorage.setItem('elections_2084_comments', JSON.stringify(userComments));
-      } catch (err) {}
+      } catch (err) { }
 
       renderAllComments();
       textInput.value = '';

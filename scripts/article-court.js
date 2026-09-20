@@ -18,85 +18,61 @@ document.addEventListener('DOMContentLoaded', () => {
   const entriesContainer = document.getElementById('retro-guestbook-entries');
   const guestbookCount = document.getElementById('retro-guestbook-count');
 
-  // Authentic Judicial Stream comments matching original article dialogue
+  // Authentic National Court Network comments matching rewritten article and mockup
   const defaultEntries = [
     {
-      author: "@courtwatcher",
-      location: "Judicial Feed 01",
-      date: "Nov 8, 2084 @ 18:30 EST",
-      text: "what case is being voted today"
+      author: "@juror_8812",
+      location: "Pilot District 4",
+      date: "Nov 8, 2084 @ 18:14 EST",
+      text: "Voted in the pilot last week. Verdict reached in under two hours. Way faster than waiting 11 days for a jury."
     },
     {
-      author: "@JusticeEnjoyer",
-      location: "Voting Terminal 9",
-      date: "Nov 8, 2084 @ 18:32 EST",
-      text: "I voted guilty because the guy looked suspicious"
-    },
-    {
-      author: "@Sector9Dad",
-      location: "Sector 9 Resident",
-      date: "Nov 8, 2084 @ 18:35 EST",
-      text: "that's not how court works"
+      author: "@LegalScholar",
+      location: "Sector 2 Civil Chamber",
+      date: "Nov 8, 2084 @ 18:22 EST",
+      text: "How are 50,000 accounts registered less than 24 hours ago swinging a felony verdict? Calling them 'temporary citizens' is peak government bureaucracy."
     },
     {
       author: "@admin",
-      location: "Consensus Judicial Mod",
-      date: "Nov 8, 2084 @ 18:36 EST",
-      text: "Your comment has been flagged as legal misinformation."
+      location: "Justice Ministry",
+      date: "Nov 8, 2084 @ 18:25 EST",
+      text: "Temporary citizen accounts are fully verified under emergency judicial throughput protocols. They are not bots."
     },
     {
       author: "@Sector9Dad",
-      location: "Sector 9 Resident",
-      date: "Nov 8, 2084 @ 18:37 EST",
-      text: "what did i say"
+      location: "District 9 Juror Grid",
+      date: "Nov 8, 2084 @ 18:31 EST",
+      text: "My weighted vote is only 0.42 because my reliability score dipped when I missed jury duty in 2082."
     },
     {
-      author: "@admin",
-      location: "Consensus Judicial Mod",
+      author: "@cynic_juror",
+      location: "Voting Terminal 3",
       date: "Nov 8, 2084 @ 18:38 EST",
-      text: "Your comment has been flagged as legal misinformation."
-    },
-    {
-      author: "@LegalEagle2044",
-      location: "Civic Monitor",
-      date: "Nov 8, 2084 @ 18:45 EST",
-      text: "I voted not guilty and my Civic Score dropped 3 points"
-    },
-    {
-      author: "@user_991",
-      location: "Terminal 991",
-      date: "Nov 8, 2084 @ 18:47 EST",
-      text: "coincidence"
+      text: "Active Civic Participation subscription gives me double vote weight and automatic access this Friday."
     },
     {
       author: "@courtbot",
-      location: "Judicial Automated Relay",
-      date: "Nov 8, 2084 @ 18:50 EST",
-      text: "Please remember to vote responsibly."
+      location: "National Court Network",
+      date: "Nov 8, 2084 @ 18:40 EST",
+      text: "Civic Participation subscribers receive priority docket feeds. The first nationwide vote opens Friday."
     },
     {
       author: "@user_552",
-      location: "District 552",
-      date: "Nov 8, 2084 @ 18:52 EST",
-      text: "what does responsibly mean"
+      location: "District 14",
+      date: "Nov 8, 2084 @ 18:48 EST",
+      text: "Are we voting on the municipal embezzlement case or the street vendor permit appeal?"
     },
     {
       author: "@courtbot",
-      location: "Judicial Automated Relay",
-      date: "Nov 8, 2084 @ 18:53 EST",
-      text: "Please vote responsibly."
-    },
-    {
-      author: "@user_552",
-      location: "District 552",
-      date: "Nov 8, 2084 @ 18:54 EST",
-      text: "👍"
+      location: "National Court Network",
+      date: "Nov 8, 2084 @ 18:49 EST",
+      text: "Friday's nationwide voting docket unlocks at 00:01 EST. Please vote responsibly."
     }
   ];
 
   function renderGuestbook() {
     if (!entriesContainer) return;
-    let stored = localStorage.getItem('slop_guestbook_v2_court');
+    let stored = localStorage.getItem('slop_guestbook_v3_court');
     let entries = stored ? JSON.parse(stored) : defaultEntries;
 
     entriesContainer.innerHTML = entries.map(item => {
@@ -130,7 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      let stored = localStorage.getItem('slop_guestbook_v2_court');
+      let stored = localStorage.getItem('slop_guestbook_v3_court');
       let entries = stored ? JSON.parse(stored) : [...defaultEntries];
 
       const now = new Date();
@@ -143,7 +119,7 @@ document.addEventListener('DOMContentLoaded', () => {
         text: text
       });
 
-      localStorage.setItem('slop_guestbook_v2_court', JSON.stringify(entries));
+      localStorage.setItem('slop_guestbook_v3_court', JSON.stringify(entries));
       messageInput.value = '';
       renderGuestbook();
     });

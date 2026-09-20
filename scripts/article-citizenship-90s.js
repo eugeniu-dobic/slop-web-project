@@ -18,85 +18,67 @@ document.addEventListener('DOMContentLoaded', () => {
   const entriesContainer = document.getElementById('retro-guestbook-entries');
   const guestbookCount = document.getElementById('retro-guestbook-count');
 
-  // Authentic CitizenPlus comments matching original article dialogue
+  // Authentic Premium Citizenship comments matching rewritten article and mockup
   const defaultEntries = [
     {
       author: "@richard_2049",
       location: "Sector 7 Terminal",
       date: "Nov 9, 2084 @ 17:45 EST",
-      text: "$30 for faster government is actually insane"
+      text: "$29.99 a month just so the hospital triage doesn't make me wait four days in the corridor."
     },
     {
       author: "@LunaSupporter",
-      location: "Luna Civic Club",
+      location: "Capital District Node",
       date: "Nov 9, 2084 @ 17:48 EST",
-      text: "Worth it. My score went up 22 points."
+      text: "Signed up for the $0.99 trial this morning. My Civic Trust Score immediately went up 15 points."
     },
     {
       author: "@user_338",
       location: "Queue 338",
       date: "Nov 9, 2084 @ 17:54 EST",
-      text: "Can I get my voting privileges back without premium"
+      text: "Wait, so same-day government responses are gone from the standard plan now? How long does standard take?"
     },
     {
       author: "@admin",
-      location: "Civic Services Desk",
+      location: "Department of Civic Services",
       date: "Nov 9, 2084 @ 17:55 EST",
-      text: "Standard citizens retain all fundamental voting rights."
+      text: "Standard citizen rights remain completely unaffected. Standard response windows average 14 to 28 business weeks."
     },
     {
-      author: "@user_338",
-      location: "Queue 338",
-      date: "Nov 9, 2084 @ 17:56 EST",
-      text: "so yes or no"
+      author: "@cynic_citizen",
+      location: "District 12 Sub-Ward",
+      date: "Nov 9, 2084 @ 18:03 EST",
+      text: "Read the fine print: if you cancel, they give you a 'temporary reduction of Civic Access privileges'. Basically you can never unsubscribe."
     },
     {
       author: "@admin",
-      location: "Civic Services Desk",
-      date: "Nov 9, 2084 @ 17:57 EST",
-      text: "Please consult the Civic Services FAQ."
-    },
-    {
-      author: "@user_991",
-      location: "Standard Tier Ward",
-      date: "Nov 9, 2084 @ 18:03 EST",
-      text: "my standard account says upgrade recommended every time i log in"
+      location: "Department of Civic Services",
+      date: "Nov 9, 2084 @ 18:05 EST",
+      text: "Cancellation remains voluntary at all times. Civic access bandwidth is dynamically allocated."
     },
     {
       author: "@user_992",
-      location: "Standard Tier Ward",
-      date: "Nov 9, 2084 @ 18:05 EST",
-      text: "same"
-    },
-    {
-      author: "@user_994",
-      location: "Restricted Terminal",
-      date: "Nov 9, 2084 @ 18:09 EST",
-      text: "mine says final warning"
+      location: "Metro Ward 4",
+      date: "Nov 9, 2084 @ 18:12 EST",
+      text: "4 million people signed up in 6 hours lol. Guess everyone took the $0.99 bait."
     },
     {
       author: "@user_772",
-      location: "Aspirant Node 772",
-      date: "Nov 9, 2084 @ 18:15 EST",
-      text: "can premium increase my score above 900"
+      location: "Terminal 772",
+      date: "Nov 9, 2084 @ 18:18 EST",
+      text: "Does the expanded voting interface option mean my votes count more or does it just give me nicer buttons?"
     },
     {
       author: "@admin",
-      location: "Civic Services Desk",
-      date: "Nov 9, 2084 @ 18:16 EST",
-      text: "Some benefits are available only to Gold citizens."
-    },
-    {
-      author: "@user_772",
-      location: "Aspirant Node 772",
-      date: "Nov 9, 2084 @ 18:17 EST",
-      text: "oh no"
+      location: "Department of Civic Services",
+      date: "Nov 9, 2084 @ 18:20 EST",
+      text: "Premium subscribers receive enhanced ballot telemetry and priority stream routing."
     }
   ];
 
   function renderGuestbook() {
     if (!entriesContainer) return;
-    let stored = localStorage.getItem('slop_guestbook_v2_citizenship');
+    let stored = localStorage.getItem('slop_guestbook_v3_citizenship');
     let entries = stored ? JSON.parse(stored) : defaultEntries;
 
     entriesContainer.innerHTML = entries.map(item => {
@@ -130,7 +112,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      let stored = localStorage.getItem('slop_guestbook_v2_citizenship');
+      let stored = localStorage.getItem('slop_guestbook_v3_citizenship');
       let entries = stored ? JSON.parse(stored) : [...defaultEntries];
 
       const now = new Date();
@@ -143,7 +125,7 @@ document.addEventListener('DOMContentLoaded', () => {
         text: text
       });
 
-      localStorage.setItem('slop_guestbook_v2_citizenship', JSON.stringify(entries));
+      localStorage.setItem('slop_guestbook_v3_citizenship', JSON.stringify(entries));
       messageInput.value = '';
       renderGuestbook();
     });

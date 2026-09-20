@@ -18,85 +18,73 @@ document.addEventListener('DOMContentLoaded', () => {
   const entriesContainer = document.getElementById('retro-guestbook-entries');
   const guestbookCount = document.getElementById('retro-guestbook-count');
 
-  // Authentic Right to Forget comments matching original article dialogue
+  // Authentic Right to Forget comments matching rewritten article and mockup
   const defaultEntries = [
-    {
-      author: "@mia_44",
-      location: "Memory Terminal 44",
-      date: "Nov 6, 2084 @ 10:14 EST",
-      text: "Can I delete my ex"
-    },
     {
       author: "@user_0081",
       location: "Archive Node 0081",
       date: "Nov 6, 2084 @ 10:16 EST",
-      text: "you can delete the memory. not the archive apparently"
+      text: "so you can delete the memory from your brain, but the Ministry keeps the backup tape in the basement forever?"
     },
     {
-      author: "@echo_echo",
-      location: "Sub-Sector 08",
-      date: "Nov 6, 2084 @ 10:22 EST",
-      text: 'why does mine say "memory retained by authority"'
-    },
-    {
-      author: "@oldschooldad",
-      location: "Sector 3 Old Quarter",
-      date: "Nov 6, 2084 @ 10:28 EST",
-      text: "we used to just forget things naturally"
+      author: "@admin",
+      location: "Ministry of Civic Data",
+      date: "Nov 6, 2084 @ 10:18 EST",
+      text: "Correct. Forgetting and public record retention are technically unrelated."
     },
     {
       author: "@mia_44",
       location: "Memory Terminal 44",
-      date: "Nov 6, 2084 @ 10:30 EST",
-      text: "how"
+      date: "Nov 6, 2084 @ 10:24 EST",
+      text: "Can I request deletion now or do we really have to wait until January"
+    },
+    {
+      author: "@echo_echo",
+      location: "Sub-Sector 08",
+      date: "Nov 6, 2084 @ 10:31 EST",
+      text: 'what does "no longer relevant to current identity" mean? Can I delete high school calculus'
     },
     {
       author: "@oldschooldad",
       location: "Sector 3 Old Quarter",
-      date: "Nov 6, 2084 @ 10:32 EST",
-      text: "idk"
+      date: "Nov 6, 2084 @ 10:35 EST",
+      text: "back in my day we used to just drink cheap beer and forget things naturally without a senate bill"
+    },
+    {
+      author: "@cynic_prime",
+      location: "Ward 12-B",
+      date: "Nov 6, 2084 @ 10:42 EST",
+      text: "The best part is the permanent confirmation badge attached to your identity record, so now every employer knows you wiped something."
     },
     {
       author: "@user_481",
       location: "Ward 481",
-      date: "Nov 6, 2084 @ 10:41 EST",
-      text: "can i delete a memory without knowing which memory it is"
+      date: "Nov 6, 2084 @ 10:48 EST",
+      text: "requests reviewed automatically means an algorithm is going to decide if my cringiest memory is eligible for purging"
     },
     {
       author: "@admin",
-      location: "Memory Registry Admin",
-      date: "Nov 6, 2084 @ 10:43 EST",
-      text: "Yes. Randomized deletion is available with Premium access."
+      location: "Ministry of Civic Data",
+      date: "Nov 6, 2084 @ 10:50 EST",
+      text: "Algorithmic triage ensures zero latency and optimizes national memory infrastructure quotas."
     },
     {
       author: "@user_221",
       location: "Net Cafe 221",
-      date: "Nov 6, 2084 @ 10:50 EST",
+      date: "Nov 6, 2084 @ 10:55 EST",
       text: "can i delete this comment"
     },
     {
       author: "@admin",
-      location: "Memory Registry Admin",
-      date: "Nov 6, 2084 @ 10:51 EST",
-      text: "No."
-    },
-    {
-      author: "@user_221",
-      location: "Net Cafe 221",
-      date: "Nov 6, 2084 @ 10:52 EST",
-      text: "why"
-    },
-    {
-      author: "@admin",
-      location: "Memory Registry Admin",
-      date: "Nov 6, 2084 @ 10:53 EST",
-      text: "This comment is part of a public record."
+      location: "Ministry of Civic Data",
+      date: "Nov 6, 2084 @ 10:56 EST",
+      text: "No. This transmission is an immutable civic record."
     }
   ];
 
   function renderGuestbook() {
     if (!entriesContainer) return;
-    let stored = localStorage.getItem('slop_guestbook_v2_memory');
+    let stored = localStorage.getItem('slop_guestbook_v3_memory');
     let entries = stored ? JSON.parse(stored) : defaultEntries;
 
     entriesContainer.innerHTML = entries.map(item => {
@@ -130,7 +118,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      let stored = localStorage.getItem('slop_guestbook_v2_memory');
+      let stored = localStorage.getItem('slop_guestbook_v3_memory');
       let entries = stored ? JSON.parse(stored) : [...defaultEntries];
 
       const now = new Date();
@@ -143,7 +131,7 @@ document.addEventListener('DOMContentLoaded', () => {
         text: text
       });
 
-      localStorage.setItem('slop_guestbook_v2_memory', JSON.stringify(entries));
+      localStorage.setItem('slop_guestbook_v3_memory', JSON.stringify(entries));
       messageInput.value = '';
       renderGuestbook();
     });
