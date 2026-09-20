@@ -2889,3 +2889,62 @@ a:hover {
   font-weight: bold !important;
   text-shadow: 0 0 6px rgba(191, 85, 236, 0.7);
 }
+
+/* Lore Trigger Transmission */
+.lore-important-ad,
+.lore-transmission-card,
+.lore-important-transmission {
+  position: relative !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  padding: 0 !important;
+  border: none !important;
+  background-color: #12100e !important;
+  box-shadow: 0 0 8px rgba(81, 41, 20, 0.45) !important;
+  overflow: hidden !important;
+  border-radius: 6px !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  animation: loreFadeIn 0.6s ease-out;
+}
+
+.lore-ad-img,
+.lore-transmission-img {
+  cursor: pointer;
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 480px;
+  object-fit: contain;
+  transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), filter 0.25s ease;
+}
+
+.lore-ad-img:hover,
+.lore-transmission-img:hover {
+  transform: scale(1.02);
+  filter: brightness(1.05);
+}
+
+.lore-transmission-close {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 20px;
+  height: 20px;
+  background-color: #000000;
+  color: #c0c0c0;
+  border-radius: 50%;
+  border: none;
+  box-shadow: 1px 1px 0px #000000;
+  font-family: 'Arial Black', Arial, sans-serif;
+  font-weight: 100;
+  font-size: 12px;
+  line-height: 16px;
+  text-align: center;
+  cursor: pointer;
+  z-index: 25;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

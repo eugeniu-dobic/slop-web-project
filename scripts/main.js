@@ -2215,12 +2215,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }
 
-      // Narrative Lore Ad: Injected in between the last four posts (after 3rd from last)
+      // Narrative Lore Transmission: Injected in between the last four posts (after 3rd from last)
       if (window.__loreAdActive && !window.__loreAdDismissed && index === Math.max(0, filteredPosts.length - 3)) {
         html += `
-          <div id="lore-trigger-ad" class="post-card post-wide ad-post lore-important-ad" data-lore-trigger="step1">
-            <button class="ad-post-close lore-ad-close" aria-label="Close Ad" title="Close Advertisement">&times;</button>
-            <img src="content/lore/post_ad_important.gif" class="ad-image lore-ad-img" alt="Important Lore Transmission" title="Click to inspect transmission">
+          <div id="lore-trigger-transmission" class="post-card post-wide lore-transmission-card lore-important-transmission" data-lore-trigger="step1">
+            <button class="lore-transmission-close" aria-label="Close Transmission" title="Close Transmission">&times;</button>
+            <img src="content/lore/transmission_important.gif" class="lore-transmission-img" alt="Important Lore Transmission" title="Click to inspect transmission">
           </div>
         `;
       }
@@ -2232,10 +2232,10 @@ document.addEventListener('DOMContentLoaded', () => {
   // EVENT DELEGATION
   if (postContainer) {
     postContainer.addEventListener('click', (e) => {
-      // 1. Close Post Ad with 'X' and respawn
-      const closeAdBtn = e.target.closest('.ad-post-close');
+      // 1. Close Post Ad or Lore Transmission with 'X' and respawn
+      const closeAdBtn = e.target.closest('.ad-post-close, .lore-transmission-close');
       if (closeAdBtn) {
-        if (closeAdBtn.classList.contains('lore-ad-close') || closeAdBtn.closest('#lore-trigger-ad')) {
+        if (closeAdBtn.classList.contains('lore-transmission-close') || closeAdBtn.classList.contains('lore-ad-close') || closeAdBtn.closest('#lore-trigger-transmission') || closeAdBtn.closest('#lore-trigger-ad')) {
           handleLoreAdClose();
           return;
         }
@@ -2982,10 +2982,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   window.showStep2DialogueModal = showStep2DialogueModal;
 
-  // Delegate click for lore-ad-img so that normal image expansion is completely overridden
+  // Delegate click for lore-transmission-img so that normal image expansion is completely overridden
   document.addEventListener('click', (e) => {
     const target = e.target;
-    if (target && (target.classList.contains('lore-ad-img') || (target.closest('#lore-trigger-ad') && target.tagName === 'IMG'))) {
+    if (target && (target.classList.contains('lore-transmission-img') || target.classList.contains('lore-ad-img') || ((target.closest('#lore-trigger-transmission') || target.closest('#lore-trigger-ad')) && target.tagName === 'IMG'))) {
       e.preventDefault();
       e.stopPropagation();
       try {
@@ -3008,7 +3008,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function handleLoreAdClose() {
     loreCloseCount++;
     window.__loreAdDismissed = true;
-    const loreCard = document.getElementById('lore-trigger-ad');
+    const loreCard = document.getElementById('lore-trigger-transmission') || document.getElementById('lore-trigger-ad');
     if (loreCard) loreCard.remove();
 
     if (loreRespawnTimeout) {
@@ -3029,17 +3029,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function injectLoreAd() {
     if (window.__loreAdDismissed) return;
-    if (document.getElementById('lore-trigger-ad')) return;
+    if (document.getElementById('lore-trigger-transmission') || document.getElementById('lore-trigger-ad')) return;
     if (!postContainer) return;
 
-    const cards = Array.from(postContainer.querySelectorAll('.post-card:not(#lore-trigger-ad)'));
+    const cards = Array.from(postContainer.querySelectorAll('.post-card:not(#lore-trigger-transmission):not(#lore-trigger-ad)'));
     const loreCard = document.createElement('div');
-    loreCard.id = 'lore-trigger-ad';
-    loreCard.className = 'post-card post-wide ad-post lore-important-ad';
+    loreCard.id = 'lore-trigger-transmission';
+    loreCard.className = 'post-card post-wide lore-transmission-card lore-important-transmission';
     loreCard.setAttribute('data-lore-trigger', 'step1');
     loreCard.innerHTML = `
-      <button class="ad-post-close lore-ad-close" aria-label="Close Ad" title="Close Advertisement">&times;</button>
-      <img src="content/lore/post_ad_important.gif" class="ad-image lore-ad-img" alt="Important Lore Transmission" title="Click to inspect transmission">
+      <button class="lore-transmission-close" aria-label="Close Transmission" title="Close Transmission">&times;</button>
+      <img src="content/lore/transmission_important.gif" class="lore-transmission-img" alt="Important Lore Transmission" title="Click to inspect transmission">
     `;
 
     // Insert in between the last four posts (before the 2nd from last)
@@ -3053,7 +3053,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Attach click handler for step 2 trigger
-    const loreImg = loreCard.querySelector('.lore-ad-img');
+    const loreImg = loreCard.querySelector('.lore-transmission-img, .lore-ad-img');
     if (loreImg) {
       loreImg.addEventListener('click', (e) => {
         e.preventDefault();

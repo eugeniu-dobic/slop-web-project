@@ -310,7 +310,7 @@ document.addEventListener('DOMContentLoaded', () => {
     modal.innerHTML = `
       <div class="giant-lore-container">
         <button class="ad-post-close giant-lore-close" id="giant-lore-close-btn" aria-label="Close Pop-up" title="Close Pop-up">&times;</button>
-        <img src="content/lore/side_ad_important.webp" class="giant-lore-img" alt="Important Transmission Alert">
+        <img src="content/lore/side_transmission_important.webp" class="giant-lore-img" alt="Important Transmission Alert">
       </div>
     `;
 

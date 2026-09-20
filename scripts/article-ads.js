@@ -84,7 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function getRandom(arr) {
     if (isLoreSideAdActive() && arr === sideAds) {
-      return 'content/lore/side_ad_important.webp';
+      return 'content/lore/side_transmission_important.webp';
     }
     return arr[Math.floor(Math.random() * arr.length)];
   }
@@ -205,8 +205,11 @@ document.addEventListener('DOMContentLoaded', () => {
       !e.target.classList.contains('post-avatar') &&
       !e.target.classList.contains('comment-avatar') &&
       !e.target.closest('.author-avatar') &&
+      !e.target.classList.contains('lore-transmission-img') &&
       !e.target.classList.contains('lore-ad-img') &&
+      !e.target.closest('#lore-trigger-transmission') &&
       !e.target.closest('#lore-trigger-ad') &&
+      !e.target.closest('.lore-important-transmission') &&
       !e.target.closest('.lore-important-ad') &&
       !e.target.closest('#truth-terminal-backdrop') &&
       !e.target.closest('#truth-terminal-box') &&
@@ -311,7 +314,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let retroAdIndex = 0;
   function getNextRetroSideAd() {
     if (isLoreSideAdActive()) {
-      return 'content/lore/side_ad_important.webp';
+      return 'content/lore/side_transmission_important.webp';
     }
     const ad = shuffledRetroAds[retroAdIndex % shuffledRetroAds.length];
     retroAdIndex++;
@@ -327,7 +330,7 @@ document.addEventListener('DOMContentLoaded', () => {
     modal.innerHTML = `
       <div class="giant-lore-container">
         <button class="ad-post-close giant-lore-close" id="giant-lore-close-btn" aria-label="Close Pop-up" title="Close Pop-up">&times;</button>
-        <img src="content/lore/side_ad_important.webp" class="giant-lore-img" alt="Important Transmission Alert">
+        <img src="content/lore/side_transmission_important.webp" class="giant-lore-img" alt="Important Transmission Alert">
       </div>
     `;
 
@@ -401,7 +404,7 @@ document.addEventListener('DOMContentLoaded', () => {
           img.style.transition = 'opacity 0.4s ease';
           img.style.opacity = '0';
           setTimeout(() => {
-            img.src = 'content/lore/side_ad_important.webp';
+            img.src = 'content/lore/side_transmission_important.webp';
             img.alt = 'Important Transmission';
             img.style.opacity = '1';
           }, 400);
@@ -409,7 +412,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }, idx * 3000);
     });
 
-    // 2. Then, on the left sidebar gradually make pop up 3 more side_ad_important (every 3s)
+    // 2. Then, on the left sidebar gradually make pop up 3 more side_transmission_important (every 3s)
     const baseExtraDelay = activeSlots.length * 3000;
     const leftSidebar = document.querySelector('.retro-left-column') ||
       document.querySelector('.article-sidebar') ||
@@ -428,7 +431,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <div class="retro-ad-label">SPONSOR ADVERTISEMENT</div>
           <div class="retro-ad-box">
             <button class="ad-post-close retro-ad-close" aria-label="Close Ad" title="Close Advertisement">&times;</button>
-            <img class="ad-image" alt="Important Transmission" src="content/lore/side_ad_important.webp" title="Click to zoom in Win95 Lightbox">
+            <img class="ad-image" alt="Important Transmission" src="content/lore/side_transmission_important.webp" title="Click to zoom in Win95 Lightbox">
           </div>
         `;
         leftSidebar.appendChild(extraAd);
@@ -456,7 +459,7 @@ document.addEventListener('DOMContentLoaded', () => {
         img.style.transition = 'opacity 0.4s ease';
         img.style.opacity = '0';
         setTimeout(() => {
-          img.src = 'content/lore/side_ad_important.webp';
+          img.src = 'content/lore/side_transmission_important.webp';
           img.style.opacity = '1';
         }, 400);
       });
@@ -466,7 +469,7 @@ document.addEventListener('DOMContentLoaded', () => {
         img.style.transition = 'opacity 0.4s ease';
         img.style.opacity = '0';
         setTimeout(() => {
-          img.src = 'content/lore/side_ad_important.webp';
+          img.src = 'content/lore/side_transmission_important.webp';
           img.style.opacity = '1';
         }, 400);
       });
@@ -476,7 +479,7 @@ document.addEventListener('DOMContentLoaded', () => {
         img.style.transition = 'opacity 0.4s ease';
         img.style.opacity = '0';
         setTimeout(() => {
-          img.src = 'content/lore/side_ad_important.webp';
+          img.src = 'content/lore/side_transmission_important.webp';
           img.style.opacity = '1';
         }, 400);
       });
@@ -564,7 +567,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (isLoreSideAdActive()) {
     setTimeout(() => {
       document.querySelectorAll('.retro-dispatch-thumb, .retro-candidate-portrait, .post-attached-image').forEach(img => {
-        img.src = 'content/lore/side_ad_important.webp';
+        img.src = 'content/lore/side_transmission_important.webp';
       });
 
       const leftCol = document.querySelector('.retro-left-column') || document.querySelector('.article-sidebar') || document.querySelector('aside');
@@ -576,7 +579,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="retro-ad-label">SPONSOR ADVERTISEMENT</div>
             <div class="retro-ad-box">
               <button class="ad-post-close retro-ad-close" aria-label="Close Ad" title="Close Advertisement">&times;</button>
-              <img class="ad-image" alt="Important Transmission" src="content/lore/side_ad_important.webp" title="Click to zoom in Win95 Lightbox">
+              <img class="ad-image" alt="Important Transmission" src="content/lore/side_transmission_important.webp" title="Click to zoom in Win95 Lightbox">
             </div>
           `;
           leftCol.appendChild(extraAd);

@@ -2014,7 +2014,8 @@ a:hover {
 
 /* Post Ad Close button - IDENTICAL to .retro-ad-close */
 .ad-post-close,
-.post-ad-close {
+.post-ad-close,
+.lore-transmission-close {
   position: absolute;
   top: 6px;
   right: 6px;
@@ -2041,12 +2042,14 @@ a:hover {
 }
 
 .ad-post-close:hover,
-.post-ad-close:hover {
+.post-ad-close:hover,
+.lore-transmission-close:hover {
   background-color: var(--retro-win-shadow);
 }
 
 .ad-post-close:active,
-.post-ad-close:active {
+.post-ad-close:active,
+.lore-transmission-close:active {
   border-color: #808080 #ffffff #ffffff #808080;
   transform: translate(1px, 1px);
   box-shadow: none;
@@ -2164,13 +2167,22 @@ a:hover {
 }
 
 /* ==========================================================================
-   LORE TRIGGER POST AD ("content/lore/post_ad_important.gif")
+   LORE TRIGGER TRANSMISSION ("content/lore/transmission_important.gif")
    ========================================================================== */
 
-.lore-important-ad {
+.lore-important-ad,
+.lore-transmission-card,
+.lore-important-transmission {
+  position: relative !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  padding: 0 !important;
+  border: none !important;
   background-color: #12100e !important;
   box-shadow: 0 0 8px rgba(81, 41, 20, 0.45) !important;
-  position: relative;
+  overflow: hidden !important;
+  border-radius: 6px !important;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   animation: loreFadeIn 0.6s ease-out;
 }
@@ -2187,13 +2199,21 @@ a:hover {
   }
 }
 
-.lore-ad-img {
+.lore-ad-img,
+.lore-transmission-img {
   cursor: pointer;
   display: block;
   width: 100%;
   height: auto;
   max-height: 480px;
   object-fit: contain;
+  transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), filter 0.25s ease;
+}
+
+.lore-ad-img:hover,
+.lore-transmission-img:hover {
+  transform: scale(1.02);
+  filter: brightness(1.05);
 }
 
 /* Violet & Bold keywords for narrative terminals (down, become, choose) */
