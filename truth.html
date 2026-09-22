@@ -258,11 +258,16 @@
 
       let sequenceStarted = false;
 
-      // 1. "keep doomscrolling" action -> redirect to index.html
+      // 1. "keep doomscrolling" action -> reset localStorage & redirect to index.html
       btnDoomscroll.addEventListener('click', () => {
         if (sequenceStarted) return;
         sequenceStarted = true;
-        
+
+        try {
+          localStorage.clear();
+          sessionStorage.clear();
+        } catch (e) { }
+
         buttonGroup.style.opacity = '0';
         buttonGroup.style.pointerEvents = 'none';
 

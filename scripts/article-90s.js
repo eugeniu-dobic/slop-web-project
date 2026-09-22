@@ -155,11 +155,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <p style="margin: 0 0 8px 0; font-size: 11px; color: #222222; line-height: 1.4;">
           State Voting Protocol 2084.B requires citizen authentication before casting your ballot. Please dial in your credentials to authorize transmission:
         </p>
-        <form id="ballot-login-form" style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
-          <input type="text" id="ballot-username" class="retro-form-input" placeholder="Citizen Handle (e.g. @Echo_84)" required style="flex: 1; min-width: 160px; padding: 5px 8px; font-size: 12px;">
-          <input type="password" id="ballot-password" class="retro-form-input" placeholder="Password / PIN" required style="flex: 1; min-width: 120px; padding: 5px 8px; font-size: 12px;">
-          <button type="submit" class="retro-submit-vote-btn" style="padding: 6px 14px; font-size: 11px;">[ Dial-In &amp; Cast Vote ]</button>
-        </form>
+        <a href="index.html" class="retro-submit-vote-btn" style="padding: 6px 14px; font-size: 11px; color: #111111; text-decoration: none;">[ Go to Login Page ]</a>
       `;
 
       if (telemetryBox && telemetryBox.parentNode) {
@@ -167,30 +163,32 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       const form = loginBox.querySelector('#ballot-login-form');
-      form.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const userInput = loginBox.querySelector('#ballot-username');
-        const userVal = userInput && userInput.value ? userInput.value.trim() : 'Citizen_84';
-        const formattedUser = userVal.startsWith('@') ? userVal : `@${userVal}`;
+      if (form) {
+        form.addEventListener('submit', (e) => {
+          e.preventDefault();
+          const userInput = loginBox.querySelector('#ballot-username');
+          const userVal = userInput && userInput.value ? userInput.value.trim() : 'Citizen_84';
+          const formattedUser = userVal.startsWith('@') ? userVal : `@${userVal}`;
 
-        const userData = {
-          username: formattedUser,
-          date: new Date().toLocaleDateString(),
-          posts: Math.floor(Math.random() * 500),
-          likes: Math.floor(Math.random() * 10000)
-        };
+          const userData = {
+            username: formattedUser,
+            date: new Date().toLocaleDateString(),
+            posts: Math.floor(Math.random() * 500),
+            likes: Math.floor(Math.random() * 10000)
+          };
 
-        try {
-          localStorage.setItem('slop_user', JSON.stringify(userData));
-        } catch (err) { }
+          try {
+            localStorage.setItem('slop_user', JSON.stringify(userData));
+          } catch (err) { }
 
-        updateBallotCitizenStatus();
-        loginBox.remove();
+          updateBallotCitizenStatus();
+          loginBox.remove();
 
-        if (typeof onSuccess === 'function') {
-          onSuccess();
-        }
-      });
+          if (typeof onSuccess === 'function') {
+            onSuccess();
+          }
+        });
+      }
     }
 
     const userInput = loginBox.querySelector('#ballot-username');
@@ -292,9 +290,7 @@ document.addEventListener('DOMContentLoaded', () => {
         window.startGradualSideAdReplacement();
       }
 
-      // After 45 seconds, make appear a small black borderless terminal with only "_" flickering as waiting for input
-      scheduleFinalTruthTerminal(45000);
-    }, 2000);
+      }, 2000);
   }
 
   function showGiantLoreModal() {
@@ -321,6 +317,8 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.appendChild(modal);
 
     const closeBtn = modal.querySelector('#giant-lore-close-btn');
+    const loreImg = modal.querySelector('.giant-lore-img');
+
     const closeModal = () => {
       modal.style.transition = 'opacity 0.25s ease';
       modal.style.opacity = '0';
@@ -333,6 +331,17 @@ document.addEventListener('DOMContentLoaded', () => {
       closeBtn.addEventListener('click', (e) => {
         e.stopPropagation();
         closeModal();
+      });
+    }
+
+    if (loreImg) {
+      loreImg.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (typeof window.triggerTruthTransition === 'function') {
+          window.triggerTruthTransition();
+        } else {
+          window.location.href = 'truth.html';
+        }
       });
     }
 
@@ -352,74 +361,6 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   window.showGiantLoreModal = showGiantLoreModal;
-
-  function scheduleFinalTruthTerminal(delayMs = 45000) {
-    if (window.__truthTerminalTimeout) clearTimeout(window.__truthTerminalTimeout);
-    window.__truthTerminalTimeout = setTimeout(() => {
-      showFinalTruthTerminal();
-    }, Math.max(0, delayMs));
-  }
-  window.scheduleFinalTruthTerminal = scheduleFinalTruthTerminal;
-
-  function showFinalTruthTerminal() {
-    if (document.getElementById('truth-terminal-backdrop')) return;
-
-    // Close giant lore modal if active
-    const giantModal = document.getElementById('giant-lore-modal');
-    if (giantModal) {
-      giantModal.remove();
-    }
-
-    const backdrop = document.createElement('div');
-    backdrop.id = 'truth-terminal-backdrop';
-
-    const box = document.createElement('div');
-    box.id = 'truth-terminal-box';
-    box.innerHTML = `<span class="truth-terminal-cursor">_</span>`;
-
-    backdrop.appendChild(box);
-    document.body.appendChild(backdrop);
-
-    const goToTruth = () => {
-      try {
-        localStorage.setItem('slop_terminal_visited', 'true');
-      } catch (e) { }
-      window.location.href = 'truth.html';
-    };
-
-    backdrop.addEventListener('click', goToTruth);
-    box.addEventListener('click', (e) => {
-      e.stopPropagation();
-      goToTruth();
-    });
-    window.addEventListener('keydown', (e) => {
-      if (document.getElementById('truth-terminal-backdrop')) {
-        goToTruth();
-      }
-    });
-  }
-  window.showFinalTruthTerminal = showFinalTruthTerminal;
-
-  // Check if small truth terminal should be shown or scheduled (45s timer)
-  try {
-    const isApproved = localStorage.getItem('slop_narrative_step') === 'step2_approved';
-    const popupTime = localStorage.getItem('slop_final_popup_time');
-    const terminalVisited = localStorage.getItem('slop_terminal_visited') === 'true';
-
-    if (isApproved && !terminalVisited) {
-      if (popupTime) {
-        const elapsed = Date.now() - parseInt(popupTime, 10);
-        if (elapsed >= 45000) {
-          showFinalTruthTerminal();
-        } else {
-          scheduleFinalTruthTerminal(45000 - elapsed);
-        }
-      } else {
-        localStorage.setItem('slop_final_popup_time', Date.now().toString());
-        scheduleFinalTruthTerminal(45000);
-      }
-    }
-  } catch (e) { }
 
   function submitBallotVote(selected) {
     if (!selected) {

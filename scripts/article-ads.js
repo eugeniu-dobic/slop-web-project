@@ -181,6 +181,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Lightbox click-to-zoom listeners (ensuring strictly single modal opening)
   document.addEventListener('click', (e) => {
+    // 0. If clicking any side_transmission_important ad/popup (except close button), trigger transition to truth.html!
+    if (!e.target.closest('button') && !e.target.closest('.retro-ad-close') && !e.target.closest('.ad-post-close') && !e.target.closest('#giant-lore-close-btn')) {
+      const isTransmissionImg = (e.target.tagName === 'IMG' && e.target.src && e.target.src.includes('side_transmission_important')) ||
+        (e.target.closest('.giant-lore-container') && !e.target.closest('button')) ||
+        (e.target.closest('.extra-left-lore-ad') && !e.target.closest('button'));
+
+      if (isTransmissionImg) {
+        e.preventDefault();
+        e.stopPropagation();
+        triggerTruthTransition();
+        return;
+      }
+
+      const adBox = e.target.closest('.retro-ad-box') || e.target.closest('.retro-ad-wrapper') || e.target.closest('.sidebar-ad-wrapper');
+      if (adBox) {
+        const adImg = adBox.querySelector('img');
+        if (adImg && adImg.src && adImg.src.includes('side_transmission_important')) {
+          e.preventDefault();
+          e.stopPropagation();
+          triggerTruthTransition();
+          return;
+        }
+      }
+    }
+
     // If the lightbox is currently active, don't trigger zoom-in
     const retroLightbox = document.getElementById('retro-ad-lightbox');
     if (retroLightbox && retroLightbox.classList.contains('active')) return;
@@ -211,8 +236,6 @@ document.addEventListener('DOMContentLoaded', () => {
       !e.target.closest('#lore-trigger-ad') &&
       !e.target.closest('.lore-important-transmission') &&
       !e.target.closest('.lore-important-ad') &&
-      !e.target.closest('#truth-terminal-backdrop') &&
-      !e.target.closest('#truth-terminal-box') &&
       !e.target.closest('#giant-lore-modal') &&
       !e.target.closest('button');
 
@@ -341,6 +364,8 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.appendChild(modal);
 
     const closeBtn = modal.querySelector('#giant-lore-close-btn');
+    const loreImg = modal.querySelector('.giant-lore-img');
+
     const closeModal = () => {
       modal.style.transition = 'opacity 0.25s ease';
       modal.style.opacity = '0';
@@ -353,6 +378,13 @@ document.addEventListener('DOMContentLoaded', () => {
       closeBtn.addEventListener('click', (e) => {
         e.stopPropagation();
         closeModal();
+      });
+    }
+
+    if (loreImg) {
+      loreImg.addEventListener('click', (e) => {
+        e.stopPropagation();
+        triggerTruthTransition();
       });
     }
 
@@ -589,9 +621,73 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // --------------------------------------------------------------------------
-  // 4. Universal Login Reminder: every 15 seconds if user is not logged in
+  // 4. Universal Login Reminder Modal: every 45 seconds if user is not logged in
   // --------------------------------------------------------------------------
   let loginReminderTimeout = null;
+  const LOGIN_REMINDER_DELAY_MS = 45000; // 45 seconds
+
+  function showLoginRequiredPromptModal() {
+    try {
+      if (localStorage.getItem('slop_user')) return;
+    } catch (e) { }
+
+    if (document.getElementById('slop-login-prompt-modal')) return;
+
+    const modal = document.createElement('div');
+    modal.id = 'slop-login-prompt-modal';
+    modal.className = 'slop-login-modal-overlay';
+    modal.innerHTML = `
+      <div class="slop-login-modal-card">
+        <div class="slop-login-modal-glass">
+          <img src="content/misc/warning.svg" alt="Warning" class="slop-login-modal-icon">
+        </div>
+        <div class="slop-login-modal-bottom">
+          <p class="slop-login-modal-text">In order to navigate the site, logging in is required. Otherwise, this popup will reappear every 45 seconds.</p>
+          <div class="slop-login-modal-divider"></div>
+          <button type="button" id="slop-login-modal-action-btn" class="slop-login-modal-btn">[log in]</button>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(modal);
+
+    // Modal cannot be dismissed by clicking outside
+    modal.addEventListener('click', (e) => {
+      e.stopPropagation();
+    });
+
+    const actionBtn = modal.querySelector('#slop-login-modal-action-btn');
+    if (actionBtn) {
+      actionBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        modal.remove();
+
+        const retroLoginWidget = document.getElementById('retro-login-widget');
+        const usernameInput = document.getElementById('username');
+
+        if (retroLoginWidget && usernameInput) {
+          // On homepage: smooth scroll to login form and focus input
+          retroLoginWidget.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          setTimeout(() => {
+            usernameInput.focus();
+            retroLoginWidget.classList.remove('retro-login-highlight');
+            void retroLoginWidget.offsetWidth;
+            retroLoginWidget.classList.add('retro-login-highlight');
+            setTimeout(() => {
+              retroLoginWidget.classList.remove('retro-login-highlight');
+            }, 3600);
+          }, 350);
+          // Re-arm timer so if user does not log in, it reappears in 45 seconds
+          startUniversalLoginReminder();
+        } else {
+          // On article page: redirect to homepage login box
+          window.location.href = 'index.html#retro-login-widget';
+        }
+      });
+    }
+  }
+
   function startUniversalLoginReminder() {
     try {
       if (localStorage.getItem('slop_user')) return;
@@ -608,10 +704,9 @@ document.addEventListener('DOMContentLoaded', () => {
       } catch (e) { }
 
       if (!isLogged) {
-        alert("Please Log In To Continue...");
-        startUniversalLoginReminder();
+        showLoginRequiredPromptModal();
       }
-    }, 15000); // Trigger every 15 seconds
+    }, LOGIN_REMINDER_DELAY_MS);
   }
 
   function clearUniversalLoginReminder() {
@@ -619,10 +714,15 @@ document.addEventListener('DOMContentLoaded', () => {
       clearTimeout(loginReminderTimeout);
       loginReminderTimeout = null;
     }
+    const modal = document.getElementById('slop-login-prompt-modal');
+    if (modal) {
+      modal.remove();
+    }
   }
 
   window.startGlobalLoginReminder = startUniversalLoginReminder;
   window.clearGlobalLoginReminder = clearUniversalLoginReminder;
+  window.showLoginRequiredPromptModal = showLoginRequiredPromptModal;
   startUniversalLoginReminder();
 
   // --------------------------------------------------------------------------
@@ -741,69 +841,32 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   // --------------------------------------------------------------------------
-  // 7. Final Small Truth Terminal Check (Appears after 45 seconds post-ballot)
+  // 7. Transition to truth.html with dramatic screen glitch/flicker effect
   // --------------------------------------------------------------------------
-  function checkAndTriggerTruthTerminal() {
+  function triggerTruthTransition() {
+    if (window.__isTransitioningToTruth) return;
+    window.__isTransitioningToTruth = true;
     try {
-      const isApproved = localStorage.getItem('slop_narrative_step') === 'step2_approved';
-      const popupTime = localStorage.getItem('slop_final_popup_time');
-      const terminalVisited = localStorage.getItem('slop_terminal_visited') === 'true';
-
-      if (isApproved && !terminalVisited) {
-        if (popupTime) {
-          const elapsed = Date.now() - parseInt(popupTime, 10);
-          if (elapsed >= 45000) {
-            showFinalTruthTerminal();
-          } else {
-            setTimeout(showFinalTruthTerminal, Math.max(0, 45000 - elapsed));
-          }
-        } else {
-          localStorage.setItem('slop_final_popup_time', Date.now().toString());
-          setTimeout(showFinalTruthTerminal, 45000);
-        }
-      }
+      localStorage.setItem('slop_terminal_visited', 'true');
     } catch (e) { }
-  }
-
-  function showFinalTruthTerminal() {
-    if (document.getElementById('truth-terminal-backdrop')) return;
 
     const giantModal = document.getElementById('giant-lore-modal');
-    if (giantModal) {
-      giantModal.remove();
+    if (giantModal) giantModal.remove();
+
+    let glitchEl = document.getElementById('slop-truth-glitch-overlay');
+    if (!glitchEl) {
+      glitchEl = document.createElement('div');
+      glitchEl.id = 'slop-truth-glitch-overlay';
+      glitchEl.className = 'slop-truth-glitch-overlay';
+      document.body.appendChild(glitchEl);
     }
 
-    const backdrop = document.createElement('div');
-    backdrop.id = 'truth-terminal-backdrop';
-
-    const box = document.createElement('div');
-    box.id = 'truth-terminal-box';
-    box.innerHTML = `<span class="truth-terminal-cursor">_</span>`;
-
-    backdrop.appendChild(box);
-    document.body.appendChild(backdrop);
-
-    const goToTruth = () => {
-      try {
-        localStorage.setItem('slop_terminal_visited', 'true');
-      } catch (e) { }
+    setTimeout(() => {
       window.location.href = 'truth.html';
-    };
-
-    backdrop.addEventListener('click', goToTruth);
-    box.addEventListener('click', (e) => {
-      e.stopPropagation();
-      goToTruth();
-    });
-    window.addEventListener('keydown', (e) => {
-      if (document.getElementById('truth-terminal-backdrop')) {
-        goToTruth();
-      }
-    });
+    }, 800);
   }
 
-  window.showFinalTruthTerminal = showFinalTruthTerminal;
-  checkAndTriggerTruthTerminal();
+  window.triggerTruthTransition = triggerTruthTransition;
 });
 
 
